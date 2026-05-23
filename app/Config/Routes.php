@@ -36,6 +36,10 @@ $routes->get('signin/index/(:segment)', 'Signin::index/$1');
 $routes->get('/signin', 'Signin::index');
 
 
+$routes->group('register', function ($routes) {
+  $routes->get('/', 'Register::index');
+  $routes->post('/', 'Register::registerinfo');
+});
 
 /*
 |--------------------------------------------------------------------------
