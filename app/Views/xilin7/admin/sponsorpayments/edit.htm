@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Sponsor payments--edit</title>
+<link href='<?php echo base_url();?>/admin/css/base.css' rel='stylesheet' type='text/css'>
+</head>
+<body background='<?php echo base_url();?>/admin/images/allbg.gif' leftmargin='8' topmargin='8'>
+<table width="98%" border="0" align="center" cellpadding="3" cellspacing="1" bgcolor="#D6D6D6">
+  <tr>
+    <td height="19" background="<?php echo base_url();?>/admin/images/tbg.gif" bgcolor="#E7E7E7">
+      <table width="96%" border="0" cellspacing="1" cellpadding="1">
+        <tr> 
+          <td width="24%" style="padding-left:10px;"><b><strong>sponsorpayments add</strong></b> </td>
+          <td width="76%" align="right"><strong><a href="<?=$_SESSION['admin_path']?>sponsorpayments/index"><u>sponsorpayments list</u></a></strong></td>
+        </tr>
+      </table></td>
+</tr>
+<tr>
+    <td height="215" align="center" valign="top" bgcolor="#FFFFFF">
+	<form name="form1" action="<?=$_SESSION['admin_path']?>sponsorpayments/edit" onSubmit="return checkSubmit();" method="post">
+		<input type="hidden" name="dopost" value="save" />
+		<input type="hidden" name="sponsor_pay_id" value="<?php echo $info['sponsor_pay_id']?>" />
+  		<table width="98%" border="0" cellspacing="1" cellpadding="1">        
+          <tr> 
+            <td height="30"><span style="color:red;">*</span>sponsor:</td>
+            <td style="text-align:left;">
+        	<select name='sponsor_id' style='width:200px'>
+			  	<?php
+					if($groupList){
+					foreach($groupList as $k=>$v)
+					{
+						$selected="";
+						if($v['sponsor_id'] == $info['sponsor_id']){
+							$selected="selected";
+						}
+						echo "<option value='".$v['sponsor_id']."' $selected>".$v['name']."</option>\r\n";
+					}
+				}
+			?>
+		  	</select>
+		  	</td>
+          </tr>        
+          <tr> 
+            <td height="30">Payments at:</td>
+            <td style="text-align:left;"><input name="paid_at" type="text" id="paid_at" size="16" style="width:200px" value="<?php echo $info['paid_at']?>"/></td>
+          </tr>      
+          <tr> 
+            <td height="30">Payments amount:</td>
+            <td style="text-align:left;"><input name="paid_amount" type="text" id="paid_amount" size="16" style="width:200px" value="<?php echo $info['paid_amount']?>"/></td>
+          </tr>
+          <tr> 
+            <td height="60">&nbsp;</td>
+            <td><input type="submit" name="Submit" value="add " class="coolbg np" /></td>
+          </tr>
+        </table>
+      </form>
+	  </td>
+</tr>
+</table>
+</body>
+</html>

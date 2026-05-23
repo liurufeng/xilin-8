@@ -1,0 +1,568 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>info</title>
+<style type="text/css">
+<!--
+body { background-image: url(<?php echo base_url();?>/admin/images/allbg.gif); }
+.multipic {
+	border: 1px dashed #FC6;
+}
+.albCt {
+	border-bottom: 1px dashed #FC0;
+	margin-bottom: 10px;
+	padding-bottom:10px;
+}
+.albCt img{
+	cursor:pointer;
+}
+-->
+</style>
+<script>
+var HTTPURL = "<?php echo $_SESSION['admin_path']?>";
+var BASEURL = "<?php echo $_SESSION['admin_path']?>";
+</script>
+<link href="<?php echo base_url();?>/admin/css/base.css" rel="stylesheet" type="text/css">
+<link href='<?php echo base_url();?>/admin/css/tb-box.css' rel='stylesheet' type='text/css' />
+<script language="javascript" src="<?php echo base_url();?>/admin/js/dedeajax2.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>/admin/js/calendar/calendar.js"></script>
+<script language='javascript' src="<?php echo base_url();?>/admin/js/main.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>/admin/js/handlers.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>/public/images/swfupload/swfupload.js"></script>
+<script language="javascript" src="<?php echo base_url();?>/admin/js/jquery/jquery.js"></script>
+<script language="javascript" src="<?php echo base_url();?>/admin/js/jquery/ui.core.js"></script>
+<script language="javascript" src="<?php echo base_url();?>/admin/js/jquery/ui.draggable.js"></script>
+<script lang='javascript' src='<?php echo base_url();?>/admin/js/tb-box.js'></script>
+<script language="javascript">
+
+function checkSubmit()
+{
+	if(document.form1.title.value=='')
+	{
+		alert('标题不能为空！');
+		return false;
+	}
+	if(document.form1.reid.value==0)
+	{
+		alert('请选择对应的栏目！');
+		return false;
+	}
+}
+
+</script>
+<script type="text/javascript">
+	function addimg()
+{ 
+		//包含所有文件域的DIV 
+		var div = document.getElementById('imgs'); 
+		//文件域 
+		var input = document.createElement("input"); 
+			input.name = "img[]"; input.type = 'file'; 
+		//添加 
+		div.appendChild(input); 
+		//删除按钮 
+		var button = document.createElement("a"); 
+		button.href = "javascript:;"; 
+		button.innerHTML = '删除'; 
+		div.appendChild(button); 
+		//换行 
+		var br = document.createElement("br"); 
+		div.appendChild(br); 
+		//在按钮上增加删除的事件 
+		button.onclick = function()
+		{  
+			input.parentNode.removeChild(input);  
+			this.parentNode.removeChild(this);  
+			br.parentNode.removeChild(br); 
+		}
+}
+</script>
+</head>
+<body topmargin="8">
+  <table width="98%" border="0" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+      <td width="60%" height="30"><IMG height=14 src="<?php echo base_url();?>/admin/images/book1.gif" width=20>&nbsp;<a href="<?=$_SESSION['admin_path']?>info/index?cid=<?php echo $cid?>"><u>文章列表</u></a> &gt;&gt; 发布文章</td>
+      <td width="30%" align='right'>&nbsp; <? if(session()->get('id')== 88){ ?><a href="<?=$_SESSION['admin_path']?>column/index">[<u>栏目管理</u>]</a> <?}?> </td>
+    </tr>
+  </table>
+  
+  <?php 
+    if(isset($action) && $action == 'edit') {
+		$posturl = $_SESSION['admin_path'].'info/edit'; //site_url('info/edit');
+		$picupurl = $_SESSION['admin_path'].'info/edit'; //site_url('info/edit');
+	}else{
+		$posturl = '';
+		$picupurl = $_SESSION['admin_path'].'info/add';
+	}
+  ?>
+  
+<form name="form1" action="<?php echo $posturl?>" enctype="multipart/form-data" method="post" onSubmit="return checkSubmit()">
+  <input type="hidden" name="dopost" value="save" />
+  <input type="hidden" name="aid" value="<?= $ainfo['id'] ?? '' ?>" />
+  <table width="98%"  border="0" align="center" cellpadding="2" cellspacing="2" id="needset" style="border:1px solid #cfcfcf;background:#ffffff;">
+   <tr>
+      <td height="24" colspan="5" class="bline">
+      	<table width="800" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="90">&nbsp;文章主栏目：</td>
+          <td>
+		  <input type="hidden" name="reid" id ="reid" value="<?php echo $cid??$ainfo['unitid']?>" />
+          <span id='typeidct'><?php echo $unitname?></span>
+		</td>
+        </tr>
+      </table></td>
+    </tr>
+	<?php if($modelvarr['title']['checked'] == '1' || $modelvarr['title']['ismust'] == '1') { ?>
+    <tr>
+      <td height="24" colspan="5" class="bline">
+      	<table width="800" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="90">&nbsp;<?php echo $modelvarr['title']['t_name']?>：</td>
+            <td><input name="title" type="text" id="title" value='<?= $ainfo['title']??'' ?>' style="width:388px" /></td>
+          </tr>
+        </table>
+		</td>
+    </tr>
+	<?php } ?>
+	<?php if($modelvarr['ttitle']['checked'] == '1' || $modelvarr['ttitle']['ismust'] == '1') { ?>
+	 <tr>
+      <td height="24" colspan="5" class="bline">
+      	<table width="800" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="90">&nbsp;<?php echo $modelvarr['ttitle']['t_name']?>：</td>
+            <td>
+            	<input name="ttitle" type="text" id="ttitle" style="width:388px"  value='<?php echo $ainfo['ttitle']; ?>' />
+            </td>
+          </tr>
+        </table>
+		</td>
+    </tr>
+	<?php } ?>
+	<?php if($modelvarr['shorttitle']['checked'] == '1' || $modelvarr['shorttitle']['ismust'] == '1') { ?>
+	 <tr>
+      <td height="24" colspan="5" class="bline">
+      	<table width="800" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="90">&nbsp;<?php echo $modelvarr['shorttitle']['t_name']?>：</td>
+            <td>
+            	<input name="shorttitle" type="text" id="shorttitle" style="width:250px"  value='<?php echo $ainfo['shorttitle']; ?>' />
+            </td>
+          </tr>
+        </table>
+		</td>
+    </tr>
+	<?php } ?>
+	
+	<?php if($modelvarr['flag']['checked'] == '1' || $modelvarr['flag']['ismust'] == '1') { ?>
+    <tr>
+      <td height="24" colspan="5" class="bline">
+      	<table width="800" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td  width="90">&nbsp;<?php echo $modelvarr['flag']['t_name']?></td>
+            <td align="left">
+            	<?php
+            	$sql = "Select * From ".$this->db->dbprefix('arcatt')." order by sortid asc";
+            	$flaglist = $this->db->query($sql)->getResultArray();
+            	foreach($flaglist as $k=>$v)
+            	{	
+					$ischecked = '';
+					if(preg_match("#".$v['att']."#",$ainfo['flag'] )){
+						$ischecked = ' checked="checked"';
+					}
+            		if($v['att']=='j')
+            		echo "<input class='np' type='checkbox' name='flags[]' id='flags".$v['att']."' value='".$v['att']."' ".$ischecked."  onclick='ShowUrlTr()'>".$v['attname']."[".$v['att']."]";
+            		else
+            		echo "<input class='np' type='checkbox' name='flags[]' id='flags".$v['att']."' value='".$v['att']."' ".$ischecked." >".$v['attname']."[".$v['att']."]";
+            	}
+            	?>
+            </td>
+			
+          </tr>
+        </table>
+       </td>
+    </tr>
+	 <tr >
+      <td height="24" colspan="5" class="bline" id="redirecturltr" style="<?php if($ainfo['isjump'] <> '1'){?>display:none<?php }else{ echo "display:block";} ?>" >
+	   <table width="800" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="90">&nbsp;跳转网址：</td>
+            <td>
+            	<input name="redirecturl" type="text" id="redirecturl" style="width:300px" value='<?php echo $ainfo['jumpurl']; ?>' />
+            </td>
+			
+          </tr>
+       </table>
+       </td>
+    </tr>
+	<?php } ?>
+	<?php if($modelvarr['sortrank']['checked'] == '1' || $modelvarr['sortrank']['ismust'] == '1') { ?>
+	<tr>
+      <td height="24" colspan="5" class="bline">
+      	<table width="800" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+			<td width="90">&nbsp;权重：</td>
+            <td><input name="weight" type="text" id="weight" style="width:50px" value='<?php if(isset($ainfo) && ($ainfo['sortrank']=="0"||$ainfo['sortrank'])){echo $ainfo['sortrank'];}else{echo"999";}?>' />(越小越靠前,0为置顶)</td>
+          </tr>
+        </table>
+       </td>
+    </tr>
+	<?php } ?>
+
+	<?php if($modelvarr['typeid']['checked'] == '1' || $modelvarr['typeid']['ismust'] == '1') { ?>
+	<tr>
+      <td height="24" colspan="5" class="bline">
+      	<table width="800" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+			<td width="90">&nbsp;<?php echo $modelvarr['typeid']['t_name']?>：</td>
+            <td>
+			<?php
+				if($modelvarr['typeid']['egroupid']){
+					$id = $modelvarr['typeid']['egroupid'];
+					$arr = $this->db->query("SELECT * FROM ".$this->db->dbprefix('stepselect')." WHERE id='$id' LIMIT 1")->row_array();
+					$dsql ="Select * From ".$this->db->dbprefix('sys_enum')." where egroup like '{$arr['egroup']}' order by disorder asc, evalue asc";
+					$dlist = $this->db->query($dsql)->getResultArray();
+					$options = '';
+					  foreach ($dlist as $k=>$row1) 
+					  {
+							 if($ainfo['typeid'] == $row1['evalue']){
+								$typeidselected ="selected='selected'";
+							 }else{
+								$typeidselected ="";
+							 }
+							 if($row1['evalue']%500==0 || $arr['issign']==1)
+							 {
+									$options .= "<option value='{$row1['evalue']}' {$typeidselected}>{$row1['ename']}</option>\r\n";
+							 }
+							 else
+							 {
+									$options .= "<option value='{$row1['evalue']}' {$typeidselected}>  └─{$row1['ename']}</option>\r\n";
+							 }
+					  }
+				}else{
+					$options = "<option value='0'>暂未选择分类</option>\r\n";
+				}
+			?>
+			<select name='type1' style='width:160px'>
+			<option value='0'>--请选择--</option>
+			<?php echo $options; ?>
+			</select>
+			
+			</td>
+          </tr>
+        </table>
+       </td>
+    </tr>
+	<?php } ?>
+	
+	<?php if($modelvarr['typeid2']['checked'] == '1' || $modelvarr['typeid2']['ismust'] == '1') { ?>
+	<tr>
+      <td height="24" colspan="5" class="bline">
+      	<table width="800" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+			<td width="90">&nbsp;<?php echo $modelvarr['typeid2']['t_name']?>：</td>
+            <td>
+			<?php
+				$options = '';
+				if($modelvarr['typeid2']['egroupid']){
+					$id = $modelvarr['typeid2']['egroupid'];
+					$arr = $this->db->query("SELECT * FROM ".$this->db->dbprefix('stepselect')." WHERE id='$id' LIMIT 1")->row_array();
+					$dsql ="Select * From ".$this->db->dbprefix('sys_enum')." where egroup like '{$arr['egroup']}' order by disorder asc, evalue asc";
+					$dlist = $this->db->query($dsql)->getResultArray();
+					$options = '';
+					  foreach ($dlist as $k=>$row1) 
+					  {
+							 if($ainfo['typeid2'] == $row1['evalue']){
+								$typeidselected ="selected='selected'";
+							 }else{
+								$typeidselected ="";
+							 }
+							 if($row1['evalue']%500==0 || $arr['issign']==1)
+							 {
+									$options .= "<option value='{$row1['evalue']}' {$typeidselected}>{$row1['ename']}</option>\r\n";
+							 }
+							 else
+							 {
+									$options .= "<option value='{$row1['evalue']}' {$typeidselected}>  └─{$row1['ename']}</option>\r\n";
+							 }
+					  }
+				}else{
+					$options = "<option value='0'>暂未选择分类</option>\r\n";
+				}
+			?>
+			<select name='type2' style='width:160px'>
+			<option value='0'>--请选择--</option>
+			<?php echo $options; ?>
+			</select>
+			
+			</td>
+          </tr>
+        </table>
+       </td>
+    </tr>
+	<?php } ?>
+
+	<?php if($modelvarr['picname']['checked'] == '1' || $modelvarr['picname']['ismust'] == '1') { ?>
+    <tr id="pictable">
+      <td height="24" colspan="5" class="bline">
+      	<table width="800" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="90"> &nbsp;<?php echo $modelvarr['picname']['t_name']?>：</td>
+            <td width="100" align="center">
+			
+			<div id='divpicview' class='divpre'>
+			<?php if($ainfo['picid']){ ?>
+			<img width="150" src="<?php echo base_url().$ainfo['picid1arr']['filename']?>">
+			<?php } else{ ?>
+			请上传
+			<?php } ?>
+			</div>
+			</td>
+			<td width="500" align="left">
+            	<table width="100%" border="0" cellspacing="1" cellpadding="1">
+                <tr>
+                  <td height="30">
+                  <input name="picname" type="hidden" id="picname" style="width:240px" value="<?php echo $ainfo['picid']?>" />
+                  <input type="button"  value="本地上传" style="width:70px;cursor:pointer;" /> 
+                  <iframe name='uplitpicfra' id='uplitpicfra' src='' width='200' height='200' style='display:none'></iframe>
+                  <span class="litpic_span"><input name="litpic" type="file" id="litpic"  onChange="SeePicNew(this, 'divpicview', 'uplitpicfra', 165, '<?php echo $picupurl?>');" size="1" class='np coolbg'/></span>
+                  <?php if($desc_id==9){echo '145*95';}else if($desc_id==11){echo '205*88';}else if($desc_id==14){echo '358*258';} else if($desc_id==15){echo '100*90';}?>
+                  </td>
+				  
+                </tr>
+              </table>
+             </td>
+          </tr>
+        </table></td>
+    </tr>
+	<?php } ?>
+	<?php if($modelvarr['picname2']['checked'] == '1' || $modelvarr['picname2']['ismust'] == '1') { ?>
+	 <tr id="pictable">
+      <td height="24" colspan="5" class="bline">
+      	<table width="800" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="90"> &nbsp;<?php echo $modelvarr['picname2']['t_name']?>：</td>
+			<td width="100" align="center">
+            <div id='divpicview2' class='divpre'>
+			<?php if($ainfo['picid2']){ ?>
+			<img width="150" src="<?php echo base_url().$ainfo['picid2arr']['filename']?>">
+			<?php } else{ ?>
+			请上传
+			<?php } ?></div>
+            </td>  
+		   <td width="500">
+            	<table width="100%" border="0" cellspacing="1" cellpadding="1">
+                <tr>
+					
+                  <td height="30">
+                  <input name="picname2" type="hidden" id="picname2" style="width:240px" value="<?php echo $ainfo['picid2']?>" />
+                  <input type="button"  value="本地上传" style="width:70px;cursor:pointer;" />
+                  <iframe name='uplitpicfra' id='uplitpicfra' src='' width='200' height='200' style='display:none'></iframe>
+                  <span class="litpic_span"><input name="litpic2" type="file" id="litpic"  onChange="SeePicNew(this, 'divpicview2', 'uplitpicfra', 165, '<?php echo $picupurl?>');" size="1" class='np coolbg'/></span>
+                  <?php if($desc_id==14){echo '600*430';}?>
+                  </td>
+                </tr>
+              </table>
+             </td>
+            
+          </tr>
+        </table></td>
+    </tr>
+	<?php } ?>
+	
+	<?php if($modelvarr['pics']['checked'] == '1' || $modelvarr['pics']['ismust'] == '1') { ?>
+    <tr id="pictable">
+      <td height="24" colspan="5" class="bline">
+      	<table width="800" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="90"> &nbsp;<?php echo $modelvarr['pics']['t_name']?>：</td>
+            <td width="100" align="center">
+			
+			<div id='' class='divpre'>
+			<ul id='divpicsview'>
+			图片列表
+			<?php if($ainfo['pics']){ 
+			foreach($ainfo['picsarr'] as $k=>$v){
+			?>
+			<li id="picslist_<?php echo $v['aid']?>"><img width="150" src="<?php echo base_url().$v['filename']?>"><br />
+			<a href="javascript:;" onclick="picslisthide(<?php echo $v[aid]?>)">删除</a></li>
+			<?php 
+				}
+			}
+			?>
+			</ul>
+			</div>
+			
+			</td>
+			<td width="500" align="left">
+            	<table width="100%" border="0" cellspacing="1" cellpadding="1">
+                <tr>
+                  <td height="30">
+                  <input name="pics" type="hidden" id="pics" style="width:240px" value="<?php echo $ainfo['pics']?>" />
+                  <input type="button"  value="本地上传" style="width:70px;cursor:pointer;" />
+                  <iframe name='uplitpicfra' id='uplitpicfra' src='' width='200' height='200' style='display:none'></iframe>
+                  <span class="litpic_span"><input name="litpics" type="file" id="litpic"  onChange="SeePicsNew(this, 'divpicsview', 'uplitpicfra', 165, '<?php echo $picupurl?>');" size="1" class='np coolbg'/></span>
+                  </td>
+				  
+                </tr>
+              </table>
+             </td>
+          </tr>
+        </table></td>
+    </tr>
+    <script language='javascript'>
+    		var oldarrstr;
+    		oldarrstr = document.getElementById("pics").value;
+			function picslisthide(id)
+			{
+				var idstr = 'picslist_'+id;
+				var arrstr;
+				arrstr = document.getElementById("pics").value;
+				var str1=arrstr.substr((arrstr.length-1),1); 
+				if(str1 != ','){
+					arrstr = arrstr+',';
+				}
+				arrstr = arrstr.replace(','+id+',',',');
+				document.getElementById("pics").value = arrstr;
+				
+				document.getElementById(idstr).style.display = 'none';
+			}
+	</script>
+	<?php } ?>
+	<?php if($modelvarr['source']['checked'] == '1' || $modelvarr['source']['ismust'] == '1') { ?>
+    <tr>
+      <td height="24" colspan="5" class="bline">
+      	<table width="800" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="90">&nbsp;<?php echo $modelvarr['source']['t_name']?>：</td>
+            <td width="">
+            	<input name="source" type="text" id="source" style="width:160px" value="<?php if($ainfo['source']){echo $ainfo['source'];}else if($desc_id==9){echo '友健康官网';}?>" size="16" />
+            </td>
+          </tr>
+        </table>
+        </td>
+    </tr>
+	<?php } ?>
+	<?php if($modelvarr['writer']['checked'] == '1' || $modelvarr['writer']['ismust'] == '1') { ?>
+	<tr>
+      <td height="24" colspan="5" class="bline">
+      	<table width="800" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="90">&nbsp;<?php echo $modelvarr['writer']['t_name']?>：</td>
+            <td>
+            	<input name="writer" type="text" id="writer" style="width:160px" value="<?php if($ainfo['writer']){echo $ainfo['writer'];}else if($desc_id!=14){echo 'Admin';}?>"/>
+            </td>
+          </tr>
+        </table>
+        </td>
+    </tr>
+	<?php } ?>
+	<?php if($modelvarr['click']['checked'] == '1' || $modelvarr['click']['ismust'] == '1') { ?>
+	<tr>
+	<td height="24" colspan="4" class="bline">
+	  <table width="800" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+		  <td width="90" height="22">&nbsp;<?php echo $modelvarr['click']['t_name']?>：</td>
+		  
+		  <td width="">
+			
+			<input type='text' name='click' value="<?php echo $ainfo['click']?$ainfo['click']:'0'; ?>" style='width:160px;' />
+		  </td>
+		</tr>
+	  </table>
+	</td>
+	</tr>
+	<?php } ?>
+	<?php if($modelvarr['pubdate']['checked'] == '1' || $modelvarr['pubdate']['ismust'] == '1') { ?>
+  <tr>
+   <td height="24" colspan="4" class="bline">
+      <table width="800" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+		  <td width="90">&nbsp;<?php echo $modelvarr['pubdate']['t_name']?>：</td>
+          <td >
+          	<?php
+				  $nowtimestr = $ainfo['senddate']?$ainfo['senddate']:time();
+ 				  $nowtime = date('Y-m-d', $nowtimestr);
+				  echo "<input name=\"pubdate\" value=\"$nowtime\" type=\"text\" id=\"pubdate\" style=\"width:160px\">";
+			?>	                                  
+				 <script language="javascript" type="text/javascript">
+				    var showX = getElementLeft($Obj("pubdate")) + 150;
+					var showY = (window.navigator.userAgent.indexOf("MSIE") >=1 )? getElementTop($Obj("pubdate"))-130:  getElementTop($Obj("pubdate"))-130;
+					if((window.navigator.userAgent.indexOf("MSIE 7.0") >=1 )) {
+						showX = getElementLeft($Obj("pubdate"))+105;
+						showY = getElementTop($Obj("pubdate")) +1200;
+					}
+					if(window.navigator.userAgent.indexOf("MSIE 6.0")>=1)
+					{
+						Calendar.setup({
+							inputField     :    "pubdate",
+							ifFormat       :    "%Y-%m-%d",
+							showsTime      :    true,
+							timeFormat     :    "24"
+						});
+					} else {
+					
+						Calendar.setup({
+							inputField     :    "pubdate",
+							ifFormat       :    "%Y-%m-%d",
+							showsTime      :    true,
+							position       :    [showX, showY],
+							timeFormat     :    "24"
+						});
+					}
+				 </script>
+		</td>
+        </tr>
+      </table>
+    </td>
+	</tr>
+	<?php } ?>
+	<?php if($modelvarr['keywords']['checked'] == '1' || $modelvarr['keywords']['ismust'] == '1') { ?>
+    <tr>
+      <td height="24" colspan="5" class="bline">
+      	<table width="800" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="90">&nbsp;<?php echo $modelvarr['keywords']['t_name']?>：</td>
+          <td width=""><input type='text' name="keywords" id="keywords" style="width:80%" value="<?= $ainfo['keywords']??'' ?>" /></td>
+          
+        </tr>
+      </table>
+	  </td>
+    </tr>
+	<?php } ?>
+	<?php if($modelvarr['description']['checked'] == '1' || $modelvarr['description']['ismust'] == '1') { ?>
+    <tr>
+      <td height="24" colspan="5" class="bline">
+      <table width="800" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="90">&nbsp;<?php echo $modelvarr['description']['t_name']?>：</td>
+          <td width="449"><textarea name="description" rows="5" id="description" style="width:80%;height:50px"><?= $ainfo['description']??'' ?></textarea></td>
+          <td width="261">&nbsp;</td>
+        </tr>
+      </table>
+      </td>
+    </tr>
+	<?php } ?>
+	<?php if($modelvarr['content']['checked'] == '1' || $modelvarr['content']['ismust'] == '1') { ?>
+	<tr>
+	  <td height="28" colspan="2" bgcolor="#F9FCEF" class="bline2">
+		<div style='float:left;line-height:28px;'>&nbsp;<strong><?php echo $modelvarr['content']['t_name']?>：</strong></div>
+		<?php echo $c?>
+	  </td>
+	</tr>
+    <?php } ?>
+  </table>
+
+  
+   <table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#F9FCEF" style="border:1px solid #cfcfcf;border-top:none;">
+   <tr height="35">
+    <td width="17%">&nbsp;</td>
+    <td width="83%"><input name="imageField" type="image" src="<?php echo base_url();?>/admin/images/button_save.gif" width="60" height="22" class="np" border="0"  style="cursor:pointer;"/>
+       <img src="<?php echo base_url();?>/admin/images/button_reset.gif" width="60" height="22" border="0" onClick="location.reload()" style="cursor:pointer; "/>
+    </td>
+   </tr>
+</table>
+</form>
+
+</body>
+</html>

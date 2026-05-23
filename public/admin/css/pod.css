@@ -1,0 +1,187 @@
+Input {
+  font-family: verdana;
+  font-size: 9pt;
+  text-decoration: none;
+  height: 20px;
+  border: 1px solid #666666;
+  color: #000000;
+}
+
+.Calendar {
+  font-family: verdana;
+  text-decoration: none;
+  width: 100%;
+  background-color: #C0D0E8;
+  font-size: 9pt;
+  border: 0px dotted #1C6FA5;
+}
+
+.CalendarTD {
+  font-family: verdana;
+  font-size: 7pt;
+  color: #000000;
+  background-color: #f6f6f6;
+  height: 20px;
+  width: 11%;
+  text-align: center;
+}
+
+.Title {
+  font-family: verdana;
+  font-size: 11pt;
+  font-weight: normal;
+  height: 24pt;
+  text-align: center;
+  color: #333333;
+  text-decoration: none;
+  background-color: #A4B9D7;
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-bottom-width: 1px;
+  border-top-color: #999999;
+  border-right-color: #999999;
+  border-bottom-color: #999999;
+  border-left-color: #999999;
+}
+
+.Day {
+  font-family: verdana;
+  font-size: 7pt;
+  color: #243F65;
+  background-color: #E5E9F2;
+  height: 80px;
+  width: 11%;
+  text-align: center;
+}
+
+.DaySat {
+  font-family: verdana;
+  font-size: 7pt;
+  color: #FF0000;
+  text-decoration: none;
+  background-color: #E5E9F2;
+  text-align: center;
+  height: 80px;
+  width: 12%;
+}
+
+.DaySun {
+  font-family: verdana;
+  font-size: 7pt;
+  color: #FF0000;
+  text-decoration: none;
+  background-color: #E5E9F2;
+  text-align: center;
+  height: 80px;
+  width: 12%;
+}
+
+.DayNow {
+  font-family: verdana;
+  font-size: 7pt;
+  font-weight: bold;
+  color: #000000;
+  background-color: #FFFFFF;
+  text-align: center;
+  height: 80px;
+}
+
+.DayTitle {
+  font-family: verdana;
+  font-size: 9pt;
+  color: #000000;
+  background-color: #C0D0E8;
+  text-align: center;
+  height: 20px;
+  width: 11%;
+}
+
+.DatSatTitle {
+  font-family: verdana;
+  font-size: 9pt;
+  color: #FF0000;
+  text-decoration: none;
+  background-color: #C0D0E8;
+  text-align: center;
+  height: 20px;
+  width: 12%;
+}
+
+.DaySunTitle {
+  font-family: verdana;
+  font-size: 9pt;
+  color: #FF0000;
+  text-decoration: none;
+  background-color: #C0D0E8;
+  text-align: center;
+  height: 20px;
+  width: 11%;
+}
+
+.DayButton {
+  font-family: verdana;
+  font-size: 9pt;
+  font-weight: bold;
+  color: #243F65;
+  text-decoration: none;
+}
+
+.DefaultValues {
+  background-color: #ffffff;
+  height: 28px;
+}
+
+#dialogPanelBg {
+  position: absolute;
+  z-index: 100;
+  background-color: transparent;
+  background-image: url(../images/spacer.gif);
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+}
+
+#dialogPanel {
+  position: absolute;
+  z-index: 200;
+  padding: 30px;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 16px;
+  visibility: hidden;
+}
+
+#popWindow {
+  margin-left: 200px;
+  margin-top: 100px;
+  z-index: 200;
+  height: 50px;
+  background-color: #ffffff;
+}
+
+.Ptitle {
+  font-size: 12pt;
+  font-weight: bold;
+}
+
+/*table a:link {
+  color: #0000ff;
+  text-decoration: underline;
+}
+
+table a:visited {
+  color: #0000ff;
+  text-decoration: underline;
+}
+
+table a:active {
+  color: #0000ff;
+  text-decoration: underline;
+}
+
+table a:hover {
+  color: #0000ff;
+  text-decoration: underline;
+}*/

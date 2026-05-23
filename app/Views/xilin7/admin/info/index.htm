@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>文档管理</title>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>/admin/css/base.css">
+<script>
+var HTTPURL = "<?php echo $_SESSION['admin_path']?>";
+</script>
+<script language="javascript" src="<?php echo base_url();?>/admin/js/ieemu.js"></script>
+<script language="javascript" src="<?php echo base_url();?>/admin/js/context_menu.js"></script>
+<script language="javascript" src="<?php echo base_url();?>/admin/js/main.js"></script>
+<script language="javascript" src="<?php echo base_url();?>/admin/js/list.js"></script>
+<script language="javascript" src="<?php echo base_url();?>/admin/js/jquery/jquery.js"></script>
+</head>
+<body leftmargin="8" topmargin="8" background='<?php echo base_url();?>/admin/images/allbg.gif' onLoad="ContextMenu.intializeContextMenu()">
+
+<!--  搜索表单  -->
+<form name='form3' action="<?=$_SESSION['admin_path']?>info/index" method='get'>
+<table width='98%'  border='0' cellpadding='1' cellspacing='1' bgcolor='#cfcfcf' style="margin-top:8px">
+  <tr bgcolor='#EEF4EA'>
+    <td background='<?php echo base_url();?>/admin/images/wbg.gif' align='center'>
+      <table border='0' cellpadding='0' cellspacing='0' height="32">
+        <tr>
+          <td width='160'>
+		  <?php echo $menuSelect?>
+          </td >
+        <td nowrap>
+          关键字：
+        </td>
+        <td width='130'>
+          	<input type='text' name='keyword' value='' style='width:120px' />
+        </td>
+        <td width='90'>
+    		<select name='flag' style='display:none;width:80px' >
+			<option value='0'>不限</option>
+			<?php
+            	foreach($flaglist as $k=>$v)
+            	{	
+					$selected  = '';
+					if(isset($_GET['flag']) && $v['att'] === $_GET['flag']){
+						$selected = ' selected ="selected"';
+					}
+					echo " <option value='".$v['att']."' ".$selected.">".$v['attname']."[".$v['att']."]</option>";
+            	}
+            	?>
+           
+      	</select>
+      </td>
+       <td>
+          <input name="imageField" type="image" src="<?php echo base_url();?>/admin/images/button_search.gif" width="60" height="22" border="0" class="np" />
+       </td>
+      </tr>
+     </table>
+	</td>
+  </tr>
+</table>
+</form>  
+<!--  内容列表   -->
+<form name="form2">
+<table width="98%" border="0" cellpadding="2" cellspacing="1" bgcolor="#CFCFCF" align="center" style="margin-top:8px">
+<tr bgcolor="#E7E7E7" >
+	<td height="28" colspan="7" background="<?php echo base_url();?>/admin/images/tbg.gif" style="padding-left:10px;">
+    <div style="float:right; margin-right:10px;">
+    	 <?php if($cid){ ?>
+		<input type='button' class="coolbg np" onClick="location='<?=$_SESSION['admin_path']?>info/add?1&cid=<?php echo $cid?>';" value='添加文档' />
+		<?php } ?>
+      <?php if(session()->get('id')== 88){ ?>
+		<input type='button' class="coolbg np" onClick="location='<?=$_SESSION['admin_path']?>column/index';" value='栏目管理' />
+		<input type='button' class="coolbg np" name='bb1' onClick="location='<?=$_SESSION['admin_path']?>info/recycling?cid=<?php echo $cid?>';" value='信息回收站' />
+		<?php } ?>
+    </div>
+	◆ <?php echo $cname?>文档列表 &nbsp;
+	</td>
+</tr>
+<tr align="center" bgcolor="#FBFCE2" height="25">
+	<td width="6%">ID</td>
+	<td width="4%">选择</td>
+	<td width="28%">标题</td>
+	<td width="10%">更新时间</td>
+	<td width="10%">栏目</td>
+	<td width="10%">状态</td>
+	<td width="10%">操作</td>
+</tr>
+<?php foreach ($lists as $k=>$v) { ?>
+<tr align='center' bgcolor="#FFFFFF" height="26" align="center" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
+	<td nowrap>
+		<?php echo $v['id']?>
+	</td>
+	<td>
+		<input name="arcID" type="checkbox" id="arcID" value="<?php echo $v['id']?>" class="np" />
+	</td>
+	<td align='left'><?php echo $v['title'].$v['falgname']?></td>
+	<td><?php echo date('Y-m-d',$v['lastupdate'])?></td>
+	<td><?php echo $v['unitname']?></td>
+	<td><?php echo $v['status']?></td>
+	<td class="top_<?php echo $v['id']?>">
+		<a href="<?=$_SESSION['admin_path']?>info/edit/<?=$v['id']?>" >
+			<u>编辑</u>
+		</a> 
+		<?php if($v['sortrank']){?>
+			<u onclick="settop(<?php echo $v['id']?>);" style="cursor:pointer;color:green;" >置顶</u>
+			<input type="hidden" id = "top_id_<?php echo $v['id']?>" value="0"></input>
+			<?php }else{?>
+			<input type="hidden" id = "top_id_<?php echo $v['id']?>" value="999"></input>
+			<u onclick="settop(<?php echo $v['id']?>);" style="cursor:pointer;color:red;" >取消置顶</u>
+			<?php }?>
+		</a> 
+	</td>
+</tr>
+<?php } ?>
+<tr bgcolor="#ffffff">
+<td height="36" colspan="7">
+	&nbsp;
+	<a href="javascript:selAll()" class="coolbg">全选</a>
+	<a href="javascript:noSelAll()" class="coolbg">取消</a>
+	<a href="javascript:checkArc(0)" class="coolbg">&nbsp;发布&nbsp;</a>
+	<!--<a href="javascript:move_Arc(0)" class="coolbg">&nbsp;移动&nbsp;</a>-->
+	<a href="javascript:delArc(0)" class="coolbg">&nbsp;删除&nbsp;</a>
+</td>
+</tr>
+</form>
+<script>
+function settop(k){
+	var val = jQuery("#top_id_"+k+"").val();
+jQuery.ajax({
+    type: "GET",
+    url: "<?=$_SESSION['admin_path']?>info/top/",
+    data: 'id='+k+'&val='+val+'',
+    dataType: "Json",
+    success: function (data) {
+	if(data!="11"){
+		 alert("操作失败");
+	}else{
+		if(val=="0"){
+			jQuery(".top_"+k+">u").css("color","red");
+			jQuery(".top_"+k+">u").text("取消置顶");	
+			jQuery("#top_id_"+k+"").val("999");
+		}else{
+			jQuery(".top_"+k+">u").css("color","green");
+			jQuery(".top_"+k+">u").text("置顶");	
+			jQuery("#top_id_"+k+"").val("0");
+		}
+	}
+    },
+    error: function (msg) {
+        alert("响应失败!稍后再试");
+    }
+});
+}
+</script>
+<tr align="right" bgcolor="#F9FCEF">
+	<td height="36" colspan="10" align="center">
+		<?php echo $pages?>
+	</td>
+</tr>
+</table>
+</body>
+</html>

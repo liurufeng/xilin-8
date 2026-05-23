@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>系统用户组管理</title>
+<link href="<?php echo base_url();?>/admin/css/base.css" rel="stylesheet" type="text/css">
+</head>
+<body background='<?php echo base_url();?>/admin/images/allbg.gif' leftmargin='8' topmargin='8'>
+<table width="98%" border="0" cellpadding="3" cellspacing="1" bgcolor="#D6D6D6" align="center">
+ 
+    <input type="hidden" name="dopost" value="save">
+    <tr> 
+      <td height="28" colspan="4" background='<?php echo base_url();?>/admin/images/tbg.gif'>
+       <table width="96%" border="0" cellspacing="1" cellpadding="1">
+        <tr> 
+          <td width="24%" style="padding-left:10px;"><b>admin group</b> </td>
+          <td width="76%" align="right"><b>
+          	<a href="<?=$_SESSION['admin_path']?>member/groupadd"><u>add admin group</u></a>
+          	|
+            <a href="<?=$_SESSION['admin_path']?>member/index"><u>admin</u></a>
+          	</b>
+          </td>
+        </tr>
+      </table>
+      </td>
+    </tr>
+    <tr bgcolor="#FBFCE2" align="center" > 
+      <td width="5%" height="24">id</td>
+      <td width="30%">group name</td>
+      <td width="30%">description</td>
+      <td width="35%">operation</td>
+    </tr>
+    <?php
+	foreach($groupList as $k=>$v)
+	{
+	?>
+   <tr align="center" bgcolor="#FFFFFF"> 
+      <td height="24"> 
+        <?php echo $v['id']?>
+      </td>
+      <td height="24">
+      	<?php echo $v['name']?>
+      </td>
+      <td height="24"> 
+        <?php echo $v['description']?>
+      </td>
+      <td>
+        <a href='<?=$_SESSION['admin_path']?>member/groupedit?id=<?php echo $v['id']?>'>edit</a> |
+      	<a href='<?=$_SESSION['admin_path']?>member/index?id=<?php echo $v['id']?>'>group admin</a> |
+      <?php if(1){ ?><a href='<?=$_SESSION['admin_path']?>member/groupdel?id=<?php echo $v['id']?>'>del</a><?php } ?>
+      </td>
+    </tr>
+    <?php
+	}
+	?>
+    <tr> 
+      <td height="24" colspan="4" bgcolor="#F9FCEF">&nbsp;</td>
+    </tr>
+  
+</table>
+</body>
+</html>

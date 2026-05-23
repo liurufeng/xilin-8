@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>栏目管理</title>
+<link href="<?php echo base_url();?>/admin/css/base.css" rel="stylesheet" type="text/css">
+<script language="javascript" src="<?php echo base_url();?>/admin/js/global.js"></script>
+<script language="javascript" src="<?php echo base_url();?>/admin/js/context_menu.js"></script>
+<script language="javascript" src="<?php echo base_url();?>/admin/js/ieemu.js"></script>
+<script language="javascript" src="<?php echo base_url();?>/admin/js/dialog.js"></script>
+<script language="javascript" src="<?php echo base_url();?>/admin/js/dedeajax2.js"></script>
+<script language="javascript">
+
+</script>
+<style>
+.coolbg2 {
+border: 1px solid #000000;
+background-color: #F2F5E9;
+height:18px
+}
+.coolbt2 {
+  border-left: 2px solid #EFEFEF;
+  border-top: 2px solid #EFEFEF;
+  border-right: 2px solid #ACACAC;
+  border-bottom: 2px solid #ACACAC;
+  background-color: #F7FCDA
+}
+.nbline {border-bottom: 1px solid #d6d6d6; background-color:#FFFFFF; }
+.bline2 {border-bottom: 1px solid #d6d6d6; background-color:#F9FCEF; }
+</style>
+</head>
+<body background='<?php echo base_url();?>/admin/images/allbg.gif' leftmargin='8' topmargin='8' onLoad="ContextMenu.intializeContextMenu()">
+<table width="98%" border="0" cellpadding="3" cellspacing="1" bgcolor="#cfcfcf" align="center">
+<tr>
+   <td height="28" background='<?php echo base_url();?>/admin/images/tbg.gif' style="padding-left:10px;">
+   <div style="float:left">
+    	<strong>网站栏目管理   （当栏目内已经有信息时 只有系统工程师才可以操作此处）</strong>
+   </div>
+   <div style="float:right;padding-right:6px;">
+   	<a href="<?php echo site_url('column/add')?>?listtype=all" class='np coolbg'>增加顶级栏目</a>
+   	<a href="<?php echo site_url('column/index')?>?do=upcatcache" class='np coolbg'>更新栏目缓存</a>
+   </div>
+   </td>
+</tr>
+
+<form name='form1' method='post' action='<?php echo site_url('column/index')?>?do=upRankAll'>
+<tr>
+<td height="120" bgcolor="#FFFFFF" valign="top">
+<table width="98%" border="0" cellpadding="1" cellspacing="1" align="center" class='tbtitle' style='background:#CFCFCF;margin-bottom:5px;'>
+  <tr align="center" bgcolor="#FBFCE2">
+    <td width="5%">sort</td>
+	<td>名称</td>
+	<td width="15%">类型</td>
+	<td width="15%">模型</td>
+	<td width="25%">管理操作</td>
+  </tr>
+ <?php 
+	$typearr = array('1'=>'目录','2'=>'栏目');
+	foreach($lists as $v){
+ ?>
+  <tr align="center" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
+	<td><input type="text" style="width:25px;height:20px" value="<?php echo $v['sortrank']?>" name="sortrank[<?php echo $v['id']?>]"></td>
+	<td align="left"><?php echo $v['pre'].$v['typename'];?></td>
+	<td ><?php echo $typearr[$v['ispart']];?>&nbsp;</td>
+	<td><?php if($v['ispart'] == '2'){ ?>
+	<?php echo $dlist[$v['channeltypeid']]['typename'].'|'.$dlist[$v['channeltypeid']]['nid'];?>
+	<?php }else{ echo "目录不许添加信息";} ?></td>
+	<td>
+		 
+		<?php if($v['ispart'] == '2'){ ?><a href="<?php echo site_url('info/index').'?cid='.$v['id'];?>">内容</a> | 
+		<?php }else{ ?>
+		
+			<a href="<?php echo site_url('column/add').'?reid='.$v['id'];?>">增加子类</a> | 
+		 <?php } ?>  
+		<a href="<?php echo site_url('column/edit/').'?reid='.$v['id'];?>">更改</a>
+		
+		 | <a href="<?php echo site_url('column/del').'?reid='.$v['id'];?>" class="del">删除</a>
+	</td>
+  </tr>
+  <?php ;}?>
+</table>
+</td>
+</tr>
+</form>
+<tr>
+ <td height="36" bgcolor="#FFFFFF" align="center">
+ <table width="98%" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+    <td align="right">
+		  <input type="button" name="sb1" value="更新排序" style="width:70px" class="coolbt" onClick="document.form1.submit();" /> 
+		  </td>
+    </tr>
+   </table>
+ </td>
+</tr>
+</table>
+</body>
+</html>

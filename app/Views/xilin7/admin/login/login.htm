@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Xilin Northshore Admin login</title>
+<link href="/admin/css/base.css" rel="stylesheet" type="text/css" />
+<link href="/admin/css/login.css" rel="stylesheet" type="text/css" />
+<script src="/admin/js/jquery/jquery.js" language="javascript" type="text/javascript"></script>
+
+</head>
+<body>
+<div id="login-box">
+   <div class="login-top"></div>
+  
+   <div class="login-main">
+    <!--<form name="form1" method="post" action="<?=$_SESSION['admin_path']?>login/check_login');?>">-->
+	   <form name="form1" method="post" action="<?=$_SESSION['admin_path']?>login/check_login">
+      <input type="hidden" name="gotopage" value="<?php if(!empty($gotopage)) echo RemoveXSS($gotopage);?>" />
+      <input type="hidden" name="dopost" value="login" />
+      <input name='act' type='hidden' value='ok' />
+      <dl>
+	   <dt>Username：</dt>
+	   <dd><input type="text" name="username"/></dd>
+	   <dt>Password：</dt>
+	   <dd><input type="password" class="alltxt" name="pwd"/></dd>
+	   <!--<dt>Verify Code：</dt>
+	   <dd>
+		<input id="vdcode" type="text" name="captcha" /> <img id="vdimgck" align="absmiddle" onClick="this.src=this.src+'?'" style="cursor: pointer;" alt="Click refresh" src="<?=$_SESSION['admin_path']?>imgcheck/vimg');?>" />
+		<a href="#" onClick="changeAuthCode();" style=" margin-left:5px; line-height:20px; color:#6f88f3;">Click refresh</a> 
+	   </dd>-->
+	   <dt>&nbsp;</dt>
+		<dd><button type="submit" name="sm1" class="login-btn" onclick="this.form.submit();">Login</button></dd>
+	 </dl>
+	   </form>
+   </div>
+   <div class="login-power"> </div>
+</div>
+
+</body>
+</html>

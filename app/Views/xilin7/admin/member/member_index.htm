@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>admin</title>
+<link href="<?php echo base_url();?>/admin/css/base.css" rel="stylesheet" type="text/css">
+</head>
+<body background='<?php echo base_url();?>/admin/images/allbg.gif' leftmargin='8' topmargin='8'>
+<table width="98%" border="0" align="center" cellpadding="2" cellspacing="1" bgcolor="#D6D6D6">
+  <tr>
+    <td height="27" colspan="5" background="<?php echo base_url();?>/admin/images/tbg.gif" bgcolor="#E7E7E7">
+    	<table width="96%" border="0" cellspacing="1" cellpadding="1">
+        <tr>
+          <td width="24%" style="padding-left:10px;"><b>admin</b> </td>
+          <td width="76%" align="right"><b>
+          	<a href="<?=$_SESSION['admin_path']?>member/add"><u>add admin</u></a>
+          	|
+          	<a href="<?=$_SESSION['admin_path']?>member/group"><u>admin group</u></a>
+          	</b>
+          </td>
+        </tr>
+      </table>
+     </td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+  </tr>
+  <tr bgcolor="#FBFCE2">
+    <td width="20%" height="24" align="center">name</td>
+    <td width="20%" align="center">username</td>
+    <td width="20%" align="center">admin group</td>
+    <td width="20%" align="center">login info</td>
+    <td width="20%" align="center">operation</td>
+  </tr>
+  <?php foreach($list as $k=>$v){ ?>
+  <tr align="center" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
+    <td><?php echo $v['username']?></td>
+    <td><?php echo $v['realname']?></td>
+    <td><?php echo $v['name']?></td>
+    <td align="left">
+	login num：<?php echo $v['loginCount']?> <br />
+	login time：<?php echo date('Y-m-d H:i:s',$v['lastLoginTime'])?><br />
+	login  IP：<?php echo long2ip($v['lastLoginIp'])?><br />
+	</td>
+    <td>
+		<a href='<?=$_SESSION['admin_path']?>member/edit?uid=<?php echo $v['uid']?>'><u>edit</u></a> |
+		<a href='<?=$_SESSION['admin_path']?>member/del?uid=<?php echo $v['uid']?>'><u>del</u></a>
+    </td>
+  </tr>
+  <?php } ?>
+</table>
+</body>
+</html>

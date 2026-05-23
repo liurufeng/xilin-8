@@ -1,0 +1,54 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>全部操作节点</title>
+<link href="<?php echo base_url();?>/admin/css/base.css" rel="stylesheet" type="text/css" />
+</head>
+<body background="<?php echo base_url();?>/admin/images/allbg.gif" leftmargin="8" topmargin="8">
+<div class="bodytitle">
+  <div class="bodytitleleft"></div>
+  <div class="bodytitletxt" style="padding-left:10px;">全部操作节点</div>
+</div>
+<table width="98%" border="0" cellpadding="1" cellspacing="1" align="center" class="tbtitle" style="border:1px solid #CFCFCF;border-bottom:none;">
+  <tr>
+    <td bgcolor="#EDF9D5" class="tbtitletxt" background="<?php echo base_url();?>/admin/images/tbg.gif"><table width='96%' border="0" cellpadding='0' cellspacing='0'>
+        <tr>
+          <td width='30%' class="tbtitletxt"  style="padding-left:10px;">[<a href="<?=$_SESSION['admin_path']?>system/add_node"><u>添加新节点</u></a>]</td>
+          <td align='right'>
+		  <a href="<?=$_SESSION['admin_path']?>system/updatecache" class='np coolbg'>更新节点缓存</a>
+		  </td>
+        </tr>
+      </table></td>
+  </tr>
+</table>
+<table width="98%" border="0" cellpadding="1" cellspacing="1" align="center" class='tbtitle' style='background:#CFCFCF;margin-bottom:5px;'>
+  <tr align="center" bgcolor="#FBFCE2">
+    <td>ID号</td>
+    <td>节点名称</td>
+    <td>权限值</td>
+    <td>排序值</td>
+    <td>状态</td>
+    <td>管理操作</td>
+  </tr>
+ <?php 
+		foreach($lists as $v){
+ ?>
+  <tr align="center" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
+    <td><?php echo $v['id'];?></td>
+    <td align="left"><?php echo $v['pre'];?><?php echo $v['name'];?></td>
+    <td align="left"><?php echo $v['codes'];?>&nbsp;<?php echo $v['description']?></td>
+    <td><?php echo $v['sort'];?></td>
+    <td><?php echo $v['check'];?></td>
+    <td><a href="<?=$_SESSION['admin_path']?>system/add_node').'?reid='.$v['id']?>">添加子节点</a> | <a href="">修改</a> | <a href="" class="del">删除</a></td>
+  </tr>
+  <?php ;}?>
+</table>
+<table width="98%" border="0" cellpadding="5" cellspacing="1" align="center" style=" border:1px solid #CFCFCF;line-height:31px;margin:auto;">
+  <tr>
+    <td height="35" align="center" style="background:#F9FCEF;padding:7px 6px 6px 10px;" ></td>
+  </tr>
+</table>
+</body>
+</html>

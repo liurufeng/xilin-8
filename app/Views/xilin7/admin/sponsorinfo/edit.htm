@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>sponsorinfo--edit</title>
+<link href='<?php echo base_url();?>/admin/css/base.css' rel='stylesheet' type='text/css'>
+<script language='javascript'>
+	function checkSubmit()
+  {
+     if(document.form1.name.value==""){
+	     alert("Sponsor's name can not be empty!");
+	     document.form1.name.focus();
+	     return false;
+     }
+     return true;
+ }
+</script>
+<script language='javascript' src="<?php echo base_url();?>/admin/js/main.js"></script>
+<script>
+var HTTPURL = "<?php echo $_SESSION['admin_path']?>";
+var BASEURL = "<?php echo $_SESSION['admin_path']?>";
+</script>
+ <?php 
+  
+$posturl = $_SESSION['admin_path'].'sponsorinfo/edit';
+$picupurl = $_SESSION['admin_path'].'sponsorinfo/edit';
+	
+  ?>
+</head>
+<body background='<?php echo base_url();?>/admin/images/allbg.gif' leftmargin='8' topmargin='8'>
+<table width="98%" border="0" align="center" cellpadding="3" cellspacing="1" bgcolor="#D6D6D6">
+  <tr>
+    <td height="19" background="<?php echo base_url();?>/admin/images/tbg.gif" bgcolor="#E7E7E7">
+      <table width="96%" border="0" cellspacing="1" cellpadding="1">
+        <tr> 
+          <td width="24%" style="padding-left:10px;"><b><strong>sponsorinfo edit</strong></b> </td>
+          <td width="76%" align="right"><strong><a href="<?=$_SESSION['admin_path']?>sponsorinfo/index"><u>sponsorinfo list</u></a></strong></td>
+        </tr>
+      </table></td>
+</tr>
+<tr>
+    <td height="215" align="center" valign="top" bgcolor="#FFFFFF">
+	<form name="form1" enctype="multipart/form-data" action="<?=$_SESSION['admin_path']?>sponsorinfo/edit" onSubmit="return checkSubmit();" method="post">
+		<input type="hidden" name="dopost" value="save" />
+		<input type="hidden" name="sponsor_id" value="<?php echo $info['sponsor_id']?>" />
+  		<table width="98%" border="0" cellspacing="1" cellpadding="1">        
+          <tr> 
+            <td height="30"><span style="color:red;">*</span>name:</td>
+            <td style="text-align:left;"><input name="name" type="text" id="name" size="16" style="width:200px" value="<?php echo $info['name']?>"/></td>
+          </tr>        
+          <tr> 
+            <td height="30">sponsor level:</td>
+            <td style="text-align:left;">
+		    <select name='level_id' style='width:200px'>
+		  	<?php
+				if($groupList){
+					foreach($groupList as $k=>$v)
+					{
+						$selected="";
+						if($v['level_id'] == $info['level_id']){
+							$selected="selected";
+						}
+						echo "<option value='".$v['level_id']."' $selected>".$v['name']."</option>\r\n";
+					}
+				}
+			?>
+		  	</select>
+            </td>
+          </tr>      
+          <tr> 
+            <td height="30">image url:</td>
+            <td style="text-align:left;">
+              <input type="text" value="<?php echo $info['image_path']?>" id="icon" name="icon" size="80"/>
+
+			    <!--<?php $posturl = '';?>
+			    <table width="100%" border="0" cellspacing="1" cellpadding="1">
+	                <tr>
+	                  <td height="30">
+	                  <input name="picname" type="hidden" id="picname" style="width:240px" value="" />
+	                  <input type="button"  value="upload" style="width:70px;cursor:pointer;" /> 
+	                  <iframe name='uplitpicfra' id='uplitpicfra' src='' width='200' height='200' style='display:none'></iframe>
+	                  <span class="litpic_span"><input name="litpic" type="file" id="litpic"  onChange="SeePicNew(this, 'divpicview', 'uplitpicfra', 165, '<?php echo $picupurl?>');" size="1" class='np coolbg'/></span>
+	                  </td>
+	                </tr>
+                </table>-->
+            </td>
+          </tr>   
+          <tr>
+         	 <td height="30">&nbsp;</td>
+         	 <td>
+         	 	<?php if($info['image_path']){?>
+         	 		<div id='divpicview' class='divpre'><img src="<?php echo $info['image_path']?>" alt="" /></div>
+         	 	<?php }else{?>
+     	 	        <div id='divpicview' class='divpre'></div>
+         	 	<?php }?>
+         	 </td>
+          </tr>      
+          <tr> 
+            <td height="30">link:</td>
+            <td style="text-align:left;"><input name="link" type="text" id="link" size="16" style="width:200px"  value="<?php echo $info['link']?>"/></td>
+          </tr>     
+          <tr> 
+            <td height="30">note:</td>
+            <td style="text-align:left;"><input name="note" type="text" id="note" size="16" style="width:200px"  value="<?php echo $info['note']?>"/></td>
+          </tr>      
+          <tr> 
+            <td height="30">next pay day:</td>
+            <td style="text-align:left;"><input name="next_pay_day" type="text" id="next_pay_day" size="16" style="width:200px" value="<?php echo $info['next_pay_day']?>"/></td>
+          </tr>      
+          <tr> 
+            <td height="30">next pay amount:</td>
+            <td style="text-align:left;"><input name="next_pay_amount" type="text" id="next_pay_amount" size="16" style="width:200px" value="<?php echo $info['next_pay_amount']?>" /></td>
+          </tr>      
+          <tr> 
+            <td height="30">active:</td>
+            <td style="text-align:left;">
+            	<input type="radio" name="active" value="1" <?php if($info['active'] == 1){ echo "checked";}?>/>yes
+            	<input type="radio" name="active" value="0" <?php if($info['active'] == 0){ echo "checked";}?>/>no
+            </td>
+          </tr>      
+          <tr> 
+            <td height="30">show order:</td>
+            <td style="text-align:left;"><input name="show_order" type="text" id="show_order" size="16" style="width:200px" value="<?php echo $info['show_order']?>" /></td>
+          </tr> 
+          <tr> 
+            <td height="60">&nbsp;</td>
+            <td><input type="submit" name="Submit" value="save " class="coolbg np" /></td>
+          </tr>
+        </table>
+      </form>
+	  </td>
+</tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,81 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>添加操作节点</title>
+<link href="<?php echo base_url();?>/admin/css/base.css" rel="stylesheet" type="text/css" />
+</head>
+<body background='images/allbg.gif' leftmargin='8' topmargin='8'>
+<div class="bodytitle">
+	<div class="bodytitleleft"></div>
+	<div class="bodytitletxt" style="padding-left:10px;"><b>添加操作节点</b></div>
+</div>
+<table width="98%" border="0" cellpadding="1" cellspacing="1" align="center" class="tbtitle" style="background:#CFCFCF;">
+   <form id="form1" name="form1" method="post">
+   <input type='hidden' name='action' value='make'>
+    <tr>
+      <td height="20" colspan="2" bgcolor="#EDF9D5" background="<?php echo base_url();?>/admin/images/tbg.gif" style="padding-left:10px;"><a href=""><u><b>权限节点</b></u></a>
+        &gt; <b> 添加操作节点：</b> </td>
+    </tr>
+    <tr>
+      <td width="19%" align="center" bgcolor="#FFFFFF"><b>所属分类</b></td>
+      <td width="81%" bgcolor="#FFFFFF">
+      	<?php echo $nodeSelect;?></td>
+    </tr>
+    <tr>
+      <td align="center" bgcolor="#FFFFFF"><b>节点名称</b></td>
+      <td bgcolor="#FFFFFF">
+        <input name="name" type="text" id="name" />
+      </td>
+    </tr>
+    <tr>
+      <td align="center" bgcolor="#FFFFFF"><b>权限标示</b></td>
+      <td bgcolor="#FFFFFF">
+      	<input name="code" type="text" id="code" />
+      </td>
+    </tr>
+    <tr>
+      <td align="center" bgcolor="#FFFFFF"><b>节点描述</b></td>
+      <td bgcolor="#FFFFFF"><textarea name="description" cols="60" rows="3" id="description"></textarea></td>
+    </tr>
+    <tr>
+      <td align="center" bgcolor="#FFFFFF"><b>排序值</b></td>
+      <td bgcolor="#FFFFFF">
+      <input name="sort" type="text" id="sort" value="10" size="6" />
+						&nbsp; 越小越靠前</td>
+    </tr>
+    
+    <tr>
+      <td align="center" bgcolor="#FFFFFF"><b>审核状态：</b></td>
+      <td bgcolor="#FFFFFF">
+
+      	<input name="is_check" type="radio" value="1" checked="checked" />
+							正常
+							<input type="radio" name="is_check" value="0" />
+							停用 
+      	</td>
+    </tr>
+
+   
+    <tr bgcolor="#F9FDF0">
+      <td height="28" colspan="2" bgcolor="#F9FCEF">
+      	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="26%">&nbsp;</td>
+            <td width="15%">
+				<input name="act" type="hidden" id="act" value="ok" />
+            	<input name="imageField" type="submit" class="np coolbg" value="提交" />
+            </td>
+            <td width="59%">
+            	<input type="button" name="button" id="button" value="返回" onClick="location='<?=$_SESSION['admin_path']?>system/index';" class="np coolbg" />
+            </td>
+          </tr>
+       </table>
+       </td>
+    </tr>
+  </form>
+
+</table>
+</body>
+</html>

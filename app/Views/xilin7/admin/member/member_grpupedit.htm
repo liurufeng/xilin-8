@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>group set</title>
+<link href='<?php echo base_url();?>/admin/css/base.css' rel='stylesheet' type='text/css'>
+<script language='javascript'>
+	function checkSubmit()
+  {
+     if(document.form1.groupname.value==""){
+	     alert("admin group's name is not null！");
+	     document.form1.groupname.focus();
+	     return false;
+     }
+     return true;
+ }
+</script>
+</head>
+<body background='<?php echo base_url();?>/admin/images/allbg.gif' leftmargin='8' topmargin='8'>
+<center>
+<table width="98%" border="0" cellpadding="2" cellspacing="1" bgcolor="#D6D6D6" align="center">
+<form name='form1' action='<?=$_SESSION['admin_path']?>member/groupedit' method='post' onSubmit="return checkSubmit();">
+<input type='hidden' name='dopost' value='save'>
+<input type='hidden' name='id' value='<?php echo $info['id'];?>'>
+  <tr>
+    <td height="23" background="<?php echo base_url();?>/admin/images/tbg.gif" align="left" style="padding-left:10px;"><b><a href='<?=$_SESSION['admin_path']?>member/group'>系统用户组管理</a>&gt;&gt;增加用户组：</b></td>
+</tr>
+  <tr> 
+    <td valign="top" bgcolor="#FFFFFF" align="center"> 
+      <table width="98%" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td width="9%" height="30"><span style="color:red">*</span>group name：</td>
+          <td width="91%" style="text-align:left;"> <input name="groupname" type="text" id="groupname" value="<?php echo $info['name'];?>"/> 
+          </td>
+        </tr>
+        <tr>
+        <td width="9%" height="30">group note：</td>
+		<td height="25" style="text-align:left;" colspan="2">
+		<table>
+	        <?php foreach($gouplists as $k=>$v){?>
+			<tr>
+				<td>
+					<input type="checkbox" value="<?php echo $v['id']?>" class="np" name="nodeids[]" <?php if(in_array($v['id'],$info['nodeidsarr'])){ echo "checked";}?>><?php echo $v['name']?></font>
+				</td>
+			</tr>
+			<?php }?>
+		</table>
+        </td>
+	    </tr>
+        </tr>
+        <tr> 
+          <td width="9%" height="30">description：</td>
+          <td width="91%" style="text-align:left;"> <textarea name="description" type="text" id="description" rows="3" cols="50"><?php echo $info['description'];?></textarea>
+          </td>
+        </tr>
+       
+        <tr> 
+          <td height="50" align="center">&nbsp;</td>
+          <td height="50"  style="text-align:left;"><input  class="np" name="imageField" type="image" src="<?php echo base_url();?>/admin/images/button_save.gif" width="60" height="22" border="0">
+          </td>
+        </tr>
+      </table>
+    </td>
+</tr>
+</form>
+</table>
+</center>
+</body>
+</html>
