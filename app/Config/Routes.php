@@ -395,7 +395,7 @@ $routes->group('admin/system', ['filter' => 'auth'], function($routes) {
 
 });
 
-$routes->group('xilin_ns_admin/teacher', ['namespace' => 'App\Controllers\Xilin_ns_admin'], function($routes) {
+$routes->group('Xilin_ns_admin/teacher', ['namespace' => 'App\Controllers\Xilin_ns_admin'], function($routes) {
 
   // list page
   $routes->get('/', 'Teacher::index');
@@ -411,7 +411,7 @@ $routes->group('xilin_ns_admin/teacher', ['namespace' => 'App\Controllers\Xilin_
   $routes->post('del', 'Teacher::del');
 });
 
-$routes->group('xilin_ns_admin/teacher', ['namespace' => 'App\Controllers\Xilin_ns_admin'], function($routes) {
+$routes->group('Xilin_ns_admin/teacher', ['namespace' => 'App\Controllers\Xilin_ns_admin'], function($routes) {
 
   $routes->match(['get','post'], '(:num)/edit', 'Teacher::edit/$1');
 

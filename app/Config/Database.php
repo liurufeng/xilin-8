@@ -126,7 +126,7 @@ class Database extends Config
     }
 
     $_SESSION['tm'] = 'xilin7/';
-    $_SESSION['admin_path'] = '/xilin_ns_admin/';
+    $_SESSION['admin_path'] = '/Xilin_ns_admin/';
     $_SESSION['site_email'] = 'webmaster@xilinnschinese.org';
     $_SESSION['check_class_conflict'] = true;
 	}
