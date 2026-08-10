@@ -31,8 +31,8 @@
   $all_emails = '';
   if(count($plist) >= 1) {
     foreach($plist as $s) {
-      if(strpos($all_emails, $s['email']) === false) $all_emails.=$s['email'].',';
-      if($s['alter_contact_email'] && strpos($all_emails, $s['alter_contact_email']) === false && ! empty($s['alter_contact_email'])) $all_emails.=$s['alter_contact_email'].',';
+      if(!empty($s['email']) && strpos($all_emails, $s['email']) === false) $all_emails.=$s['email'].',';
+      if(!empty($s['alter_contact_email']) && strpos($all_emails, $s['alter_contact_email']) === false) $all_emails.=$s['alter_contact_email'].',';
       }
     ?>
       <tr bgcolor="#FFFFFF" >
@@ -51,7 +51,7 @@
   $all_emails = '';
   if(count($tlist) >= 1) {
     foreach($tlist as $s) {
-      if(strpos($all_emails, $s['email']) === false) $all_emails.=$s['email'].',';
+      if(!empty($s['email']) && strpos($all_emails, $s['email']) === false) $all_emails.=$s['email'].',';
     }
     ?>
     <tr bgcolor="#FFFFFF" >

@@ -78,7 +78,7 @@ class Account extends BaseController
           }
           if(!empty($a['student_id'])) {
             $students[$a['class_id']][$a['student_id']] = $a;
-            if(isset($parent_emails[$a['class_id']]) && strpos($parent_emails[$a['class_id']], $a['email'])===false) {
+            if(!empty($a['email']) && isset($parent_emails[$a['class_id']]) && strpos($parent_emails[$a['class_id']], $a['email'])===false) {
               $parent_emails[$a['class_id']] .= $a['email'] . ',';
             }
             if(!empty($a['alter_contact_email']) && isset($parent_emails[$a['class_id']]) && strpos($parent_emails[$a['class_id']], $a['alter_contact_email'])===false){

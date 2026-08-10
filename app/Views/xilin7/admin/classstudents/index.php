@@ -59,15 +59,12 @@
     $num = 1;
     $all_emails = $emails = '';
     foreach($students as $s) {
-      $emails .= $s['email'] . ',';
+      if(!empty($s['email'])) $emails .= $s['email'] . ',';
       $alt_email = trim(strval($s['alter_contact_email']));
       $emails .= empty($alt_email) ? '': $alt_email . ',';
 
-      if(strpos($all_emails, $s['email']) === false) $all_emails.=$s['email'].',';
-      if(isset($alt_email)
-        && !empty($alt_email)
-        && strpos($all_emails, $alt_email) === false
-        ) $all_emails.=$alt_email.',';
+      if(!empty($s['email']) && strpos($all_emails, $s['email']) === false) $all_emails.=$s['email'].',';
+      if(!empty($alt_email) && strpos($all_emails, $alt_email) === false) $all_emails.=$alt_email.',';
       ?>
 
       <tr>
