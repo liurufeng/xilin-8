@@ -40,8 +40,8 @@ class Sponsorlevel extends MY_Controller
     if ($this->request->getVar('dopost') == 'save' || $this->request->getVar('dopost') == 'add') {
       if ($this->request->getVar('name')) {
         $name = trim($this->request->getVar('name'));
-        $sql = " SELECT 1 FROM  sponsor_level WHERE name = '$name' and status=1";
-         $rst = $this->db->query($sql)->getResultArray();
+        $sql = " SELECT 1 FROM  sponsor_level WHERE name = ? and status=1";
+         $rst = $this->db->query($sql, [$name])->getResultArray();
         if (is_array($rst) && count($rst) > 0) {
           ShowMsg("sponsor level'name already exists", $_SESSION['admin_path'].'sponsorlevel/add');
         }
@@ -66,8 +66,8 @@ class Sponsorlevel extends MY_Controller
       // 判断用户名是否存在
       if ($this->request->getVar('level_id')) {
         $name = trim($this->request->getVar('name'));
-        $sql = " SELECT 1 FROM  sponsor_level WHERE name = '$name' and level_id <> {$this->request->getVar('level_id')} and status=1";
-        $rst = $this->db->query($sql)->getResultArray();
+        $sql = " SELECT 1 FROM  sponsor_level WHERE name = ? and level_id <> ? and status=1";
+        $rst = $this->db->query($sql, [$name, (int)$this->request->getVar('level_id')])->getResultArray();
         if (is_array($rst) && count($rst) > 0) {
           ShowMsg("sponsor level'name already exists", $_SESSION['admin_path'].'sponsorlevel/add');
         }

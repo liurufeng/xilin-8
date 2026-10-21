@@ -28,8 +28,8 @@ class Pod extends BaseController
       if ($type == 1) {
         $id = $userinfo[0]['parent_id'];
 
-        $sql = "select * from parents where parent_id = $id";
-        $userinfodata = $this->db->query($sql)->getResultArray();
+        $sql = "select * from parents where parent_id = ?";
+        $userinfodata = $this->db->query($sql, [$id])->getResultArray();
         $data['userinfodata'] = $userinfodata;
         $data['usertype'] = $type;
       $data['userinfodata'] = $userinfodata;
@@ -47,16 +47,20 @@ class Pod extends BaseController
    */
   function getEvents()
   {
+    // returns helpers' contact details: logged-in users only
+    if (empty(session()->get('userresult')) && !(session()->get('id') && session()->get('group_id') && session()->get('name'))) {
+      return;
+    }
     $year = $this->request->getVar('y');
     $month = $this->request->getVar('m');
     $pid = $this->request->getVar('pid');
     $return_string = '';
     $sql = "SELECT event_id,date,start_time,end_time,helpers_needed,cancel_in_days
     	      FROM events
-    	      WHERE year=" . $year . "
-    	      AND month=" . $month . "
+    	      WHERE year=?
+    	      AND month=?
     	      ORDER BY date ASC";
-    $result = $this->db->query($sql)->getResultArray();
+    $result = $this->db->query($sql, [$year, $month])->getResultArray();
 
     if ($result) {
       foreach ($result as $event) {
@@ -74,9 +78,9 @@ class Pod extends BaseController
                   ) AS DETAILS
                   FROM helpers h
                   join parents p on p.parent_id=h.parent_id
-                  WHERE h.event_id = $eid ";
+                  WHERE h.event_id = ? ";
 
-        $result2 = $this->db->query($query)->getResultArray();
+        $result2 = $this->db->query($query, [$eid])->getResultArray();
         $helpers = "";
         $thisRegistered = 0;
         if ($result2) {

@@ -35,11 +35,11 @@
   		<table width="98%" border="0" cellspacing="1" cellpadding="1">
           <tr> 
             <td width="16%" height="30"><span style="color:red;">*</span>Subject name：</td>
-            <td width="84%"  style="text-align:left;"><input name="subject_name" type="text" id="subject_name" size="16" style="width:200px" value="<?php echo $info['subject_name']?>"/></td>
+            <td width="84%"  style="text-align:left;"><input name="subject_name" type="text" id="subject_name" size="16" style="width:200px" value="<?php echo esc($info['subject_name'], 'attr')?>"/></td>
           </tr>
           <tr> 
             <td width="16%" height="30">Seq：</td>
-            <td width="84%"  style="text-align:left;"><input name="seq" type="text" id="seq" size="16" style="width:200px"  value="<?php echo $info['seq']?>"/></td>
+            <td width="84%"  style="text-align:left;"><input name="seq" type="text" id="seq" size="16" style="width:200px"  value="<?php echo esc($info['seq'], 'attr')?>"/></td>
           </tr>
         <tr>
           <td height="30">show flag：</td>

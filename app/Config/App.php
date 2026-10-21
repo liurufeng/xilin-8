@@ -200,4 +200,13 @@ class App extends BaseConfig
      * @see http://www.w3.org/TR/CSP/
      */
     public bool $CSPEnabled = false;
+
+    public function __construct()
+    {
+        require_once __DIR__ . '/xilin_environment.php';
+
+        parent::__construct();
+
+        $this->baseURL = xilin_base_url();
+    }
 }

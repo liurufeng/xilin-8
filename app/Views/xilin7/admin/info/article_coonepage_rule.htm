@@ -127,10 +127,10 @@ function DelNode(selid)
 <td><?php echo $fields['id']?></td>
 <td><input name="ids" type="checkbox" id="ids" value="<?php echo $fields['id']?>" class="np"></td>
 <td align='left'>
-<?php echo $fields['url']; ?>
+<?php echo esc($fields['url']); ?>
 </td>
-<td><?php echo $fields['lang']; ?></td>
-<td><?php echo $fields['title']; ?></td>
+<td><?php echo esc($fields['lang']); ?></td>
+<td><?php echo esc($fields['title']); ?></td>
 <td>
 <a href="javascript:EditNode(<?php echo $fields['id']?>)">编辑</a> | 
 <a href="javascript:DelNode(<?php echo $fields['id']?>)">删除</a> 

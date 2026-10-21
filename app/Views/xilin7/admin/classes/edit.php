@@ -7,8 +7,8 @@
 <script language='javascript'>
 	function checkSubmit()
   {
-    var semster_id = <?=session()->get('semester_id')?>
-    var cur_semster_id = <?=session()->get('current_semester')['semester_id']?>;
+    var semster_id = <?=(int) session()->get('semester_id')?>
+    var cur_semster_id = <?=(int) session()->get('current_semester')['semester_id']?>;
 
      if(document.form1.class_code.value==""){
 	     alert("class's code is not null!");
@@ -62,7 +62,7 @@
 						if($v['subject_id'] == $info['subject_id']){
 							$selected="selected";
 						}
-						echo "<option value='".$v['subject_id']."' $selected>".$v['subject_name']."</option>\r\n";
+						echo "<option value='".$v['subject_id']."' $selected>".esc($v['subject_name'])."</option>\r\n";
 					}
 					}
 			  	?>
@@ -81,7 +81,7 @@
 						if($v['semester_id'] == $info['semester_id']){
 							$selected="selected";
 						}
-						echo "<option value='".$v['semester_id']."' $selected>".$v['semester_name']."</option>\r\n";
+						echo "<option value='".$v['semester_id']."' $selected>".esc($v['semester_name'])."</option>\r\n";
 					}
 					}
 			  	?>
@@ -100,7 +100,7 @@
 						if($v['teacher_id'] == $info['teacher_id']){
 							$selected="selected";
 						}
-						echo "<option value='".$v['teacher_id']."' $selected>".$v['en_name']."</option>\r\n";
+						echo "<option value='".$v['teacher_id']."' $selected>".esc($v['en_name'])."</option>\r\n";
 					}
 					}
 			  	?>
@@ -108,62 +108,62 @@
           </tr>
           <tr> 
             <td height="30"><span style="color:red;">*</span>Class Code</td>
-            <td style="text-align:left;"><input name="class_code" type="text" id="class_code" size="16" style="width:200px" value="<?php echo $info['class_code']?>" /></td>
+            <td style="text-align:left;"><input name="class_code" type="text" id="class_code" size="16" style="width:200px" value="<?php echo esc($info['class_code'], 'attr')?>" /></td>
           </tr>
         
           <tr> 
             <td height="30"><span style="color:red;">*</span>Class Name:</td>
-            <td style="text-align:left;"><input name="class_name" type="text" id="class_name" size="16" style="width:200px"  value="<?php echo $info['class_name']?>" /></td>
+            <td style="text-align:left;"><input name="class_name" type="text" id="class_name" size="16" style="width:200px"  value="<?php echo esc($info['class_name'], 'attr')?>" /></td>
           </tr>
         
           <tr> 
             <td height="30">Notes:</td>
-            <td style="text-align:left;"><input name="notes" type="text" id="notes" size="16" style="width:200px" value="<?php echo $info['notes']?>" /></td>
+            <td style="text-align:left;"><input name="notes" type="text" id="notes" size="16" style="width:200px" value="<?php echo esc($info['notes'], 'attr')?>" /></td>
           </tr>
         
           <tr> 
             <td height="30">Syl Link:</td>
-            <td style="text-align:left;"><input name="syl_link" type="text" id="syl_link" size="16" style="width:200px" value="<?php echo $info['syl_link']?>" /></td>
+            <td style="text-align:left;"><input name="syl_link" type="text" id="syl_link" size="16" style="width:200px" value="<?php echo esc($info['syl_link'], 'attr')?>" /></td>
           </tr>
         
           <tr> 
             <td height="30">Tuition:</td>
-            <td style="text-align:left;"><input name="tuition" type="text" id="tuition" size="16" style="width:200px"  value="<?php echo $info['tuition']?>"/></td>
+            <td style="text-align:left;"><input name="tuition" type="text" id="tuition" size="16" style="width:200px"  value="<?php echo esc($info['tuition'], 'attr')?>"/></td>
           </tr>
          
           <tr> 
             <td height="30">Late Tuition:</td>
-            <td style="text-align:left;"><input name="late_tuition" type="text" id="late_tuition" size="16" style="width:200px"  value="<?php echo $info['late_tuition']?>"/></td>
+            <td style="text-align:left;"><input name="late_tuition" type="text" id="late_tuition" size="16" style="width:200px"  value="<?php echo esc($info['late_tuition'], 'attr')?>"/></td>
           </tr>
          
           <tr> 
             <td height="30">Book Fee:</td>
-            <td style="text-align:left;"><input name="book_fee" type="text" id="book_fee" size="16" style="width:200px"  value="<?php echo $info['book_fee']?>"/></td>
+            <td style="text-align:left;"><input name="book_fee" type="text" id="book_fee" size="16" style="width:200px"  value="<?php echo esc($info['book_fee'], 'attr')?>"/></td>
           </tr>
          
           <tr> 
             <td height="30">Late Book Fee:</td>
-            <td style="text-align:left;"><input name="late_book_fee" type="text" id="late_book_fee" size="16" style="width:200px"  value="<?php echo $info['late_book_fee']?>"/></td>
+            <td style="text-align:left;"><input name="late_book_fee" type="text" id="late_book_fee" size="16" style="width:200px"  value="<?php echo esc($info['late_book_fee'], 'attr')?>"/></td>
           </tr>
          
           <tr> 
             <td height="30">Material Fee:</td>
-            <td style="text-align:left;"><input name="material_fee" type="text" id="material_fee" size="16" style="width:200px" value="<?php echo $info['material_fee']?>" /></td>
+            <td style="text-align:left;"><input name="material_fee" type="text" id="material_fee" size="16" style="width:200px" value="<?php echo esc($info['material_fee'], 'attr')?>" /></td>
           </tr>
          
           <tr> 
             <td height="30">Meeting Time:</td>
-            <td style="text-align:left;"><input name="meeting_time" type="text" id="meeting_time" size="16" style="width:200px" value="<?php echo $info['meeting_time']?>" /></td>
+            <td style="text-align:left;"><input name="meeting_time" type="text" id="meeting_time" size="16" style="width:200px" value="<?php echo esc($info['meeting_time'], 'attr')?>" /></td>
           </tr>
          
           <tr> 
             <td height="30">Classroom:</td>
-            <td style="text-align:left;"><input name="classroom" type="text" id="classroom" size="16" style="width:200px" value="<?php echo $info['classroom']?>" /></td>
+            <td style="text-align:left;"><input name="classroom" type="text" id="classroom" size="16" style="width:200px" value="<?php echo esc($info['classroom'], 'attr')?>" /></td>
           </tr>
          
           <tr> 
             <td height="30">Student Amount Limit:</td>
-            <td style="text-align:left;"><input name="student_amount_limit" type="text" id="student_amount_limit" size="16" style="width:200px" value="<?php echo $info['student_amount_limit']?>"/></td>
+            <td style="text-align:left;"><input name="student_amount_limit" type="text" id="student_amount_limit" size="16" style="width:200px" value="<?php echo esc($info['student_amount_limit'], 'attr')?>"/></td>
           </tr>
          
 <!--          <tr>
@@ -184,7 +184,7 @@
          
           <tr> 
             <td height="30">Seq:</td>
-            <td style="text-align:left;"><input name="seq" type="text" id="seq" size="16" style="width:200px"  value="<?php echo $info['seq']?>"/></td>
+            <td style="text-align:left;"><input name="seq" type="text" id="seq" size="16" style="width:200px"  value="<?php echo esc($info['seq'], 'attr')?>"/></td>
           </tr>
           <tr> 
             <td height="60">&nbsp;</td>

@@ -16,7 +16,7 @@
             <select id="semester_id" name="semester_id" onchange="submit();">
               <?php foreach($semesters as $semester) {?>
               <option value="<?=$semester['semester_id']?>" <?php if($semester['semester_id'] == session()->get('semester_id')) echo 'selected'; ?> >
-                <?=$semester['semester_year']?> <?=$semester['semester_name']?>
+                <?=esc($semester['semester_year'])?> <?=esc($semester['semester_name'])?>
               </option>
               <?php } ?>
             </select>
@@ -37,17 +37,17 @@
     <tr bgcolor="#E4F0F9" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#E4F0F9';">
       <td colspan="11">
         Class:
-        <?php echo $v['class_code']?>,
-        <?php echo $v['subject']?>,
-        <?php echo $v['class_name']?>,
-        <?php echo $v['teacher']?>,
-        <?php echo $v['teacher_email']?>,
-        <?php echo $v['notes']?>,
+        <?php echo esc($v['class_code'])?>,
+        <?php echo esc($v['subject'])?>,
+        <?php echo esc($v['class_name'])?>,
+        <?php echo esc($v['teacher'])?>,
+        <?php echo esc($v['teacher_email'])?>,
+        <?php echo esc($v['notes'])?>,
         <?php /*echo $v['syl_link']*/?>,
-        <?php echo $v['meeting_time']?>,
-        <?php echo $v['classroom']?>,
-        <?=$v['tuition']?> + <?=$v['book_fee']?> + <?=$v['material_fee']?>,
-        <?=$v['student_amount_limit']?></td>
+        <?php echo esc($v['meeting_time'])?>,
+        <?php echo esc($v['classroom'])?>,
+        <?=esc($v['tuition'])?> + <?=esc($v['book_fee'])?> + <?=esc($v['material_fee'])?>,
+        <?=esc($v['student_amount_limit'])?></td>
     </tr>
     <?php
     $db = db_connect();
@@ -70,22 +70,22 @@
       <tr>
         <td colspan="11">
           <?=$num++?>.
-          <?php echo $s['sename']?>,
-          <?php echo $s['birthday']?>,
-          <?php echo $s['gender']?>,
-          <?php echo $s['email']?>,
-          <?= $s['primary_relationship']?>: <?= $s['primary_en_name']?>,
-          <?php echo $s['primary_phone']?>,
-          <?= $s['alter_relationship']?>: <?= $s['alter_en_name']?>,
-          <?php echo $s['alter_phone']?>,
-          <?php echo $s['alter_contact_email']?>,
-          <?=$s['address']?> <?=$s['city']?> <?=$s['state']?> <?=$s['zip']?></td>
+          <?php echo esc($s['sename'])?>,
+          <?php echo esc($s['birthday'])?>,
+          <?php echo esc($s['gender'])?>,
+          <?php echo esc($s['email'])?>,
+          <?= esc($s['primary_relationship'])?>: <?= esc($s['primary_en_name'])?>,
+          <?php echo esc($s['primary_phone'])?>,
+          <?= esc($s['alter_relationship'])?>: <?= esc($s['alter_en_name'])?>,
+          <?php echo esc($s['alter_phone'])?>,
+          <?php echo esc($s['alter_contact_email'])?>,
+          <?=esc($s['address'])?> <?=esc($s['city'])?> <?=esc($s['state'])?> <?=esc($s['zip'])?></td>
       </tr>
   <?php }
     if($num > 1) {?>
       <tr bgcolor="#FFFFFF" >
         <td height="27" align="left" colspan="11">Email list of the class: <br>
-        <textarea style="width: 99%;"><?=rtrim($emails,',')?></textarea>
+        <textarea style="width: 99%;"><?=esc(rtrim($emails,','))?></textarea>
         </td>
       </tr>
       <?php }?>
@@ -96,7 +96,7 @@
 <?php } ?>
 </table>
 <p>Parent email addresses of all classes in this semester</p>
-<textarea style="width: 98%;" rows="10"><?=rtrim($all_emails,',')?>
+<textarea style="width: 98%;" rows="10"><?=esc(rtrim($all_emails,','))?>
 </textarea>
 </body>
 </html>

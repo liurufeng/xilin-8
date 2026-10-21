@@ -31,7 +31,7 @@
                 Semester: <select id="semester_id" name="semester_id" onchange="submit();">
                   <?php foreach($semesters as $semester) {?>
                     <option value="<?=$semester['semester_id']?>" <?php if($semester['semester_id'] == session()->get('semester_id')) echo 'selected'; ?> >
-                      <?=$semester['semester_year']?> <?=$semester['semester_name']?>
+                      <?=esc($semester['semester_year'])?> <?=esc($semester['semester_name'])?>
                     </option>
                   <?php } ?>
                 </select>
@@ -64,18 +64,18 @@
             </tr>
             </thead>
             <tbody>
-              <tr class="info"><td><?=$c['class_code']?></td>
-                <td><?=$c['class_name']?></td>
-                <td><?=$c['meeting_time']?></td>
-                <td><?=$c['classroom']?></td>
-                <td><?=$c['notes']?></td>
-                <td><?=$c['tuition']?>+<?=$c['book_fee']?>+<?=$c['material_fee']?></td>
+              <tr class="info"><td><?=esc($c['class_code'])?></td>
+                <td><?=esc($c['class_name'])?></td>
+                <td><?=esc($c['meeting_time'])?></td>
+                <td><?=esc($c['classroom'])?></td>
+                <td><?=esc($c['notes'])?></td>
+                <td><?=esc($c['tuition'])?>+<?=esc($c['book_fee'])?>+<?=esc($c['material_fee'])?></td>
               </tr>
 
               <tr>
                 <td height="30">Syllabus Link:</td>
                 <td style="text-align:left;" colspan="5">
-                  <input name="syl_link" type="text" id="syl_link_<?=$c['class_id']?>" size="30" style="width:500px" value="<?php echo $c['syl_link']?>" />
+                  <input name="syl_link" type="text" id="syl_link_<?=$c['class_id']?>" size="30" style="width:500px" value="<?php echo esc($c['syl_link'], 'attr')?>" />
                   <input type="submit" value=" Update " name="Save" class="btn btn-primary btn-xs" style="position: relative; top: -2px; cursor: pointer"
                     onclick="updateSL(<?=$c['class_id']?>);">
                 </td>
@@ -95,12 +95,12 @@
 
                 <tr style="border: 0;">
                   <td colspan="6" style="border: 0;">
-                    <?= ++$counter?>. <?=$s['en_name']?> <?=empty($s['cn_name'])?'':'('.$s['cn_name'].')'?>,
-                    <?=$s['birthday']?>, <?=$s['gender']?>,
-                    <?=$s['primary_relationship']?>: <?=$s['primary_en_name']?>,
-                    <?=$s['email']?>, <?= (!empty($s['alter_contact_email']) && $s['alter_contact_email'] != $s['email']) ? $s['alter_contact_email'].', ' : '' ?>
-                    <?=$s['primary_phone']?>,
-                    <?=$s['address']?> <?=$s['city']?> <?=$s['state']?> <?=$s['zip']?>
+                    <?= ++$counter?>. <?=esc($s['en_name'])?> <?=esc(empty($s['cn_name'])?'':'('.$s['cn_name'].')')?>,
+                    <?=esc($s['birthday'])?>, <?=esc($s['gender'])?>,
+                    <?=esc($s['primary_relationship'])?>: <?=esc($s['primary_en_name'])?>,
+                    <?=esc($s['email'])?>, <?= esc((!empty($s['alter_contact_email']) && $s['alter_contact_email'] != $s['email']) ? $s['alter_contact_email'].', ' : '') ?>
+                    <?=esc($s['primary_phone'])?>,
+                    <?=esc($s['address'])?> <?=esc($s['city'])?> <?=esc($s['state'])?> <?=esc($s['zip'])?>
                   </td>
                 </tr>
               <?php } } ?>
@@ -108,13 +108,13 @@
                 <tr bgcolor="#FFFFFF" >
                   <td align="right">* Emails of the class</td>
                   <td height="45" colspan="5">
-                    <textarea name="emails_<?=$ck?>" id="emails_<?=$ck?>" style="width: 100%;" rows="4" required=""><?=rtrim($parent_emails[$ck],',')?></textarea>
+                    <textarea name="emails_<?=esc($ck, 'attr')?>" id="emails_<?=esc($ck, 'attr')?>" style="width: 100%;" rows="4" required=""><?=esc(rtrim($parent_emails[$ck],','))?></textarea>
                   </td>
                 </tr>
                 <tr>
                   <td colspan="6" style="font-size: 15px; font-weight: bold; border: 0; border-bottom: 2px solid #000000">
 
-                  <a class="btn btn-block btn-primary" href="https://mail.google.com/mail/?view=cm&fs=1&to=<?=$teacher['email']?>&bcc=<?=rtrim($parent_emails[$ck],',')?>" target="_blank"> Email the class parents </a></td>
+                  <a class="btn btn-block btn-primary" href="https://mail.google.com/mail/?view=cm&fs=1&to=<?=esc($teacher['email'], 'attr')?>&bcc=<?=esc(rtrim($parent_emails[$ck],','), 'attr')?>" target="_blank"> Email the class parents </a></td>
 
                 </tr>
 

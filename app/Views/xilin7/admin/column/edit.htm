@@ -58,9 +58,9 @@ function checkSubmit()
 <table width="98%" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr><td height="10"></td></tr>
   <tr>
- <form name="form1" action="<?php echo $posturl?>" enctype="multipart/form-data" method="post" onSubmit="return checkSubmit()">
+ <form name="form1" action="<?php echo esc($posturl, 'attr')?>" enctype="multipart/form-data" method="post" onSubmit="return checkSubmit()">
   <input type="hidden" name="dopost" value="save" />
-  <input type="hidden" name="id" id="id" value="<?php echo $reid; ?>" />
+  <input type="hidden" name="id" id="id" value="<?php echo esc($reid, 'attr'); ?>" />
 
     <td height="95" align="center" bgcolor="#FFFFFF">
 
@@ -68,7 +68,7 @@ function checkSubmit()
           
           <tr style="display:block">
             <td class='' height="26" style="padding-left:10px;"><font color='red'>栏目名称：</font></td>
-            <td class=''><input name="typename" type="text" id="typename" size="30" class="iptxt" value="<?php echo $info['typename']?>" /></td>
+            <td class=''><input name="typename" type="text" id="typename" size="30" class="iptxt" value="<?php echo esc($info['typename'], 'attr')?>" /></td>
           </tr>
 		  <tr style="display:block">
             <td height="26" class='' style="padding-left:10px;">栏目属性：</td>
@@ -82,7 +82,7 @@ function checkSubmit()
 		 
           <tr style="display:block">
             <td class='' height="26" style="padding-left:10px;"> 排列顺序： </td>
-            <td class=''><input name="sortrank" size="6" type="text" value="<?php echo $info['sortrank']?>" class="pubinputs" style="width:60px" />
+            <td class=''><input name="sortrank" size="6" type="text" value="<?php echo esc($info['sortrank'], 'attr')?>" class="pubinputs" style="width:60px" />
               （由低 -&gt; 高） </td>
           </tr>
 		  <tr id="isparttr1" style="display:block">
@@ -91,7 +91,7 @@ function checkSubmit()
                 
 			<select name="channeltypeid" id="channeltypeid" style="width:200px" >
 				<?php foreach($list as $k=>$v){ ?>
-				<option value="<?php echo $v['id']?>" <?php if($v['id'] == $info['channeltypeid']){ echo "selected ='selected' ";}?>><?php echo $v['typename']?>|<?php echo $v['nid']?></option>
+				<option value="<?php echo $v['id']?>" <?php if($v['id'] == $info['channeltypeid']){ echo "selected ='selected' ";}?>><?php echo esc($v['typename'])?>|<?php echo esc($v['nid'])?></option>
 				<?php } ?>
             </select> 
 			<a href="<?php echo site_url('modelv/index')?>"><u>查看模型</u></a>
@@ -102,7 +102,7 @@ function checkSubmit()
             <td class=''>
 			<select name="searchtype" id="searchtype" style="width:200px" >
 				<?php foreach($SearchTypes as $k=>$v){ ?>
-				<option value="<?php echo $k?>" <?php if($k == $info['searchtype']){ echo "selected ='selected' ";}?>><?php echo $v?></option>
+				<option value="<?php echo $k?>" <?php if($k == $info['searchtype']){ echo "selected ='selected' ";}?>><?php echo esc($v)?></option>
 				<?php } ?>
             </select> 
             </td>
@@ -126,7 +126,7 @@ function checkSubmit()
             	<table width="100%" border="0" cellspacing="1" cellpadding="1">
                 <tr>
                   <td height="30">
-                  <input name="picname" type="hidden" id="picname" style="width:240px" value="<?php echo $info['banner']?>" />
+                  <input name="picname" type="hidden" id="picname" style="width:240px" value="<?php echo esc($info['banner'], 'attr')?>" />
                   <input type="button"  value="本地上传" style="width:70px;cursor:pointer;" /> 
                   <iframe name='uplitpicfra' id='uplitpicfra' src='' width='200' height='200' style='display:none'></iframe>
                   <span class="litpic_span"><input name="litpic" type="file" id="litpic"  onChange="SeePicNew(this, 'divpicview', 'uplitpicfra', 165, '<?php echo $picupurl?>');" size="1" class='np coolbg'/></span>
@@ -140,29 +140,29 @@ function checkSubmit()
     </tr>
           <tr id="isparttr5" style="display:block">
             <td height="65" style="padding-left:10px;">展示图描述：</td>
-            <td height="65"> <textarea name="content" cols="70" style="height:50px" rows="4" id="content" class="alltxt"><?php echo $info['content']?></textarea></td>
+            <td height="65"> <textarea name="content" cols="70" style="height:50px" rows="4" id="content" class="alltxt"><?php echo esc($info['content'])?></textarea></td>
           </tr>         
 		  <tr id="isparttr1" style="display:block">
 			<td height="60" style="padding-left:10px;">&nbsp;URL规则：</td>
             <td>
-                <input name="url" type="text" style="width:250px" id="seotitle" class="alltxt" value="<?php echo $info['url']?>" />
+                <input name="url" type="text" style="width:250px" id="seotitle" class="alltxt" value="<?php echo esc($info['url'], 'attr')?>" />
             </td>
           </tr>
 		  <tr id="isparttr2" style="display:block">
             <td height="60" style="padding-left:10px;">&nbsp;SEO标题：</td>
             <td>
-                <input name="seotitle" type="text" style="width:250px" id="seotitle" class="alltxt" value="<?php echo $info['seotitle']?>" />
+                <input name="seotitle" type="text" style="width:250px" id="seotitle" class="alltxt" value="<?php echo esc($info['seotitle'], 'attr')?>" />
             </td>
           </tr>
           <tr id="isparttr3" style="display:block">
             <td height="45" style="padding-left:10px;"> &nbsp;&nbsp;关键字：</td>
             <td>
-                <textarea name="keywords" cols="70" rows="4" id="keywords" class="alltxt"><?php echo $info['keywords']?></textarea>
+                <textarea name="keywords" cols="70" rows="4" id="keywords" class="alltxt"><?php echo esc($info['keywords'])?></textarea>
             </td>
           </tr>
           <tr style="display:block">
             <td height="65" style="padding-left:10px;">栏目描述：</td>
-            <td height="65"> <textarea name="description" cols="70" style="height:50px" rows="4" id="description" class="alltxt"><?php echo $info['description']?></textarea></td>
+            <td height="65"> <textarea name="description" cols="70" style="height:50px" rows="4" id="description" class="alltxt"><?php echo esc($info['description'])?></textarea></td>
           </tr>
         </table>
        

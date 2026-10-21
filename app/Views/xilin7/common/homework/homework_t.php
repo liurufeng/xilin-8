@@ -19,8 +19,8 @@
     <div class="container-wrapper">
       <div class="container">
         <form action="<?php echo site_url('homework/do_add/'.$action)?>" method="POST">
-          <input type="hidden" name="homework_id" value="<?=$action == 'Edit' ? $homework_id : ''?>">
-          <input type="hidden" name="semester_id" value="<?=$semester_id?>">
+          <input type="hidden" name="homework_id" value="<?=esc($action == 'Edit' ? $homework_id : '', 'attr')?>">
+          <input type="hidden" name="semester_id" value="<?=esc($semester_id, 'attr')?>">
           <input type="hidden" name="teacher_id" value="<?=$teacher['teacher_id']?>">
           <div class="row">
             <ul class="account-header">
@@ -37,7 +37,7 @@
 
                 <table class="table table-hover table-bordered fixed-table-layout" style="width: 66% !important;">
                   <tr>
-                    <th colspan="2" style="text-align:center;" class="info"><?=$action?> Homework</th>
+                    <th colspan="2" style="text-align:center;" class="info"><?=esc($action)?> Homework</th>
                   </tr>
                   <tr>
                     <td style="text-align:right;"><span style="color:red;">*</span>Class:</td>
@@ -45,7 +45,7 @@
                       <select id="class_id" style="height:35px; width:450px; text-align:left;margin-left:10px; padding: 3px;"
                               name="class_id">
                         <?foreach($classes as $k => $c) { ?>
-                          <option value="<?=$k?>" <?= $action == 'Edit' && $h['class_id'] == $k ? 'selected' : '' ?>><?=$c['class_name']?> (<?=$c['class_code']?> <?=$c['meeting_time']?>)</option>
+                          <option value="<?=$k?>" <?= $action == 'Edit' && $h['class_id'] == $k ? 'selected' : '' ?>><?=esc($c['class_name'])?> (<?=esc($c['class_code'])?> <?=esc($c['meeting_time'])?>)</option>
                         <? } ?>
                       </select>
                     </td>
@@ -53,26 +53,26 @@
 
                   <tr>
                     <td style="text-align:right;"><span style="color:red;">*</span>Homework Title:</td>
-                    <td style="padding:3px;"><input type="text" value="<?= $action == 'Edit' ? $h['title'] : ''?>" name="title" required
+                    <td style="padding:3px;"><input type="text" value="<?= esc($action == 'Edit' ? $h['title'] : '', 'attr')?>" name="title" required
                                                     style="width:450px; margin-left:10px; padding: 3px;"/></td>
                   </tr>
 
                   <tr>
                     <td style="text-align:right;">Notes:</td>
                     <td style="padding:3px;">
-                      <textarea name="note" rows="10" cols="10" style="width:450px; margin-left:10px; padding: 3px;"><?= $action == 'Edit' ? $h['note'] : ''?></textarea>
+                      <textarea name="note" rows="10" cols="10" style="width:450px; margin-left:10px; padding: 3px;"><?= esc($action == 'Edit' ? $h['note'] : '')?></textarea>
                     </td>
                   </tr>
 
                   <tr>
                     <td style="text-align:right;">Homework Link:</td>
-                    <td style="padding:3px;"><input type="text" value="<?= $action == 'Edit' ? $h['link'] : ''?>" name="link"
+                    <td style="padding:3px;"><input type="text" value="<?= esc($action == 'Edit' ? $h['link'] : '', 'attr')?>" name="link"
                                                     style="width:450px; margin-left:10px; padding: 3px;"/></td>
                   </tr>
 
                   <tr>
                     <td style="text-align:right;">Due Date:</td>
-                    <td style="padding:3px;" id="sandbox-container"><input type="text" value="<?= $action == 'Edit' ? $h['due_date'] : ''?>" name="due_date"
+                    <td style="padding:3px;" id="sandbox-container"><input type="text" value="<?= esc($action == 'Edit' ? $h['due_date'] : '', 'attr')?>" name="due_date"
                                                     style="width:450px; margin-left:10px; padding: 3px;"/></td>
                   </tr>
 
@@ -121,7 +121,7 @@
                   <input type="email" name="email" class="form-control" placeholder="Email" required>
                 </div>
                 <div class="form-group">
-                  <input type="password" name="password" class="form-control" placeholder="Password"
+                  <input type="password" name="password" autocomplete="current-password" class="form-control" placeholder="Password"
                          required>
                 </div>
                 <button type="submit" class="btn btn-primary">LOGIN</button>

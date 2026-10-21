@@ -45,9 +45,9 @@ class Teacher extends MY_Controller
             join classes c on t.teacher_id=c.teacher_id
             where t.status = 1
             and c.status = 1
-            and c.semester_id = {$current_semester_id}
+            and c.semester_id = ?
             order by t.en_name";
-    $active_email_arr = $this->db->query($sql)->getResultArray();
+    $active_email_arr = $this->db->query($sql, [$current_semester_id])->getResultArray();
     $active_emails = '';
     foreach($active_email_arr as $row){
       $active_emails .= $row['email'] .',';
@@ -66,15 +66,13 @@ class Teacher extends MY_Controller
       // 判断用户名是否存在
       if ($this->request->getVar('email')) {
         $email = trim($this->request->getVar('email'));
-        $sql = " SELECT 1 FROM  teachers WHERE email = '$email' and status=1";
-         $rst = $this->db->query($sql)->getResultArray();
+        $sql = " SELECT 1 FROM  teachers WHERE email = ? and status=1";
+         $rst = $this->db->query($sql, [$email])->getResultArray();
         if (is_array($rst) && count($rst) > 0) {
           ShowMsg('email already exists', $_SESSION['admin_path'].'teacher/add');
         }
         $insertdata['email'] = $this->request->getVar('email');
         $insertdata['en_name'] = $this->request->getVar('en_name');
-        $insertdata['password'] = $this->request->getVar('passwd');
-        $insertdata['passwd'] = $this->request->getVar('passwd'); //md5($this->request->getVar('passwd'));
         $insertdata['type'] = $this->request->getVar('type');
         $insertdata['cn_name'] = $this->request->getVar('cn_name');
         $insertdata['phone1'] = $this->request->getVar('phone1');
@@ -106,16 +104,14 @@ class Teacher extends MY_Controller
       // 判断用户名是否存在
       if ($this->request->getVar('teacher_id')) {
         $email = trim($this->request->getVar('email'));
-        $sql = " SELECT 1 FROM  teachers WHERE email = '$email' and status=1 and teacher_id<>" . $this->request->getVar('teacher_id');
-         $rst = $this->db->query($sql)->getResultArray();
+        $sql = " SELECT 1 FROM  teachers WHERE email = ? and status=1 and teacher_id<> ?";
+         $rst = $this->db->query($sql, [$email, (int)$this->request->getVar('teacher_id')])->getResultArray();
         if (is_array($rst) && count($rst) > 0) {
           ShowMsg('email already exists', $_SESSION['admin_path'].'teacher/add');
         }
 
         $insertdata['email'] = $this->request->getVar('email');
         $insertdata['en_name'] = $this->request->getVar('en_name');
-        $insertdata['password'] = $this->request->getVar('passwd');
-        $insertdata['passwd'] = $this->request->getVar('passwd'); //md5($this->request->getVar('passwd'));
         $insertdata['type'] = $this->request->getVar('type');
         $insertdata['cn_name'] = $this->request->getVar('cn_name');
         $insertdata['phone1'] = $this->request->getVar('phone1');

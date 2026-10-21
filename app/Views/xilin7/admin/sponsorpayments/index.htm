@@ -30,9 +30,9 @@
   <?php foreach($list as $k=>$v){ ?>
   <tr align="center" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
     <td><?php echo $v['sponsor_pay_id']?></td>
-    <td><?php echo $v['name']?></td>
-    <td><?php echo $v['paid_at']?></td>
-    <td><?php echo $v['paid_amount']?></td>
+    <td><?php echo esc($v['name'])?></td>
+    <td><?php echo esc($v['paid_at'])?></td>
+    <td><?php echo esc($v['paid_amount'])?></td>
     <td>
 		<a href='<?=$_SESSION['admin_path']?>sponsorpayments/edit?sponsor_pay_id=<?php echo $v['sponsor_pay_id']?>'><u>edit</u></a> |
 		<a href='<?=$_SESSION['admin_path']?>sponsorpayments/del?sponsor_pay_id=<?php echo $v['sponsor_pay_id']?>' onclick="return confirm('Are you sure to delete this record?')"><u>delete</u></a>

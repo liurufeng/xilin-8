@@ -51,7 +51,7 @@
 
       <?php if ($announcements && isset($announcements[0])) { ?>
           <div class="card-body">
-              <h5><?= $announcements[0]['lastupdate'] ?></h5>
+              <h5><?= esc($announcements[0]['lastupdate']) ?></h5>
               <p class="card-text"><?= html_entity_decode($announcements[0]['body']) ?></p>
           </div>
       <?php } ?>

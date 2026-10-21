@@ -16,10 +16,10 @@ class Article extends Model
         from archives la
 				join addonarticle lac on la.id = lac.aid
 				where la.status = 1
-				and unitid = $id
+				and unitid = ?
 				order by id desc
 				limit 1";
-    return $this->db->query($sql)->getResultArray();
+    return $this->db->query($sql, [$id])->getResultArray();
 
   }
 

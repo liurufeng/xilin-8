@@ -28,12 +28,12 @@ class Teachers extends BaseController
       $type = $userinfo['usertype'];
       if ($type == 1) {
         $id = $userinfo[0]['parent_id'];
-        $sql = "select * from parents where parent_id = $id";
+        $sql = "select * from parents where parent_id = ?";
       } else {
         $id = $userinfo[0]['teacher_id'];
-        $sql = "select * from teachers where teacher_id = $id";
+        $sql = "select * from teachers where teacher_id = ?";
       }
-      $userinfodata = $this->db->query($sql)->getResultArray();
+      $userinfodata = $this->db->query($sql, [$id])->getResultArray();
       $data['userinfodata'] = $userinfodata;
       $data['usertype'] = $type;
     }
@@ -42,6 +42,11 @@ class Teachers extends BaseController
   }
 
   public function update_sl(){
+    $userinfo = session()->get('userresult');
+    if (empty($userinfo) || $userinfo['usertype'] != 2) {
+      sendJson(array('success' => FALSE));
+      return;
+    }
     $updatedata['syl_link'] = $this->request->getVar('syl_link');
     $success_msg = 'Your update have been successfully submitted!';
 
@@ -67,6 +72,10 @@ class Teachers extends BaseController
   }
 
   public function rosterEmail() {
+    // a scheduled job
+    if (!xilin_cron_allowed()) {
+      return $this->response->setStatusCode(403)->setBody('no access');
+    }
     // 0. get current semester info
     //$this->load->model('semester');
     $semester = new Semester();
@@ -77,21 +86,21 @@ class Teachers extends BaseController
     // 1. get the date of the second session from calendar
     $sql = "select date 
             from calendar c
-            where c.semester_id = {$current_semester_id}
+            where c.semester_id = ?
             and c.session = 2
             and c.show_flag =1
             and c.status = 1
             limit 1";
 
-    $result = $this->db->query($sql)->getRowArray();
+    $result = $this->db->query($sql, [$current_semester_id])->getRowArray();
     if(!$result) exit;
     // 2. find the class registration that have changes after the 2nd session date
     $sql = "select sc.class_id
             from studentclasses sc
-            where sc.semester_id = {$current_semester_id}
-            and sc.update_time >= STR_TO_DATE('{$result['date']}','%m/%d/%Y')
+            where sc.semester_id = ?
+            and sc.update_time >= STR_TO_DATE(?,'%m/%d/%Y')
             group by sc.class_id";
-    $result = $this->db->query($sql)->getResultArray();
+    $result = $this->db->query($sql, [$current_semester_id, $result['date']])->getResultArray();
     if(!$result) exit;
     // 3. send email of the roster to the teacher if there are changes
     foreach ($result as $class) {
@@ -102,11 +111,11 @@ class Teachers extends BaseController
 				join teachers t on t.teacher_id=c.teacher_id
 				join semester se on se.semester_id=c.semester_id
 				where c.status = 1 
-				and se.semester_id = {$current_semester_id}
-        and c.class_id = {$class['class_id']} 
+				and se.semester_id = ?
+        and c.class_id = ? 
         limit 1";
 
-      $v = $this->db->query($sql)->getRowArray();
+      $v = $this->db->query($sql, [$current_semester_id, $class['class_id']])->getRowArray();
       $message = "Hi {$v['teacher']}, <br><br> 
                   The roster of class {$v['class_name']} has changed since last week, here is the updated student list. <br><br>";
       $message .= <<<HTML
@@ -133,9 +142,9 @@ HTML;
           from studentclasses sc
           join students s on s.student_id = sc.student_id
           join parents p on p.parent_id = s.parent_id
-          where sc.deleted = 0 and sc.class_id = ".$v['class_id']
+          where sc.deleted = 0 and sc.class_id = ?"
         ." order by s.en_name ";
-      $students = $this->db->query($sql)->getResultArray();
+      $students = $this->db->query($sql, [$v['class_id']])->getResultArray();
       $num = 1;
 
       foreach($students as $s) {

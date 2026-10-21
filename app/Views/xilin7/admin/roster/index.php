@@ -16,7 +16,7 @@
             <select id="semester_id" name="semester_id" onchange="submit();">
               <?php foreach($semesters as $semester) {?>
               <option value="<?=$semester['semester_id']?>" <?php if($semester['semester_id'] == session()->get('semester_id')) echo 'selected'; ?> >
-                <?=$semester['semester_year']?> <?=$semester['semester_name']?>
+                <?=esc($semester['semester_year'])?> <?=esc($semester['semester_name'])?>
               </option>
               <?php } ?>
             </select>
@@ -42,10 +42,10 @@
 
     <tr bgcolor="#E4F0F9" style="text-align: center; font-weight: bold;">
       <td colspan="9">
-        <?php echo $v['class_code']?>,
-        <?php echo $v['class_name']?>,
-        <?php echo $v['teacher']?> (<?php echo $v['subject']?>),
-        <?php echo $v['meeting_time']?> @ <?php echo $v['classroom']?>
+        <?php echo esc($v['class_code'])?>,
+        <?php echo esc($v['class_name'])?>,
+        <?php echo esc($v['teacher'])?> (<?php echo esc($v['subject'])?>),
+        <?php echo esc($v['meeting_time'])?> @ <?php echo esc($v['classroom'])?>
       </td>
     </tr>
 
@@ -75,12 +75,12 @@
     foreach($students as $s) {
       ?>
       <tr>
-        <td><?=$num?></td>
+        <td><?=esc($num)?></td>
         <td><?php echo $s['sid']?></td>
-        <td><?php echo $s['sename']?></td>
-        <td><?php echo $s['primary_en_name']?></td>
-        <td><?=$s['email']?></td>
-        <td><?=$s['alter_contact_email']?></td>
+        <td><?php echo esc($s['sename'])?></td>
+        <td><?php echo esc($s['primary_en_name'])?></td>
+        <td><?=esc($s['email'])?></td>
+        <td><?=esc($s['alter_contact_email'])?></td>
         <td><?php echo $s['parent_id']?></td>
         <td><?php echo empty($s['buy_book'])?'---':'Yes' ?></td>
         <td>
@@ -92,11 +92,11 @@
           }
           $balance = $payment['total'][$s['parent_id']] + $payment['pod'][$s['parent_id']]['penalty'] - $payment['discount'][$s['parent_id']] - $paid;
           if($balance > 0) {
-            $positiveBalances[$s['parent_id']]= "<tr><td>".$s['primary_en_name']."</td><td>".$s['email']."</td><td>".$s['parent_id']
+            $positiveBalances[$s['parent_id']]= "<tr><td>".esc($s['primary_en_name'])."</td><td>".esc($s['email'])."</td><td>".$s['parent_id']
               ."</td><td>".$balance."</td></tr>";
           }
           ?>
-          <span style="color: <?= $balance>0?'red':''?>"><?=$balance?></span>
+          <span style="color: <?= $balance>0?'red':''?>"><?=esc($balance)?></span>
         </td>
       </tr>
   <?php $num++; } ?>
@@ -148,11 +148,11 @@
     ?>
       <tr>
           <td><?php echo $s['parent_id']?></td>
-          <td><?php echo $s['primary_en_name']?></td>
-          <td><?=$s['email']?></td>
-          <td><?php echo $s['sename']?></td>
-          <td><?php echo $s['class_code']?></td>
-          <td><?php echo $s['class_name']?></td>
+          <td><?php echo esc($s['primary_en_name'])?></td>
+          <td><?=esc($s['email'])?></td>
+          <td><?php echo esc($s['sename'])?></td>
+          <td><?php echo esc($s['class_code'])?></td>
+          <td><?php echo esc($s['class_name'])?></td>
           <td>
             <?php $paid = 0;
             foreach($payment['checks'][$s['parent_id']] as $check) {
@@ -160,11 +160,11 @@
             }
             $balance = $payment['total'][$s['parent_id']] + $payment['pod'][$s['parent_id']]['penalty'] - $payment['discount'][$s['parent_id']] - $paid;
             if($balance > 0) {
-              $positiveBalances[$s['parent_id']]= "<tr><td>".$s['primary_en_name']."</td><td>".$s['email']."</td><td>".$s['parent_id']
+              $positiveBalances[$s['parent_id']]= "<tr><td>".esc($s['primary_en_name'])."</td><td>".esc($s['email'])."</td><td>".$s['parent_id']
                 ."</td><td>".$balance."</td></tr>";
             }
             ?>
-              <span style="color: <?= $balance>0?'red':''?>"><?=$balance?></span>
+              <span style="color: <?= $balance>0?'red':''?>"><?=esc($balance)?></span>
           </td>
       </tr>
     <?php $num++; } ?>

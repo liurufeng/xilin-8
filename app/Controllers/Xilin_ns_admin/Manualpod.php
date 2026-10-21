@@ -32,13 +32,14 @@ class Manualpod extends MY_Controller
 
     $semester_id = $this->request->getVar('semester_id');
     if(isset($semester_id) && !empty($semester_id)) {
+      $semester_id = (int)$semester_id;
       session()->set(array('semester_id' => $semester_id));
       $where =' where m.semester_id='.$semester_id;
     } else {
       $current_semester = session()->get('current_semester');
       $current_semester_id = $current_semester['semester_id'];
       session()->set(array('semester_id' => $current_semester_id));
-      $where =' where m.semester_id='.$current_semester_id;
+      $where =' where m.semester_id='.(int)$current_semester_id;
     }
 
     $sql = "select m.*,p.*
@@ -108,9 +109,9 @@ class Manualpod extends MY_Controller
     $sql = "select m.*,p.*
 				from manual_pod_record m
 				join parents p on p.parent_id = m.parent_id
-				where manual_pod_record_id = " . $this->request->getVar('manual_pod_record_id');
+				where manual_pod_record_id = ?";
 
-    $data['list'] = $this->db->query($sql)->getRowArray();
+    $data['list'] = $this->db->query($sql, [(int)$this->request->getVar('manual_pod_record_id')])->getRowArray();
 
     echo view($_SESSION['tm'].'admin/manualpod/edit.php', $data);
   }

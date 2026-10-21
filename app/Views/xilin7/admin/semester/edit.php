@@ -35,7 +35,7 @@
   		<table width="98%" border="0" cellspacing="1" cellpadding="1">
           <tr> 
             <td width="16%" height="30"><span style="color:red;">*</span>semester year：(e.g. 2016)</td>
-            <td width="84%"  style="text-align:left;"><input name="semester_year" type="text" id="semester_year" size="16" style="width:200px" value="<?php echo  $info['semester_year']?>" /></td>
+            <td width="84%"  style="text-align:left;"><input name="semester_year" type="text" id="semester_year" size="16" style="width:200px" value="<?php echo  esc($info['semester_year'], 'attr')?>" /></td>
           </tr>
           <tr> 
             <td width="16%" height="30"><span style="color:red;">*</span>semester name：</td>
@@ -49,7 +49,7 @@
 						if($v['ename'] == $info['semester_name']){
 							$selected = "selected";
 						}
-						echo "<option value='".$v['ename']."' $selected >".$v['ename']."</option>\r\n";
+						echo "<option value='".esc($v['ename'])."' $selected >".esc($v['ename'])."</option>\r\n";
 					}
 					}
 			  	?>
@@ -68,7 +68,7 @@
 						if($v['ename'] == $info['semester_status']){
 							$selected = "selected";
 						}
-						echo "<option value='".$v['ename']."' $selected>".$v['ename']."</option>\r\n";
+						echo "<option value='".esc($v['ename'])."' $selected>".esc($v['ename'])."</option>\r\n";
 					}
 					}
 			  	?>
@@ -77,23 +77,23 @@
           </tr>
           <tr> 
             <td height="30">late registration date：<br /> (e.g. 2008-06-01 00:00:00)</td>
-            <td style="text-align:left;"><input name="late_registration" type="text" id="late_registration" size="16" style="width:200px" value="<?php echo  $info['late_registration']?>"/></td>
+            <td style="text-align:left;"><input name="late_registration" type="text" id="late_registration" size="16" style="width:200px" value="<?php echo  esc($info['late_registration'], 'attr')?>"/></td>
           </tr>
           <tr> 
             <td height="30">registration fee：</td>
-            <td style="text-align:left;"><input name="registration_fee" type="text" id="registration_fee" size="16" style="width:200px" value="<?php echo  $info['registration_fee']?>"/></td>
+            <td style="text-align:left;"><input name="registration_fee" type="text" id="registration_fee" size="16" style="width:200px" value="<?php echo  esc($info['registration_fee'], 'attr')?>"/></td>
           </tr>
           <tr> 
             <td height="30">late registration fee：</td>
-            <td style="text-align:left;"><input name="late_registration_fee" type="text" id="late_registration_fee" size="16" style="width:200px"  value="<?php echo  $info['late_registration_fee']?>"/></td>
+            <td style="text-align:left;"><input name="late_registration_fee" type="text" id="late_registration_fee" size="16" style="width:200px"  value="<?php echo  esc($info['late_registration_fee'], 'attr')?>"/></td>
           </tr>
           <tr> 
             <td height="30">parent discount base：</td>
-            <td style="text-align:left;"><input name="parent_discount_base" type="text" id="parent_discount_base" size="16" style="width:200px"  value="<?php echo  $info['parent_discount_base']?>"/></td>
+            <td style="text-align:left;"><input name="parent_discount_base" type="text" id="parent_discount_base" size="16" style="width:200px"  value="<?php echo  esc($info['parent_discount_base'], 'attr')?>"/></td>
           </tr>
           <tr> 
             <td height="30">teacher discount base：</td>
-            <td style="text-align:left;"><input name="teacher_discount_base" type="text" id="teacher_discount_base" size="16" style="width:200px"  value="<?php echo  $info['teacher_discount_base']?>"/></td>
+            <td style="text-align:left;"><input name="teacher_discount_base" type="text" id="teacher_discount_base" size="16" style="width:200px"  value="<?php echo  esc($info['teacher_discount_base'], 'attr')?>"/></td>
           </tr>
           <tr> 
             <td height="30">show flag：</td>

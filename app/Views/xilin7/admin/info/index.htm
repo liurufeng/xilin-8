@@ -41,7 +41,7 @@ var HTTPURL = "<?php echo $_SESSION['admin_path']?>";
 					if(isset($_GET['flag']) && $v['att'] === $_GET['flag']){
 						$selected = ' selected ="selected"';
 					}
-					echo " <option value='".$v['att']."' ".$selected.">".$v['attname']."[".$v['att']."]</option>";
+					echo " <option value='".$v['att']."' ".$selected.">".esc($v['attname'])."[".$v['att']."]</option>";
             	}
             	?>
            
@@ -63,14 +63,14 @@ var HTTPURL = "<?php echo $_SESSION['admin_path']?>";
 	<td height="28" colspan="7" background="<?php echo base_url();?>/admin/images/tbg.gif" style="padding-left:10px;">
     <div style="float:right; margin-right:10px;">
     	 <?php if($cid){ ?>
-		<input type='button' class="coolbg np" onClick="location='<?=$_SESSION['admin_path']?>info/add?1&cid=<?php echo $cid?>';" value='添加文档' />
+		<input type='button' class="coolbg np" onClick="location='<?=$_SESSION['admin_path']?>info/add?1&cid=<?php echo esc($cid, 'attr')?>';" value='添加文档' />
 		<?php } ?>
       <?php if(session()->get('id')== 88){ ?>
 		<input type='button' class="coolbg np" onClick="location='<?=$_SESSION['admin_path']?>column/index';" value='栏目管理' />
-		<input type='button' class="coolbg np" name='bb1' onClick="location='<?=$_SESSION['admin_path']?>info/recycling?cid=<?php echo $cid?>';" value='信息回收站' />
+		<input type='button' class="coolbg np" name='bb1' onClick="location='<?=$_SESSION['admin_path']?>info/recycling?cid=<?php echo esc($cid, 'attr')?>';" value='信息回收站' />
 		<?php } ?>
     </div>
-	◆ <?php echo $cname?>文档列表 &nbsp;
+	◆ <?php echo esc($cname)?>文档列表 &nbsp;
 	</td>
 </tr>
 <tr align="center" bgcolor="#FBFCE2" height="25">
@@ -90,10 +90,10 @@ var HTTPURL = "<?php echo $_SESSION['admin_path']?>";
 	<td>
 		<input name="arcID" type="checkbox" id="arcID" value="<?php echo $v['id']?>" class="np" />
 	</td>
-	<td align='left'><?php echo $v['title'].$v['falgname']?></td>
+	<td align='left'><?php echo esc($v['title'].$v['falgname'])?></td>
 	<td><?php echo date('Y-m-d',$v['lastupdate'])?></td>
-	<td><?php echo $v['unitname']?></td>
-	<td><?php echo $v['status']?></td>
+	<td><?php echo esc($v['unitname'])?></td>
+	<td><?php echo esc($v['status'])?></td>
 	<td class="top_<?php echo $v['id']?>">
 		<a href="<?=$_SESSION['admin_path']?>info/edit/<?=$v['id']?>" >
 			<u>编辑</u>

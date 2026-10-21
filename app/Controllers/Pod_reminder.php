@@ -24,7 +24,7 @@ class Pod_reminder extends BaseController {
   public function index()
   {
     $p = $this->request->getVar('p');
-    if($p!="qDqAxn24w!0@o9!*@o15") die('no access');
+    if(!is_cli() && !(is_string($p) && hash_equals((string)xilin_secret('cron_token', 'qDqAxn24w!0@o9!*@o15'), $p))) die('no access');
 
     try {
       $sql = "SELECT event_id, CONCAT((`month`+1),'/',`date`,'/',`year`) edate,start_time,end_time
@@ -40,10 +40,11 @@ class Pod_reminder extends BaseController {
 
         $sql1 = "SELECT IF(ISNULL(primary_en_name),'No Name?',primary_en_name) as pname,email
         FROM helpers h,parents p
-        WHERE event_id={$eid} AND p.parent_id=h.parent_id";
-        $result1 = $this->db->query($sql1)->getResultArray();
+        WHERE event_id=? AND p.parent_id=h.parent_id";
+        $result1 = $this->db->query($sql1, [$eid])->getResultArray();
         foreach ($result1 as $r1) {
           $email = $r1['email'];
+          if(filter_var($email, FILTER_VALIDATE_EMAIL) === false) continue;
           $pn = $r1['pname'];
 
           $msg="<html><body>";

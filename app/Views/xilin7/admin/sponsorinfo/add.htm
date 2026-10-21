@@ -55,7 +55,7 @@ $picupurl = site_url('sponsorinfo/add');
 				if($groupList){
 					foreach($groupList as $k=>$v)
 					{
-						echo "<option value='".$v['level_id']."'>".$v['name']."</option>\r\n";
+						echo "<option value='".$v['level_id']."'>".esc($v['name'])."</option>\r\n";
 					}
 				}
 			?>

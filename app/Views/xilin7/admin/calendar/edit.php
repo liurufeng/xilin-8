@@ -44,7 +44,7 @@
 			    <select name='semester_id' style='width:200px'>
             <?php foreach($semesters as $semester) {?>
               <option value="<?=$semester['semester_id']?>" <?php if($semester['semester_id'] == $info['semester_id']) echo 'selected'; ?> >
-                <?=$semester['semester_year']?> <?=$semester['semester_name']?>
+                <?=esc($semester['semester_year'])?> <?=esc($semester['semester_name'])?>
               </option>
             <?php } ?>
 			  	</select>
@@ -52,19 +52,19 @@
           </tr>
           <tr> 
             <td height="30"><span style="color:red;">*</span>header：</td>
-            <td style="text-align:left;"><input name="header" type="text" id="header" size="16" style="width:200px" value="<?php echo $info['header']?>"/></td>
+            <td style="text-align:left;"><input name="header" type="text" id="header" size="16" style="width:200px" value="<?php echo esc($info['header'], 'attr')?>"/></td>
           </tr>
           <tr> 
             <td height="30"><span style="color:red;">*</span>date：</td>
-            <td style="text-align:left;"><input name="date" type="text" id="date" size="16" style="width:200px"  value="<?php echo $info['date']?>" /></td>
+            <td style="text-align:left;"><input name="date" type="text" id="date" size="16" style="width:200px"  value="<?php echo esc($info['date'], 'attr')?>" /></td>
           </tr>
           <tr> 
             <td height="30">session：</td>
-            <td style="text-align:left;"><input name="session" type="text" id="session" size="16" style="width:200px"  value="<?php echo $info['session']?>" /></td>
+            <td style="text-align:left;"><input name="session" type="text" id="session" size="16" style="width:200px"  value="<?php echo esc($info['session'], 'attr')?>" /></td>
           </tr>
           <tr> 
             <td height="30">note：</td>
-            <td style="text-align:left;"><input name="note" type="text" id="note" size="16" style="width:200px"   value="<?php echo $info['note']?>" /></td>
+            <td style="text-align:left;"><input name="note" type="text" id="note" size="16" style="width:200px"   value="<?php echo esc($info['note'], 'attr')?>" /></td>
           </tr>
           <tr> 
             <td height="30">show flag：</td>
@@ -75,7 +75,7 @@
           </tr>
           <tr> 
             <td height="30">show order：</td>
-            <td style="text-align:left;"><input name="show_order" type="text" id="show_order" size="16" style="width:200px"   value="<?php echo $info['show_order']?>"/></td>
+            <td style="text-align:left;"><input name="show_order" type="text" id="show_order" size="16" style="width:200px"   value="<?php echo esc($info['show_order'], 'attr')?>"/></td>
           </tr>
           <tr> 
             <td height="60">&nbsp;</td>

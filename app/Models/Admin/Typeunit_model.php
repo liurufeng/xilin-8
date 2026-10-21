@@ -152,7 +152,7 @@ class Typeunit_model extends Model
         $in .= $v['id'] . ',';
       }
     }
-    $in = $in . $id;
+    $in = $in . (int)$id;
     $result = $this->where("id in($in)")->delete();
     $this->delCache(); //清除缓存
     return $result;

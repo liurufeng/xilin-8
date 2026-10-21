@@ -55,8 +55,8 @@ class Modelv_model extends Model
       return false;
     }
 
-    $sql = "SELECT * FROM channeltype WHERE id = $id";
-    $info = $this->db->query($sql)->getRowArray();
+    $sql = "SELECT * FROM channeltype WHERE id = ?";
+    $info = $this->db->query($sql, [$id])->getRowArray();
     $thisidinfo = unserialize($info['data']);
 
     $sql = "SELECT * FROM ttable ORDER BY ismust ASC,tid ASC";

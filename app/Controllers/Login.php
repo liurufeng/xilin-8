@@ -1,4 +1,5 @@
 <?php namespace App\Controllers;
+use App\Libraries\Passwords;
 use App\Models\{Semester, Subject, Classes, Teacher, Article};
 
 /**
@@ -22,46 +23,51 @@ class Login extends BaseController
     echo view($_SESSION['tm'].'/signin/');
   }
 
+  /**
+   * Parents sign in with email and password (teachers use Google, Tlogin::g_login).
+   */
   function check_login()
   {
-    $email = trim($this->request->getVar('email'));
-    $pass = $this->request->getVar('password');
+    $email = trim((string)$this->request->getVar('email'));
+    $pass = (string)$this->request->getVar('password');
     if (empty($email)) {
       ShowMsg('Email cannot be empty!', '/signin/', 0, 1500);
-    } elseif (empty($pass)) {
+    } elseif ($pass === '') {
       ShowMsg('Password cannot be empty!', '/signin/', 0, 1500);
     }
+    if (!Passwords::attemptAllowed('parent', $email)) {
+      ShowMsg('Too many sign-in attempts. Please wait 10 minutes and try again.', '/signin/', 0, 3000);
+    }
 
-    $pass = str_replace("'","[$!)", $pass);
-    $sql = "select * from parents where email = '$email' and passwd = '$pass'";
-    $result = $this->db->query($sql)->getResultArray();
-    $sql = "select * from teachers where email = '$email' and passwd = '$pass'";
-    $tresult = $this->db->query($sql)->getResultArray();
+    $parent = null;
+    $rows = $this->db->query("select * from parents where email = ?", [$email])->getResultArray();
+    foreach ($rows as $row) {
+      if (Passwords::matches($pass, $row['passwd'], Passwords::parentLegacy($pass))) {
+        Passwords::upgrade('parents', 'parent_id', $row['parent_id'], 'passwd', $pass, $row['passwd']);
+        $parent = $row;
+        break;
+      }
+    }
 
-    if (!empty($result) || !empty($tresult)) {
-      if (!empty($result)) {
-        $result['usertype'] = 1;
-        session()->set(array('userresult'=> $result));
-      } else {
-        $tresult['usertype'] = 2;
-        session()->set(array('userresult'=> $tresult));
-      }
-      $data['success'] = true;
-      if(null !== session()->get('pod') && session()->get('pod')) {
-        unset($_SESSION['pod']);
-        return redirect()->to(base_url('/pod/index') );
-      }
-      return redirect()->to(base_url('/account') );
-    } else {
+    if ($parent === null) {
       return redirect()->to(base_url('/signin') );
     }
+
+    // a new session id on sign-in; the password (hash) stays out of the session
+    $pod = session()->get('pod');
+    session()->regenerate(true);
+    unset($parent['passwd']);
+    session()->set(array('userresult'=> array(0 => $parent, 'usertype' => 1)));
+    if ($pod) {
+      session()->remove('pod');
+      return redirect()->to(base_url('/pod/index') );
+    }
+    return redirect()->to(base_url('/account') );
   }
 
   function logout()
   {
-    helper('cookie');
-    session()->destroy();;
-    delete_cookie('csrf_cookie_name', $_SERVER['HTTP_HOST'], '/');
+    session()->destroy();
     return redirect()->to(base_url('/index') );
   }
 

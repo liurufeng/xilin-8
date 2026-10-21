@@ -39,7 +39,7 @@
 	        <?php foreach($gouplists as $k=>$v){?>
 			<tr>
 				<td>
-					<input type="checkbox" value="<?php echo $v['id']?>" class="np" name="nodeids[]"><?php echo $v['name']?></font>
+					<input type="checkbox" value="<?php echo $v['id']?>" class="np" name="nodeids[]"><?php echo esc($v['name'])?></font>
 				</td>
 			</tr>
 			<?php }?>

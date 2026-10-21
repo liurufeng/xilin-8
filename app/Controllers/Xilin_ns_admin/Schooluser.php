@@ -33,12 +33,13 @@ class Schooluser extends MY_Controller
     $semester_id = $this->request->getVar('semester_id');
     if(isset($semester_id) && !empty($semester_id)) {
       session()->set(array('semester_id' => $semester_id));
-      $where =' where s.semester_id='.$semester_id;
+      $where =' where s.semester_id = ?';
     } else {
       $current_semester = session()->get('current_semester');
       $current_semester_id = $current_semester['semester_id'];
       session()->set(array('semester_id' => $current_semester_id));
-      $where =' where s.semester_id='.$current_semester_id;
+      $where =' where s.semester_id = ?';
+      $semester_id = $current_semester_id;
     }
 
     $sql = "select s.*,se.ename
@@ -46,7 +47,7 @@ class Schooluser extends MY_Controller
 				join sys_enum se on s.type = se.id and se.egroup = 'schoolusertype'
 				" . $where .
         " and s.status = 1";
-    $data['list'] = $this->db->query($sql)->getResultArray();
+    $data['list'] = $this->db->query($sql, [$semester_id])->getResultArray();
     echo view($_SESSION['tm'].'admin/schooluser/index.php', $data);
   }
 
@@ -60,8 +61,8 @@ class Schooluser extends MY_Controller
         $name = trim($this->request->getVar('name'));
         $parent_id = $this->request->getVar('parent_id');
         $semester_id = $this->request->getVar('semester_id');
-        $sql = " SELECT 1 FROM schooluser WHERE name = '$name' and semester_id = {$semester_id} and status=1";
-        $rst = $this->db->query($sql)->getResultArray();
+        $sql = " SELECT 1 FROM schooluser WHERE name = ? and semester_id = ? and status=1";
+        $rst = $this->db->query($sql, [$name, $semester_id])->getResultArray();
         if (is_array($rst) && count($rst) > 0) {
           ShowMsg("school user'name already exists", $_SESSION['admin_path'].'schooluser/add');
         }

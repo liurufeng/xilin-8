@@ -23,15 +23,19 @@ class Roster extends MY_Controller
     $semester->getCurrentSemester();
 
     $semester_id = $this->request->getVar('semester_id');
+    // passed on to Payment_model SQL; force an integer id
+    $semester_id = empty($semester_id) ? $semester_id : (int)$semester_id;
 
     if(isset($semester_id) && !empty($semester_id)) {
       session()->set(array('semester_id' => $semester_id));
-      $where =' and se.semester_id='.$semester_id;
+      $where =' and se.semester_id = ?';
+      $where_id = $semester_id;
     } else {
       $current_semester = session()->get('current_semester');
       $current_semester_id = $current_semester['semester_id'];
       session()->set(array('semester_id' => $current_semester_id));
-      $where =' and se.semester_id='.$current_semester_id;
+      $where =' and se.semester_id = ?';
+      $where_id = $current_semester_id;
     }
 
     $sql = "select c.*,s.subject_name subject,t.en_name teacher
@@ -42,7 +46,7 @@ class Roster extends MY_Controller
 				where c.status = 1 " . $where .
         " order by s.seq, c.class_code ";
 
-    $data['list'] = $this->db->query($sql)->getResultArray();
+    $data['list'] = $this->db->query($sql, [$where_id])->getResultArray();
 
     $payment = new Payment_model();
     $data['payment'] = $payment->getPaymentData($semester_id);

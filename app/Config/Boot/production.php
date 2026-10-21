@@ -23,8 +23,3 @@ ini_set('display_errors', '0');
  | release of the framework.
  */
 defined('CI_DEBUG') || define('CI_DEBUG', false);
-
-$_SESSION['tm'] = 'xilin7/';
-$_SESSION['admin_path'] = '/Xilin_ns_admin/';
-$_SESSION['site_email'] = 'webmaster@xilinnschinese.org';
-$_SESSION['check_class_conflict'] = true;

@@ -18,18 +18,18 @@
     <tbody>
     <tr>
         <td style="width: 140px;">Invoice Date:</td>
-        <td style="width: 288px;"><?= $invoice_date?></td>
+        <td style="width: 288px;"><?= esc($invoice_date)?></td>
         <td style="width: 275px; text-align: right;">&nbsp;Tax ID: 30-0332045</td>
     </tr>
     <?php if($parent_id){ ?>
     <tr>
         <td>Family ID:</td>
-        <td><?= $parent_id ?></td>
+        <td><?= esc($parent_id) ?></td>
         <td style="text-align: right;">&nbsp;4957 Oakton Street, Suite 292</td>
     </tr>
     <tr>
         <td>Payment Code:</td>
-        <td><?= $pay_code ?></td>
+        <td><?= esc($pay_code) ?></td>
         <td style="text-align: right;">&nbsp;Skokie, IL 60077</td>
     </tr>
     <?php } else { ?>
@@ -66,8 +66,8 @@
     </tr>
 
     <tr>
-        <td style="width: 45%;"><?= $name ?></td>
-        <td style="width: 45%; text-align: right;"><?= $amount ?></td>
+        <td style="width: 45%;"><?= esc($name) ?></td>
+        <td style="width: 45%; text-align: right;"><?= esc($amount) ?></td>
     </tr>
 
     </tbody>

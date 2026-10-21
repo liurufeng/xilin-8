@@ -32,13 +32,14 @@ class Classstudents extends MY_Controller
 
     $semester_id = $this->request->getVar('semester_id');
     if(isset($semester_id) && !empty($semester_id)) {
+      $semester_id = (int)$semester_id;
       session()->set(array('semester_id' => $semester_id));
       $where =' and se.semester_id='.$semester_id;
     } else {
       $current_semester = session()->get('current_semester');
       $current_semester_id = $current_semester['semester_id'];
       session()->set(array('semester_id' => $current_semester_id));
-      $where =' and se.semester_id='.$current_semester_id;
+      $where =' and se.semester_id='.(int)$current_semester_id;
     }
 
     $sql = "select c.*,s.subject_name subject,t.en_name teacher,t.email teacher_email,concat(se.semester_name,se.semester_year) semester

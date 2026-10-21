@@ -59,7 +59,7 @@
                   <b>&nbsp;Password</b>
                 </td>
                 <td valign="middle" align="left">
-                  <input id="password" name="password" size="50" type="password">
+                  <input id="password" name="password" autocomplete="current-password" size="50" type="password">
                 </td>
               </tr>
               <tr height="3"><td colspan="2"></td></tr>

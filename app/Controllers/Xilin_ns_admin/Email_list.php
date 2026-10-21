@@ -23,10 +23,11 @@ class Email_list extends MY_Controller
 
     $semester_id = $this->request->getVar('semester_id');
     if(isset($semester_id) && !empty($semester_id)) {
+      $semester_id = (int)$semester_id;
       session()->set(array('semester_id' => $semester_id));
     } else {
       $current_semester = session()->get('current_semester');
-      $semester_id = $current_semester['semester_id'];
+      $semester_id = (int)$current_semester['semester_id'];
       session()->set(array('semester_id' => $semester_id));
     }
 

@@ -6,7 +6,7 @@
     ?>
       <div class="row" style="margin: 1em;">
         <div class="col-md-12">
-        <a><h3 class="section-title text-center"><?= $s['semester_name'] .' '. $s['semester_year']; ?> Calendar</h3></a>
+        <a><h3 class="section-title text-center"><?= esc($s['semester_name'] .' '. $s['semester_year']); ?> Calendar</h3></a>
           </div>
 
         <div class="col-md-12">
@@ -30,13 +30,13 @@
                 ?>
               <tr>
                   <td width="200">
-                    <?= $c['date'] ?>
+                    <?= esc($c['date']) ?>
                   </td>
                   <td width="100">
-                    <?= $c['session'] ?>
+                    <?= esc($c['session']) ?>
                   </td>
                   <td width="300">
-                    <?= $c['note'] ?>
+                    <?= esc($c['note']) ?>
                   </td>
               </tr>
                 <?php } } ?>

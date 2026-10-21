@@ -34,9 +34,9 @@ foreach ($newsletters as $item) {
                             <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
                                 <div class="vehiculs-box">
                                     <div class="vehiculs-thumb">
-                                        <img src="<?=$nl['img_url'] ?>" alt=""></a>
-                                        <span class="spn-status"> <?=$nl['name'] ?></span>
-                                        <a class="proeprty-sh-more" href="<?php echo $nl['url']; ?>" target="_blank"><i class="fa fa-angle-double-right"> </i><i class="fa fa-angle-double-right"> </i></a>
+                                        <img src="<?=esc($nl['img_url'], 'attr') ?>" alt=""></a>
+                                        <span class="spn-status"> <?=esc($nl['name']) ?></span>
+                                        <a class="proeprty-sh-more" href="<?php echo esc($nl['url'], 'attr'); ?>" target="_blank"><i class="fa fa-angle-double-right"> </i><i class="fa fa-angle-double-right"> </i></a>
                                     </div>
                                 </div>
                             </div>
@@ -48,9 +48,9 @@ foreach ($newsletters as $item) {
                               <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
                                   <div class="vehiculs-box">
                                       <div class="vehiculs-thumb">
-                                          <img src="<?=$nl['img_url'] ?>" alt=""></a>
-                                          <span class="spn-status"> <?=$nl['name'] ?></span>
-                                          <a class="proeprty-sh-more" href="<?php echo $nl['url']; ?>" target="_blank"><i class="fa fa-angle-double-right"> </i><i class="fa fa-angle-double-right"> </i></a>
+                                          <img src="<?=esc($nl['img_url'], 'attr') ?>" alt=""></a>
+                                          <span class="spn-status"> <?=esc($nl['name']) ?></span>
+                                          <a class="proeprty-sh-more" href="<?php echo esc($nl['url'], 'attr'); ?>" target="_blank"><i class="fa fa-angle-double-right"> </i><i class="fa fa-angle-double-right"> </i></a>
                                       </div>
                                   </div>
                               </div>
@@ -73,16 +73,16 @@ foreach ($newsletters as $item) {
 
                 <h2 <!--class="--><?/*= $i < 1 ? 'active' : ''*/?>">
                     <span style="font-size: 1.5em; color: #bd2b2b;" class="fa fa-angle-right">
-                  <?=$year?></span></h2>
+                  <?=esc($year)?></span></h2>
 
                 <div class="content" style="display: none;">
                     <ul>
                     <?php foreach($ym as $month => $nl) { ?>
-                      <li><a href="<?php echo $nl['url']; ?>" target="_blank" style="font-size: 1.2em; color:
+                      <li><a href="<?php echo esc($nl['url'], 'attr'); ?>" target="_blank" style="font-size: 1.2em; color:
                       #bd2b2b;">
-                            <?=$nl['name'] ?>
+                            <?=esc($nl['name']) ?>
                               <?php if($nl['img_url']) { ?>
-                                  <img src="<?=$nl['img_url'] ?>" style="margin-left: 35px; height: 200px; ">
+                                  <img src="<?=esc($nl['img_url'], 'attr') ?>" style="margin-left: 35px; height: 200px; ">
                               <?php } ?>
                           </a>
                       </li>

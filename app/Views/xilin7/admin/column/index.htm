@@ -59,11 +59,11 @@ height:18px
 	foreach($lists as $v){
  ?>
   <tr align="center" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
-	<td><input type="text" style="width:25px;height:20px" value="<?php echo $v['sortrank']?>" name="sortrank[<?php echo $v['id']?>]"></td>
-	<td align="left"><?php echo $v['pre'].$v['typename'];?></td>
-	<td ><?php echo $typearr[$v['ispart']];?>&nbsp;</td>
+	<td><input type="text" style="width:25px;height:20px" value="<?php echo esc($v['sortrank'], 'attr')?>" name="sortrank[<?php echo $v['id']?>]"></td>
+	<td align="left"><?php echo esc($v['pre'].$v['typename']);?></td>
+	<td ><?php echo esc($typearr[$v['ispart']]);?>&nbsp;</td>
 	<td><?php if($v['ispart'] == '2'){ ?>
-	<?php echo $dlist[$v['channeltypeid']]['typename'].'|'.$dlist[$v['channeltypeid']]['nid'];?>
+	<?php echo esc($dlist[$v['channeltypeid']]['typename'].'|'.$dlist[$v['channeltypeid']]['nid']);?>
 	<?php }else{ echo "目录不许添加信息";} ?></td>
 	<td>
 		 

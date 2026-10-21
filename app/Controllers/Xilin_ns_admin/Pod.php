@@ -62,10 +62,10 @@ class Pod extends MY_Controller
     $return_string = '';
     $sql = "SELECT event_id,date,start_time,end_time,helpers_needed,cancel_in_days
     	      FROM events
-    	      WHERE year=" . $year . "
-    	      AND month=" . $month . "
+    	      WHERE year = ?
+    	      AND month = ?
     	      ORDER BY date ASC";
-    $result = $this->db->query($sql)->getResultArray();
+    $result = $this->db->query($sql, [$year, $month])->getResultArray();
 
     if ($result) {
       foreach ($result as $event) {
@@ -84,9 +84,9 @@ class Pod extends MY_Controller
                   signin,signout
                   FROM helpers h
                   join parents p on p.parent_id=h.parent_id
-                  WHERE h.event_id = $eid ";
+                  WHERE h.event_id = ? ";
 
-        $result2 = $this->db->query($query)->getResultArray();
+        $result2 = $this->db->query($query, [$eid])->getResultArray();
 
         $helpers = "";
         if ($result2) {
@@ -155,14 +155,14 @@ class Pod extends MY_Controller
     FROM events e,helpers h,parents p
     WHERE e.event_id=h.event_id
     AND p.parent_id=h.parent_id
-    AND (e.year > " . $year . " OR (e.year=" . $year . " AND e.month > " . $month . ") OR (e.year=" . $year . " AND e.month=" . $month . " AND e.date>=" . $date . "))
+    AND (e.year > ? OR (e.year = ? AND e.month > ?) OR (e.year = ? AND e.month = ? AND e.date >= ?))
     ORDER BY e.year,e.month,e.date";
 
-    $result = $this->db->query($query)->getResultArray();
+    $result = $this->db->query($query, [$year, $year, $month, $year, $month, $date])->getResultArray();
     echo "<table>";
     if($result) {
       foreach($result as $helper) {
-        echo "<tr>"."<td>".$helper['Event']."</td>"."<td>".$helper['Helper']."</td>"."</tr>";
+        echo "<tr>"."<td>".esc($helper['Event'])."</td>"."<td>".esc($helper['Helper'])."</td>"."</tr>";
       }
     } else {
       echo "<tr><td>None signed up</td></tr>";

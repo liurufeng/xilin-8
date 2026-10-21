@@ -36,14 +36,14 @@
   <?php foreach($list as $k=>$v){ ?>
   <tr align="center" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
     <td><?php echo $v['semester_id']?></td>
-    <td><?php echo $v['semester_year']?></td>
-    <td><?php echo $v['semester_name']?></td>
-    <td><?php echo $v['semester_status']?></td>
-    <td><?php echo $v['late_registration']?></td>
-    <td><?php echo $v['registration_fee']?></td>
-    <td><?php echo $v['late_registration_fee']?></td>
-    <td><?php echo $v['parent_discount_base']?></td>
-    <td><?php echo $v['teacher_discount_base']?></td>
+    <td><?php echo esc($v['semester_year'])?></td>
+    <td><?php echo esc($v['semester_name'])?></td>
+    <td><?php echo esc($v['semester_status'])?></td>
+    <td><?php echo esc($v['late_registration'])?></td>
+    <td><?php echo esc($v['registration_fee'])?></td>
+    <td><?php echo esc($v['late_registration_fee'])?></td>
+    <td><?php echo esc($v['parent_discount_base'])?></td>
+    <td><?php echo esc($v['teacher_discount_base'])?></td>
     <td><?= $v['show_calendar'] > 0 ? 'Show' : 'No'?></td>
     <td>
 		<a href='<?=$_SESSION['admin_path']?>semester/edit?semester_id=<?php echo $v['semester_id']?>'><u>edit</u></a> |

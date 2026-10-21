@@ -19,10 +19,10 @@
     <div class="container-wrapper">
       <div class="container">
         <form action="<?php echo site_url('homework/submit_grade')?>" method="POST">
-          <input type="hidden" name="homework_id" value="<?= $homework_id?>">
-          <input type="hidden" name="class_id" value="<?=$class_id?>">
-          <input type="hidden" name="student_id" value="<?=$student_id?>">
-          <input type="hidden" name="hw_sub_id" value="<?=$hw_sub_id?>">
+          <input type="hidden" name="homework_id" value="<?= esc($homework_id, 'attr')?>">
+          <input type="hidden" name="class_id" value="<?=esc($class_id, 'attr')?>">
+          <input type="hidden" name="student_id" value="<?=esc($student_id, 'attr')?>">
+          <input type="hidden" name="hw_sub_id" value="<?=esc($hw_sub_id, 'attr')?>">
           <div class="row">
             <ul class="account-header">
               <li><a href="/account/index">Class Details</a></li>
@@ -42,52 +42,52 @@
                   <tr>
                     <td style="text-align:right;">Class:</td>
                     <td style="padding:8px; margin-left:20px;">
-                      <?=$h['class_name']?> (<?=$h['class_code']?> <?=$h['meeting_time']?>)
+                      <?=esc($h['class_name'])?> (<?=esc($h['class_code'])?> <?=esc($h['meeting_time'])?>)
                     </td>
                   </tr>
 
                   <tr>
                     <td style="text-align:right;">Homework Title:</td>
-                    <td style="padding:8px; margin-left:20px;"><?= $h['title'] ?></td>
+                    <td style="padding:8px; margin-left:20px;"><?= esc($h['title']) ?></td>
                   </tr>
 
                   <tr>
                     <td style="text-align:right;">Notes:</td>
                     <td style="padding:8px; margin-left:20px;">
-                      <?= $h['tnote'] ?>
+                      <?= esc($h['tnote']) ?>
                     </td>
                   </tr>
 
                   <tr>
                     <td style="text-align:right;">Homework Link:</td>
-                    <td style="padding:8px; margin-left:20px;"><?= $h['tlink'] ?></td>
+                    <td style="padding:8px; margin-left:20px;"><?= esc($h['tlink']) ?></td>
                   </tr>
 
                   <tr>
                     <td style="text-align:right;">Due Date:</td>
-                    <td style="padding:8px; margin-left:20px;"><?= $h['due_date'] ?></td>
+                    <td style="padding:8px; margin-left:20px;"><?= esc($h['due_date']) ?></td>
                   </tr>
 
                   <tr>
                     <td style="text-align:right;">Student Homework Link:</td>
-                    <td style="padding:8px; margin-left:20px;"><?= $h['link'] ?></td>
+                    <td style="padding:8px; margin-left:20px;"><?= esc($h['link']) ?></td>
                   </tr>
 
                   <tr>
                     <td style="text-align:right;">Student Notes:</td>
-                    <td style="padding:8px; margin-left:20px;"><?= $h['note'] ?></td>
+                    <td style="padding:8px; margin-left:20px;"><?= esc($h['note']) ?></td>
                   </tr>
 
                   <tr>
                     <td style="text-align:right;">Grade:</td>
-                    <td style="padding:3px;"><input type="text" value="<?= $h['grade'] ?>" name="grade"
+                    <td style="padding:3px;"><input type="text" value="<?= esc($h['grade'], 'attr') ?>" name="grade"
                                                     style="width:450px; margin-left:10px; padding: 3px;"/></td>
                   </tr>
 
                   <tr>
                     <td style="text-align:right;">Grade Comment:</td>
                     <td style="padding:3px;">
-                      <textarea name="comment" rows="10" cols="10" style="width:450px; margin-left:10px; padding: 3px;"><?= $h['comment'] ?></textarea>
+                      <textarea name="comment" rows="10" cols="10" style="width:450px; margin-left:10px; padding: 3px;"><?= esc($h['comment']) ?></textarea>
                     </td>
                   </tr>
 
@@ -101,7 +101,7 @@
             <p data-wow-delay="200ms" data-wow-duration="300ms" class="wow fadeInUp animated"
                style="visibility: visible; animation-duration: 300ms; animation-delay: 200ms; animation-name: fadeInUp;">
               <input type="submit" value=" Submit " name="submit" class="btn btn-primary btn-lg"/>
-              <a href="/homework/grade/<?= $homework_id?>" class="btn btn-warning btn-lg">Cancel</a>
+              <a href="/homework/grade/<?= esc($homework_id, 'attr')?>" class="btn btn-warning btn-lg">Cancel</a>
             </p>
           </div>
         </form>
@@ -124,7 +124,7 @@
                   <input type="email" name="email" class="form-control" placeholder="Email" required>
                 </div>
                 <div class="form-group">
-                  <input type="password" name="password" class="form-control" placeholder="Password"
+                  <input type="password" name="password" autocomplete="current-password" class="form-control" placeholder="Password"
                          required>
                 </div>
                 <button type="submit" class="btn btn-primary">LOGIN</button>

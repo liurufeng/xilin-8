@@ -6,7 +6,13 @@ function sendJson($data)
     header('Cache-Control: no-cache, must-revalidate');
     header('Expires: Fri, 24 Nov 2000 06:00:00 GMT');
     header('Content-type: application/json');
-    echo json_encode($data);
+    header('X-Content-Type-Options: nosniff');
+    // CI4 sends its own (text/html) Content-Type from the shared response
+    // object after the controller returns, so set it there as well.
+    if (function_exists('service')) {
+        service('response')->setContentType('application/json');
+    }
+    echo json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 }
 
 function html_entity_fix($input, $options = array())

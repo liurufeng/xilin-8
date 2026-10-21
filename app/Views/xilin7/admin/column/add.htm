@@ -59,9 +59,9 @@ function checkSubmit()
 <table width="98%" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr><td height="10"></td></tr>
   <tr>
-<form name="form1" action="<?php echo $posturl?>" enctype="multipart/form-data" method="post" onSubmit="return checkSubmit()">
+<form name="form1" action="<?php echo esc($posturl, 'attr')?>" enctype="multipart/form-data" method="post" onSubmit="return checkSubmit()">
   <input type="hidden" name="dopost" value="save" />
-  <input type="hidden" name="reid" id="reid" value="<?php echo $_GET['reid']; ?>" />
+  <input type="hidden" name="reid" id="reid" value="<?php echo (int) ($_GET['reid'] ?? 0); ?>" />
 
     <td height="95" align="center" bgcolor="#FFFFFF">
 
@@ -69,7 +69,7 @@ function checkSubmit()
           
 		  <tr style="display:block">
             <td class='' height="26" style="padding-left:10px;"><font color='red'>栏目上级：</font></td>
-            <td class=''><?php echo $rename; ?></td>
+            <td class=''><?php echo esc($rename); ?></td>
           </tr>
           <tr style="display:block">
             <td class='' height="26" style="padding-left:10px;"><font color='red'>栏目名称：</font></td>
@@ -97,7 +97,7 @@ function checkSubmit()
                 
 			<select name="channeltypeid" id="channeltypeid" style="width:200px" >
 				<?php foreach($list as $k=>$v){ ?>
-				<option value="<?php echo $v['id']?>"><?php echo $v['typename']?>|<?php echo $v['nid']?></option>
+				<option value="<?php echo $v['id']?>"><?php echo esc($v['typename'])?>|<?php echo esc($v['nid'])?></option>
 				<?php } ?>
             </select> 
 			<a href="<?php echo site_url('modelv/index')?>"><u>查看模型</u></a>
@@ -108,7 +108,7 @@ function checkSubmit()
             <td class=''>
 			<select name="searchtype" id="searchtype" style="width:200px" >
 				<?php foreach($SearchTypes as $k=>$v){ ?>
-				<option value="<?php echo $k?>"><?php echo $v?></option>
+				<option value="<?php echo $k?>"><?php echo esc($v)?></option>
 				<?php } ?>
             </select> 
             </td>
@@ -147,7 +147,7 @@ function checkSubmit()
     </tr>
               <tr id="isparttr5" style="display:block">
             <td height="65" style="padding-left:10px;">展示图描述：</td>
-            <td height="65"> <textarea name="content" cols="70" style="height:50px" rows="4" id="content" class="alltxt"><?php echo $info['content']?></textarea></td>
+            <td height="65"> <textarea name="content" cols="70" style="height:50px" rows="4" id="content" class="alltxt"><?php echo esc($info['content'])?></textarea></td>
           </tr>   
 		  <tr id="isparttr1" style="display:block">
 			<td height="60" style="padding-left:10px;">&nbsp;URL规则：</td>

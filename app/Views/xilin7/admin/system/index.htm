@@ -37,10 +37,10 @@
  ?>
   <tr align="center" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
     <td><?php echo $v['id'];?></td>
-    <td align="left"><?php echo $v['pre'];?><?php echo $v['name'];?></td>
-    <td align="left"><?php echo $v['codes'];?>&nbsp;<?php echo $v['description']?></td>
-    <td><?php echo $v['sort'];?></td>
-    <td><?php echo $v['check'];?></td>
+    <td align="left"><?php echo esc($v['pre']);?><?php echo esc($v['name']);?></td>
+    <td align="left"><?php echo esc($v['codes']);?>&nbsp;<?php echo esc($v['description'])?></td>
+    <td><?php echo esc($v['sort']);?></td>
+    <td><?php echo esc($v['check']);?></td>
     <td><a href="<?=$_SESSION['admin_path']?>system/add_node').'?reid='.$v['id']?>">添加子节点</a> | <a href="">修改</a> | <a href="" class="del">删除</a></td>
   </tr>
   <?php ;}?>

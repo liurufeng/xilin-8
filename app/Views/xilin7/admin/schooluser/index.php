@@ -16,7 +16,7 @@
               <select id="semester_id" name="semester_id" onchange="submit();">
                 <?php foreach($semesters as $semester) {?>
                 <option value="<?=$semester['semester_id']?>" <?php if($semester['semester_id'] == session()->get('semester_id')) echo 'selected'; ?> >
-                <?=$semester['semester_year']?> <?=$semester['semester_name']?>
+                <?=esc($semester['semester_year'])?> <?=esc($semester['semester_name'])?>
                 </option>
                 <?php } ?>
               </select>
@@ -45,17 +45,17 @@
   <tr align="center" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
     <td><?php echo $v['semester_id']?></td>
     <td><?php echo $v['id']?></td>
-    <td><?php echo $v['name']?></td>
-    <td><?php echo $v['email']?></td>
-    <td><?php echo $v['phone']?></td>
-    <td><?php echo $v['ename']?></td>
+    <td><?php echo esc($v['name'])?></td>
+    <td><?php echo esc($v['email'])?></td>
+    <td><?php echo esc($v['phone'])?></td>
+    <td><?php echo esc($v['ename'])?></td>
     <!--<?php if($v['image']){?>
-    <td><img src="<?php echo $v['image']?>" height="20px;"/></td>
+    <td><img src="<?php echo esc($v['image'], 'attr')?>" height="20px;"/></td>
     <?php }else{?>
     <td></td>
     <?php }?>-->
     <td><?php if($v['isshow']){ echo 'yes';}else{ echo 'no';}?></td>
-    <td><?php echo $v['desc']?></td>
+    <td><?php echo esc($v['desc'])?></td>
     <td>
 		<a href='<?=$_SESSION['admin_path']?>schooluser/edit?id=<?php echo $v['id']?>'><u>edit</u></a> |
 		<a href='<?=$_SESSION['admin_path']?>schooluser/del?id=<?php echo $v['id']?>' onclick="return confirm('Are you sure to delete this user?')"><u>delete</u></a>

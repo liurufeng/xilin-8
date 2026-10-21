@@ -14,8 +14,8 @@ class Teacher extends Model
   {
     $sql = "select t.* from teachers t
 				where t.status = 1
-				and t.teacher_id = $teacher_id";
-    $info = $this->db->query($sql)->getRowArray();
+				and t.teacher_id = ?";
+    $info = $this->db->query($sql, [$teacher_id])->getRowArray();
 
     return $info;
   }
@@ -44,11 +44,11 @@ class Teacher extends Model
 				and se.egroup = 'schoolusertype'
 				where s.status = 1
 				and s.isshow = 1
-				and type=$type
-				and s.semester_id = $semester_id
+				and type=?
+				and s.semester_id = ?
 				order by show_order";
 
-    return $this->db->query($sql)->getResultArray();
+    return $this->db->query($sql, [$type, $semester_id])->getResultArray();
   }
 
   function getGroupList()

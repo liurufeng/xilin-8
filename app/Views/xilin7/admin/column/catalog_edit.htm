@@ -9,7 +9,7 @@ var channelArray = new Array();
 <?php    
 $i = 0;
 foreach($channelArray as $k=>$arr){
-  echo "channelArray[$k] = \"{$arr['nid']}\";\r\n";
+  echo "channelArray[$k] = \"".esc($arr['nid'])."\";\r\n";
 }
 ?>
 
@@ -138,7 +138,7 @@ function CheckCross()
   <tr>
   <form name="form1" action="catalog_edit.php" method="post" onSubmit="return checkSubmit();">
   <input type="hidden" name="dopost" value="save" />
-  <input type="hidden" name="id" value="<?php echo $id; ?>" />
+  <input type="hidden" name="id" value="<?php echo esc($id, 'attr'); ?>" />
   <input type="hidden" name="topid" value="<?php echo $myrow['topid']; ?>" />
   <td height="95" align="center" bgcolor="#FFFFFF">
     
@@ -203,19 +203,19 @@ function CheckCross()
                 <?php    
             foreach($channelArray as $k=>$arr)
             {
-                if($k==$channelid) echo "    <option value='{$k}' selected>{$arr['typename']}|{$arr['nid']}</option>\r\n";
-              else  echo "    <option value='{$k}'>{$arr['typename']}|{$arr['nid']}</option>\r\n";
+                if($k==$channelid) echo "    <option value='{$k}' selected>".esc($arr['typename'])."|".esc($arr['nid'])."</option>\r\n";
+              else  echo "    <option value='{$k}'>".esc($arr['typename'])."|".esc($arr['nid'])."</option>\r\n";
             }
             ?>
               </select> </td>
           </tr>
           <tr> 
             <td class='bline' height="26" style="padding-left:10px;"><font color='red'>栏目名称：</font></td>
-            <td class='bline'><input name="typename" type="text" id="typename" size="30" value="<?php echo $myrow['typename']?>" class="iptxt" /></td>
+            <td class='bline'><input name="typename" type="text" id="typename" size="30" value="<?php echo esc($myrow['typename'], 'attr')?>" class="iptxt" /></td>
           </tr>
           <tr> 
             <td class='bline' height="26" style="padding-left:10px;"> 排列顺序： </td>
-            <td class='bline'> <input name="sortrank" size="6" type="text" value="<?php echo $myrow['sortrank']?>" class="iptxt" />
+            <td class='bline'> <input name="sortrank" size="6" type="text" value="<?php echo esc($myrow['sortrank'], 'attr')?>" class="iptxt" />
               （由低 -&gt; 高） </td>
           </tr>
           <tr> 
@@ -227,9 +227,9 @@ function CheckCross()
               while($row = $dsql->GetObject())
               {
                   if($myrow['corank']==$row->rank)
-                    echo "<option value='".$row->rank."' selected>".$row->membername."</option>\r\n";
+                    echo "<option value='".$row->rank."' selected>".esc($row->membername)."</option>\r\n";
                         else
-                          echo "<option value='".$row->rank."'>".$row->membername."</option>\r\n";
+                          echo "<option value='".$row->rank."'>".esc($row->membername)."</option>\r\n";
               }
               ?>
               </select>
@@ -237,7 +237,7 @@ function CheckCross()
           </tr>
           <tr> 
             <td class='bline' height="26" style="padding-left:10px;">文件保存目录：</td>
-            <td class='bline'> <input name="typedir" type="text" id="typedir" value="<?php echo $myrow['typedir']?>" style="width:300px"  class="iptxt" /> 
+            <td class='bline'> <input name="typedir" type="text" id="typedir" value="<?php echo esc($myrow['typedir'], 'attr')?>" style="width:300px"  class="iptxt" /> 
             </td>
           </tr>
           <tr> 
@@ -251,7 +251,7 @@ function CheckCross()
           </tr>
           <tr> 
             <td class='bline' height="26" style="padding-left:10px;">默认页的名称： </td>
-            <td class='bline'><input name="defaultname" type="text" value="<?php echo $myrow['defaultname']?>" class="iptxt" /></td>
+            <td class='bline'><input name="defaultname" type="text" value="<?php echo esc($myrow['defaultname'], 'attr')?>" class="iptxt" /></td>
           </tr>
           <tr> 
             <td height="26" class='bline' style="padding-left:10px;">栏目属性：</td>
@@ -282,7 +282,7 @@ function CheckCross()
                 <input name="cross" type="radio" id="cross2" onClick="CheckCross()" value="2" class='np'<?php if($myrow['cross']==2) echo " checked='1' ";?>/>
                 手工指定交叉栏目ID(用逗号分开)
                 <br />
-                <textarea name="crossid" cols="50" rows="3" id="crossid" style="<?php if($myrow['cross']!=2) echo "display:none";?>" class="alltxt" ><?php echo $myrow['crossid']; ?></textarea>
+                <textarea name="crossid" cols="50" rows="3" id="crossid" style="<?php if($myrow['cross']!=2) echo "display:none";?>" class="alltxt" ><?php echo esc($myrow['crossid']); ?></textarea>
             </td>
           </tr>
           <tr id='smclass' style='<?php echo ($channelid<0 ? '' : 'display:none'); ?>'>
@@ -302,14 +302,14 @@ function CheckCross()
                             $selstr = '';
                         }
                         if($arr['evalue']%500==0) {
-                            echo "<option value='{$arr['evalue']}'{$selstr}>{$arr['ename']}</option>\r\n";
+                            echo "<option value='".esc($arr['evalue'])."'{$selstr}>".esc($arr['ename'])."</option>\r\n";
                         }
                         else if(preg_match("#\.#", $arr['evalue']))
                         {
-                            echo "<option value='{$arr['evalue']}'{$selstr}> └───{$arr['ename']}</option>\r\n";
+                            echo "<option value='".esc($arr['evalue'])."'{$selstr}> └───".esc($arr['ename'])."</option>\r\n";
                         }
                         else {
-                            echo "<option value='{$arr['evalue']}'{$selstr}> └─{$arr['ename']}</option>\r\n";
+                            echo "<option value='".esc($arr['evalue'])."'{$selstr}> └─".esc($arr['ename'])."</option>\r\n";
                         }
                     }
                     ?>
@@ -333,7 +333,7 @@ function CheckCross()
           </tr>
           <tr> 
             <td class='bline' height="24" style="padding-left:10px;">绑定域名：</td>
-            <td class='bline'> <input name="siteurl" type="text" id="siteurl" size="35" value="<?php echo $myrow['siteurl']?>" class="iptxt" />
+            <td class='bline'> <input name="siteurl" type="text" id="siteurl" size="35" value="<?php echo esc($myrow['siteurl'], 'attr')?>" class="iptxt" />
               (需加 http://，一级或二级域名的根网址) </td>
           </tr>
           <tr> 
@@ -349,7 +349,7 @@ function CheckCross()
               <?php
               foreach($channelArray as $k=>$arr)
               {
-                   echo "{$arr['typename']}({$arr['nid']})、";
+                   echo "".esc($arr['typename'])."(".esc($arr['nid']).")、";
               }
              ?>
               ） </font> <br/>
@@ -360,20 +360,20 @@ function CheckCross()
           </tr>
           <tr> 
             <td height="26" style="padding-left:10px;">封面模板：</td>
-            <td> <input name="tempindex" type="text" value="<?php echo $myrow['tempindex']?>" style="width:300px" class="iptxt" /> 
+            <td> <input name="tempindex" type="text" value="<?php echo esc($myrow['tempindex'], 'attr')?>" style="width:300px" class="iptxt" /> 
               <input type="button" name="set1" value="浏览..." class="coolbg np" style="width:60px" onClick="SelectTemplets('form1.tempindex');"/> 
               <img src="images/help.gif" alt="帮助" width="16" height="16" border="0" style="cursor:pointer" onClick="ShowHide('helpvar1')"/> 
             </td>
           </tr>
           <tr> 
             <td height="26" style="padding-left:10px;">列表模板：</td>
-            <td> <input name="templist" type="text" value="<?php echo $myrow['templist']?>" style="width:300px" class="iptxt" /> 
+            <td> <input name="templist" type="text" value="<?php echo esc($myrow['templist'], 'attr')?>" style="width:300px" class="iptxt" /> 
               <input type="button" name="set3" value="浏览..." class="coolbg np" style="width:60px" onClick="SelectTemplets('form1.templist');"/> 
             </td>
           </tr>
           <tr> 
             <td height="26" style="padding-left:10px;">文章模板：</td>
-            <td><input name="temparticle" type="text" value="<?php echo $myrow['temparticle']?>" style="width:300px"  class="iptxt" /> 
+            <td><input name="temparticle" type="text" value="<?php echo esc($myrow['temparticle'], 'attr')?>" style="width:300px"  class="iptxt" /> 
               <input type="button" name="set4" value="浏览..." class="coolbg np" style="width:60px" onClick="SelectTemplets('form1.temparticle');"/> 
             </td>
           </tr>
@@ -390,7 +390,7 @@ function CheckCross()
           </tr>
           <tr> 
             <td height="26" style="padding-left:10px;">文章命名规则：</td>
-            <td> <input name="namerule" type="text" id="namerule" value="<?php echo $myrow['namerule']?>" size="40" class="iptxt" /> 
+            <td> <input name="namerule" type="text" id="namerule" value="<?php echo esc($myrow['namerule'], 'attr')?>" size="40" class="iptxt" /> 
               <img src="images/help.gif" alt="帮助" width="16" height="16" border="0" style="cursor:pointer" onClick="ShowHide('helpvar2')"/> 
             </td>
           </tr>
@@ -400,24 +400,24 @@ function CheckCross()
           </tr>
           <tr> 
             <td height="26" style="padding-left:10px;">列表命名规则：</td>
-            <td> <input name="namerule2" type="text" id="namerule2" value="<?php echo $myrow['namerule2']?>" size="40" class="iptxt" /> 
+            <td> <input name="namerule2" type="text" id="namerule2" value="<?php echo esc($myrow['namerule2'], 'attr')?>" size="40" class="iptxt" /> 
               <img src="images/help.gif" alt="帮助" width="16" height="16" border="0" style="cursor:pointer" onClick="ShowHide('helpvar3')"/></td>
           </tr>
           <tr>
             <td height="65" style="padding-left:10px;">SEO标题：</td>
             <td>
-                <input name="seotitle" type="text" style="width:250px" id="seotitle" class="alltxt" value="<?php echo $myrow['seotitle']?>" />
+                <input name="seotitle" type="text" style="width:250px" id="seotitle" class="alltxt" value="<?php echo esc($myrow['seotitle'], 'attr')?>" />
                 (栏目模板里用{dede:field.seotitle /}调用)
             </td>
           </tr>
           <tr> 
             <td height="65" style="padding-left:10px;">关键字：</td>
-            <td> <textarea name="keywords" cols="70" rows="4" id="keywords"  class="alltxt" ><?php echo $myrow['keywords']?></textarea> 
+            <td> <textarea name="keywords" cols="70" rows="4" id="keywords"  class="alltxt" ><?php echo esc($myrow['keywords'])?></textarea> 
             </td>
           </tr>
           <tr>
             <td height="65" style="padding-left:10px;">栏目描述：</td>
-            <td height="65"><textarea name="description" cols="70" style="height:50px" rows="4" id="description" class="alltxt" ><?php echo $myrow['description']?></textarea></td>
+            <td height="65"><textarea name="description" cols="70" style="height:50px" rows="4" id="description" class="alltxt" ><?php echo esc($myrow['description'])?></textarea></td>
           </tr>
           <tr> 
             <td height="45" style="padding-left:10px;">继承选项：</td>

@@ -16,7 +16,7 @@
             <select id="semester_id" name="semester_id" onchange="submit();">
               <?php foreach($semesters as $semester) {?>
               <option value="<?=$semester['semester_id']?>" <?php if($semester['semester_id'] == session()->get('semester_id')) echo 'selected'; ?> >
-                <?=$semester['semester_year']?> <?=$semester['semester_name']?>
+                <?=esc($semester['semester_year'])?> <?=esc($semester['semester_name'])?>
               </option>
               <?php } ?>
             </select>
@@ -40,7 +40,7 @@
       </tr>
       <tr bgcolor="#FFFFFF" >
         <td colspan="60">
-          <textarea style="width: 99%;" rows="38"><?=rtrim($all_emails,',') ?></textarea>
+          <textarea style="width: 99%;" rows="38"><?=esc(rtrim($all_emails,',')) ?></textarea>
         </td>
       </tr>
       <?php }?>
@@ -59,7 +59,7 @@
     </tr>
     <tr bgcolor="#FFFFFF" >
       <td colspan="60">
-        <textarea style="width: 99%;" rows="6"><?=rtrim($all_emails,',') ?></textarea>
+        <textarea style="width: 99%;" rows="6"><?=esc(rtrim($all_emails,',')) ?></textarea>
       </td>
     </tr>
   <?php } ?>

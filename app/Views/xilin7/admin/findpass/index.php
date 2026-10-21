@@ -26,24 +26,31 @@
     <th width="8%" align="center">alt_c_name</th>
     <th width="8%" align="center">alt_phone</th>
     <th width="8%" align="center">alt_email</th>
-    <th align="center">pass</th>
+    <th width="12%" align="center">new password</th>
   </tr>
   <?php
 
   foreach($matches as $k=>$v){ ?>
   <tr align="center" bgcolor="#FFEEEE" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFEEEE';">
     <td><?= $v['parent_id']?></td>
-    <td><?= $v['email']?></td>
-    <td><?= $v['primary_relationship']?></td>
-    <td><?= $v['primary_en_name']?></td>
-    <td><?= $v['primary_cn_name']?></td>
-    <td><?= $v['primary_phone']?></td>
-    <td><?= $v['alter_relationship']?></td>
-    <td><?= $v['alter_en_name']?></td>
-    <td><?= $v['alter_cn_name']?></td>
-    <td><?= $v['alter_phone']?></td>
-    <td><?= $v['alter_contact_email']?></td>
-    <td><?= $v['passwd']?></td>
+    <td><?= esc($v['email'])?></td>
+    <td><?= esc($v['primary_relationship'])?></td>
+    <td><?= esc($v['primary_en_name'])?></td>
+    <td><?= esc($v['primary_cn_name'])?></td>
+    <td><?= esc($v['primary_phone'])?></td>
+    <td><?= esc($v['alter_relationship'])?></td>
+    <td><?= esc($v['alter_en_name'])?></td>
+    <td><?= esc($v['alter_cn_name'])?></td>
+    <td><?= esc($v['alter_phone'])?></td>
+    <td><?= esc($v['alter_contact_email'])?></td>
+    <td>
+      <!-- passwords are stored as hashes and can't be shown; set a new one and tell the parent -->
+      <form method="post" action="<?= $_SESSION['admin_path'].'findpass/setpass'?>" autocomplete="off">
+        <input type="hidden" name="parent_id" value="<?= (int)$v['parent_id']?>"/>
+        <input type="password" name="passwd" size="10" autocomplete="new-password"/>
+        <input type="submit" value="Set"/>
+      </form>
+    </td>
   </tr>
     <?php }?>
 </table>

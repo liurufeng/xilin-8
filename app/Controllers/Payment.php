@@ -7,8 +7,16 @@ use Google\Service\Gmail\ModifyMessageRequest;
 
 class Payment extends Controller
 {
+  private function isAdmin()
+  {
+    return session()->get('id') && session()->get('group_id') && session()->get('name');
+  }
+
   public function auth()
   {
+    if (!$this->isAdmin()) {
+      return $this->response->setStatusCode(403)->setBody('Forbidden');
+    }
     $client = new Client();
     $client->setAuthConfig(WRITEPATH . 'credentials.json'); // credentials.json from Google Cloud Console
     $client->setRedirectUri(base_url('payment/callback'));
@@ -25,6 +33,9 @@ class Payment extends Controller
 
   public function callback()
   {
+    if (!$this->isAdmin()) {
+      return $this->response->setStatusCode(403)->setBody('Forbidden');
+    }
     $client = new Client();
     $client->setAuthConfig(WRITEPATH . 'credentials.json');
     $client->setRedirectUri(base_url('payment/callback'));
@@ -48,7 +59,8 @@ class Payment extends Controller
   public function read($token = null)
   {
     // Optional token for securing the web endpoint
-    if ($token !== 'YOUR_SECRET_TOKEN') {
+    $secret = (string)xilin_secret('payment_read_token', '');
+    if ($secret === '' || !is_string($token) || !hash_equals($secret, $token)) {
       return $this->response->setStatusCode(403)->setBody('Unauthorized');
     }
 
@@ -168,8 +180,8 @@ class Payment extends Controller
         }
 
 
-          $sql = "select * from parents where parent_id = " . (int)$parent_id . " limit 1";
-          $result = $db->query($sql)->getRowArray();
+          $sql = "select * from parents where parent_id = ? limit 1";
+          $result = $db->query($sql, [(int)$parent_id])->getRowArray();
 
           if($result) {
             $parent_email = $result['email'];
@@ -212,8 +224,8 @@ class Payment extends Controller
           $avoid_dup[] = $checking;
           $check_amount = floatval($sent_info[1]); //floatval(preg_replace('/[^0-9\.]+/', '', $sent_info[1]));
 
-          $sqlx = "select check_id from checks where parent_id = ".$parent_id." and check_amount = ".$check_amount." and check_date >= NOW() - INTERVAL 30 MINUTE";
-          $resultx = $db->query($sqlx)->getRowArray();
+          $sqlx = "select check_id from checks where parent_id = ? and check_amount = ? and check_date >= NOW() - INTERVAL 30 MINUTE";
+          $resultx = $db->query($sqlx, [$parent_id, $check_amount])->getRowArray();
           if(isset($resultx) && isset($resultx['check_id']) && !empty($resultx['check_id'])) continue;
 
           $insertdata1['semester_id'] = $semester_id;
@@ -256,7 +268,9 @@ class Payment extends Controller
             $headers .= "Reply-To: ec@xilinnschinese.org\r\n";
             $headers .= "MIME-Version: 1.0\r\n";
             $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-            @mail($parent_email, $subject, $msg_p, $headers, '-f paymentconfirmation@xilinnschinese.org');
+            if(filter_var($parent_email, FILTER_VALIDATE_EMAIL)) {
+              @mail($parent_email, $subject, $msg_p, $headers, '-f paymentconfirmation@xilinnschinese.org');
+            }
 
             $processed[] = $messageId;
             $mods = new ModifyMessageRequest([

@@ -30,10 +30,10 @@
   <?php foreach($list as $k=>$v){ ?>
   <tr align="center" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
     <td><?php echo $v['level_id']?></td>
-    <td><?php echo $v['name']?></td>
-    <td><?php echo $v['show_order']?></td>
+    <td><?php echo esc($v['name'])?></td>
+    <td><?php echo esc($v['show_order'])?></td>
     <?php if($v['icon']){?>
-    <td><img src="<?php echo $v['icon']?>" height="20px;"/></td>
+    <td><img src="<?php echo esc($v['icon'], 'attr')?>" height="20px;"/></td>
     <?php }else{?>
     <td></td>
     <?php }?>

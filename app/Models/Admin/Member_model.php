@@ -1,4 +1,5 @@
 <?php namespace App\Models\Admin;
+use App\Libraries\Passwords;
 use CodeIgniter\Model;
 /**
  *
@@ -34,30 +35,34 @@ class Member_model extends Model
       return '-1002'; // 密码不能为空
     }
 
-    $sql = "select id,name,pass,group_id 
+    $userinfo = $this->db->query("select id,name,pass,pwd,group_id
             from admin
-            where name = '{$username}'
-            and state = 1";
-    $userinfo = $this->db->query($sql)->getResultArray();
+            where name = ?
+            and state = 1", [$username])->getResultArray();
     if (empty($userinfo)) {
       return '-1003'; // 用户信息不存在
     }
 
-    if ($password != $userinfo[0]['pass']) {
+    // admin.pass holds the password (a hash, or still plain text); admin.pwd an older copy, used only if it is a hash
+    $pwd = (string)$userinfo[0]['pwd'];
+    $matches = Passwords::matches($password, $userinfo[0]['pass'])
+      || (Passwords::isHash($pwd) && Passwords::matches($password, $pwd));
+    if (!$matches) {
+      // the attempt is logged without the password typed
       $login_logdata = array(
         'typeid' => '1',
         'username' => $username,
-        'password' => $password,
+        'password' => '',
         'logintime' => time(),
         'loginip' => get_client_ip(),
       );
 
       $this->db->table('login_log')
         ->insert($login_logdata);
-      //$this->db->insert('login_log', $login_logdata);
 
       return '-1004'; // 密码错误
     }
+    Passwords::upgrade('admin', 'id', $userinfo[0]['id'], 'pass', $password, $userinfo[0]['pass']);
 
     $ip = get_client_ip() ? get_client_ip() : 0;
     $this->db->table('admin')
@@ -81,10 +86,10 @@ class Member_model extends Model
     $sql = "select a.id,a.name,a.group_id,a.realname,a.loginCount,r.nodeids
             from admin a
             join admin_role r on r.id = a.group_id
-            where a.id = {$uid}
+            where a.id = ?
             ";
 
-    $row = $this->db->query($sql)->getResultArray();
+    $row = $this->db->query($sql, [(int)$uid])->getResultArray();
     return $row[0];
   }
 

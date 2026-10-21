@@ -16,7 +16,7 @@
             <select id="semester_id" name="semester_id" onchange="submit();">
               <?php foreach($semesters as $semester) {?>
               <option value="<?=$semester['semester_id']?>" <?php if($semester['semester_id'] == session()->get('semester_id')) echo 'selected'; ?> >
-                <?=$semester['semester_year']?> <?=$semester['semester_name']?>
+                <?=esc($semester['semester_year'])?> <?=esc($semester['semester_name'])?>
               </option>
               <?php } ?>
             </select>
@@ -44,10 +44,10 @@
   <?php foreach($list as $k=>$v){ ?>
   <tr align="center" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
     <td><?php echo $v['parent_id']?></td>
-    <td><?php echo $v['primary_en_name']?></td>
-    <td><?php echo $v['email']?></td>
-    <td><?php echo $v['manual_records']?></td>
-    <td><?php echo $v['notes']?></td>
+    <td><?php echo esc($v['primary_en_name'])?></td>
+    <td><?php echo esc($v['email'])?></td>
+    <td><?php echo esc($v['manual_records'])?></td>
+    <td><?php echo esc($v['notes'])?></td>
     <td>
 		<a href='<?=$_SESSION['admin_path']?>manualpod/edit?manual_pod_record_id=<?php echo $v['manual_pod_record_id']?>'><u>edit</u></a> |
     <!--<a href='<?php /*echo site_url('manualpod/copy')*/?>?manual_pod_record_id=<?php /*echo $v['manual_pod_record_id']*/?>'><u>copy</u></a> |-->

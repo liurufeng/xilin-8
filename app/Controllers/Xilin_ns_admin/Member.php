@@ -1,5 +1,6 @@
 <?php namespace App\Controllers\Xilin_ns_admin;
 
+use App\Libraries\Passwords;
 use App\Models\Admin\Member_model;
 /**
  *
@@ -42,7 +43,7 @@ class Member extends MY_Controller
     $wheresql = '';
     if (!empty($id)) {
 
-      $wheresql = ' and a.group_id = ' . $id;
+      $wheresql = ' and a.group_id = ' . (int)$id;
     }
     $sql = "SELECT a.id as uid, a.name as username, a.realname, a.loginCount, a.lastLoginTime,a.lastLoginIp,ar.name
 				FROM admin AS a
@@ -67,24 +68,24 @@ class Member extends MY_Controller
       // 判断用户名是否存在
       if ($this->request->getVar('username')) {
         $username = trim($this->request->getVar('username'));
-        $sql = " SELECT 1 FROM  admin WHERE name = '$username'";
-         $rst = $this->db->query($sql)->getResultArray();
+        $sql = " SELECT 1 FROM  admin WHERE name = ?";
+         $rst = $this->db->query($sql, [$username])->getResultArray();
         if (is_array($rst) && count($rst) > 0) {
           ShowMsg('username already exists', $_SESSION['admin_path'].'member/add');
         }
 
         $insertdata['name'] = $this->request->getVar('username');
         $insertdata['realname'] = $this->request->getVar('realname');
-        $insertdata['pass'] = $this->request->getVar('pwd');//md5($this->request->getVar('pwd'));
-        $insertdata['pwd'] = $this->request->getVar('pwd');
+        $insertdata['pass'] = Passwords::forStorage('admin', 'pass', (string)$this->request->getVar('pwd'));
         $insertdata['group_id'] = $this->request->getVar('groupid');
         $insertdata['email'] = $this->request->getVar('email');
-        $this->db->insert('admin', $insertdata);
+        $this->db->table('admin')
+          ->insert($insertdata);
         ShowMsg('add success', $_SESSION['admin_path'].'member/index');
       }
     }
-    $this->load->model('member_model');
-    $data['groupList'] = Member_model::getGroupList();
+    $member_model = new Member_model();
+    $data['groupList'] = $member_model->getGroupList();
 
     echo view($_SESSION['tm'].'admin/member/member_add.htm', $data);
   }
@@ -99,18 +100,19 @@ class Member extends MY_Controller
       // 判断用户名是否存在
       if ($this->request->getVar('username')) {
         $username = trim($this->request->getVar('username'));
-        $sql = " SELECT 1 FROM  admin WHERE name = '$username' and id <> " . $this->request->getVar('uid');
-         $rst = $this->db->query($sql)->getResultArray();
+        $sql = " SELECT 1 FROM  admin WHERE name = ? and id <> ?";
+         $rst = $this->db->query($sql, [$username, (int)$this->request->getVar('uid')])->getResultArray();
         if (is_array($rst) && count($rst) > 0) {
           ShowMsg('username already exists', $_SESSION['admin_path'].'member/add');
         }
 
         $insertdata['name'] = $this->request->getVar('username');
         $insertdata['realname'] = $this->request->getVar('realname');
-        $insertdata['pwd'] = $this->request->getVar('pwd');
-        $pwd = $this->request->getVar('pwd');
-        if (!empty($pwd)) {
-          $insertdata['pass'] = $this->request->getVar('pwd');//md5($this->request->getVar('pwd'));
+        // blank: the password stays as it is
+        $pwd = (string)$this->request->getVar('pwd');
+        if ($pwd !== '') {
+          $insertdata['pass'] = Passwords::forStorage('admin', 'pass', $pwd);
+          $insertdata['pwd'] = null;
         }
         $insertdata['group_id'] = $this->request->getVar('groupid');
         $insertdata['email'] = $this->request->getVar('email');

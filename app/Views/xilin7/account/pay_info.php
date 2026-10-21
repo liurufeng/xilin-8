@@ -11,17 +11,17 @@
 
         <div class="row account-top" id="view_profile">
           <? if (isset($success_msg)) { ?>
-              <div class="row success-flash"><b><?= $success_msg ?></b></div>
+              <div class="row success-flash"><b><?= esc($success_msg) ?></b></div>
           <? } ?>
           <? if (isset($error_msg)) { ?>
-              <div class="row error-flash"><b><?= $error_msg ?></b></div>
+              <div class="row error-flash"><b><?= esc($error_msg) ?></b></div>
           <? } ?>
           <? if (session()->flashdata('success_msg')) { ?>
-              <div class="row success-flash"><b><?= session()->flashdata('success_msg'); ?></b></div>
+              <div class="row success-flash"><b><?= esc(session()->flashdata('success_msg')); ?></b></div>
           <? } ?>
 
           <? if (session()->flashdata('error_msg')) { ?>
-              <div class="row error-flash"><b><?= session()->flashdata('error_msg'); ?></b></div>
+              <div class="row error-flash"><b><?= esc(session()->flashdata('error_msg')); ?></b></div>
           <? } ?>
             <div class="Profile account-table" data-wow-delay="200ms" data-wow-duration="300ms" class="wow fadeInUp animated"
                  style="visibility: visible; animation-duration: 300ms; animation-delay: 200ms; animation-name: fadeInUp;">
@@ -33,7 +33,7 @@
 
                       <tr>
                           <td style="text-align:right;">Email:</td>
-                          <td class="right"><?= $p['email'] ?>
+                          <td class="right"><?= esc($p['email']) ?>
                           </td>
                       </tr>
                       <tr>
@@ -44,79 +44,79 @@
                       <tr>
                           <td style="text-align:right;">Primary Contact English Name:</td>
                           <td class="right">
-                            <?= $p['primary_en_name'] ?>
+                            <?= esc($p['primary_en_name']) ?>
                           </td>
                       </tr>
                       <tr>
                           <td style="text-align:right;">Chinese Name:</td>
                           <td class="right">
-                            <?= $p['primary_cn_name'] ?>
+                            <?= esc($p['primary_cn_name']) ?>
                           </td>
                       </tr>
                       <tr>
                           <td style="text-align:right;">Relationship:</td>
                           <td class="right">
-                            <?= $p['primary_relationship'] ?>
+                            <?= esc($p['primary_relationship']) ?>
                           </td>
                       </tr>
                       <tr>
                           <td style="text-align:right;">Phone:</td>
                           <td class="right">
-                            <?= $p['primary_phone'] ?>
+                            <?= esc($p['primary_phone']) ?>
                           </td>
                       </tr>
                       <tr>
                           <td style="text-align:right;">Alternative Contact Email:</td>
                           <td class="right">
-                            <?= $p['alter_contact_email'] ?>
+                            <?= esc($p['alter_contact_email']) ?>
                           </td>
                       </tr>
                       <tr>
                           <td style="text-align:right;">Alternative Contact English Name:</td>
                           <td class="right">
-                            <?= $p['alter_en_name'] ?>
+                            <?= esc($p['alter_en_name']) ?>
                           </td>
                       </tr>
                       <tr>
                           <td style="text-align:right;">Chinese Name:</td>
                           <td class="right">
-                            <?= $p['alter_cn_name'] ?>
+                            <?= esc($p['alter_cn_name']) ?>
                           </td>
                       </tr>
                       <tr>
                           <td style="text-align:right;">Relationship:</td>
                           <td class="right">
-                            <?= $p['alter_relationship'] ?>
+                            <?= esc($p['alter_relationship']) ?>
                           </td>
                       </tr>
                       <tr>
                           <td style="text-align:right;">Phone:</td>
                           <td class="right">
-                            <?= $p['alter_phone'] ?>
+                            <?= esc($p['alter_phone']) ?>
                           </td>
                       </tr>
                       <tr>
                           <td style="text-align:right;">Street Address:</td>
                           <td class="right">
-                            <?= $p['address'] ?>
+                            <?= esc($p['address']) ?>
                           </td>
                       </tr>
                       <tr>
                           <td style="text-align:right;">City:</td>
                           <td class="right">
-                            <?= $p['city'] ?>
+                            <?= esc($p['city']) ?>
                           </td>
                       </tr>
                       <tr>
                           <td style="text-align:right;">State:</td>
                           <td class="right">
-                            <?= $p['state'] ?>
+                            <?= esc($p['state']) ?>
                           </td>
                       </tr>
                       <tr>
                           <td style="text-align:right;">Zip:</td>
                           <td class="right">
-                            <?= $p['zip'] ?>
+                            <?= esc($p['zip']) ?>
                           </td>
                       </tr>
                   </table>

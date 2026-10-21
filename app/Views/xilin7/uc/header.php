@@ -69,7 +69,7 @@
                                     <input type="text" id="email_login" name="email" placeholder="Username" />
                                 </div>
                                 <div class="field">
-                                    <input type="password" name="password" placeholder="Password" />
+                                    <input type="password" name="password" autocomplete="current-password" placeholder="Password" />
                                 </div>
                                 <div class="field">
                                     <input type="submit" value="Login" class="flat-btn" />
@@ -94,7 +94,7 @@
                                     <input type="email" value="" name="re_email" placeholder="*Re-type Email" />
                                 </div>
                                 <div class="field">
-                                    <input type="password" name="passwd" placeholder="*Type Password" maxlength="20"/>
+                                    <input type="password" name="passwd" autocomplete="new-password" placeholder="*Type Password" maxlength="20"/>
                                 </div>
                                 <div class="field-half">
                                     <input type="text" value="" name="primary_en_name" placeholder="*English Name" />

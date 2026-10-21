@@ -43,11 +43,11 @@ class Info_model extends Model
     $sql = "SELECT * FROM archives as a
 			  LEFT JOIN addonarticle as aa
 			  ON a.id = aa.aid 
-			  WHERE a.id = '{$aid}'
+			  WHERE a.id = ?
 			  LIMIT 1";
 
     $info = $this->db
-      ->query($sql)
+      ->query($sql, [$aid])
       ->getRowArray();
     return $info;
 
@@ -62,9 +62,9 @@ class Info_model extends Model
     if (empty($aid)) return;
 
     $sql = "SELECT * FROM " . $this->db->dbprefix('attachment') . "
-			  WHERE aid = $aid 
+			  WHERE aid = ? 
 			  LIMIT 1";
-    $info = $this->db->query($sql)->getRowArray();
+    $info = $this->db->query($sql, [$aid])->getRowArray();
     return $info;
   }
 

@@ -10,11 +10,11 @@
   <div class="Profile">
 
   <? if (session()->flashdata('success_msg')) { ?>
-    <div class="row success-flash"><b><?= session()->flashdata('success_msg'); ?></b></div>
+    <div class="row success-flash"><b><?= esc(session()->flashdata('success_msg')); ?></b></div>
   <? } ?>
 
   <? if (session()->flashdata('error_msg')) { ?>
-    <div class="row error-flash"><b><?= session()->flashdata('error_msg'); ?></b></div>
+    <div class="row error-flash"><b><?= esc(session()->flashdata('error_msg')); ?></b></div>
   <? } ?>
 
     <?php if ($usertype === 1) { ?>
@@ -25,24 +25,24 @@
             </TR>
             <TR>
               <TD align="right" width="109">Email</TD>
-              <TD align="left" width="500"><?= $parent['email'] ?><span
+              <TD align="left" width="500"><?= esc($parent['email']) ?><span
                   style="float:right;">Parent ID: &nbsp;&nbsp;<?= $parent['parent_id'] ?>&nbsp;&nbsp; </span></TD>
             </TR>
             <TR>
               <TD align="right" width="109">Primary Contact</TD>
-              <TD align="left" width="500"><?= $parent['primary_relationship'] ?>
-                , <?= $parent['primary_en_name'] ?><?= $parent['primary_cn_name'] ? '(' . $parent['primary_cn_name'] . ')' : '' ?>
-                , <?= $parent['primary_phone'] ?></TD>
+              <TD align="left" width="500"><?= esc($parent['primary_relationship']) ?>
+                , <?= esc($parent['primary_en_name']) ?><?= esc($parent['primary_cn_name'] ? '(' . $parent['primary_cn_name'] . ')' : '') ?>
+                , <?= esc($parent['primary_phone']) ?></TD>
             </TR>
             <TR>
               <TD align="right" width="109">Altern. Contact</TD>
               <TD align="left"
-                  width="500"><?= $parent['alter_relationship'] ? $parent['alter_relationship'] : '' ?><?= $parent['alter_en_name'] ? ', ' . $parent['alter_en_name'] : '' ?>
-                <?= $parent['alter_cn_name'] ? '(' . $parent['alter_cn_name'] . ')' : '' ?><?= $parent['alter_phone'] ? ', ' . $parent['alter_phone'] : '' ?></TD>
+                  width="500"><?= esc($parent['alter_relationship'] ? $parent['alter_relationship'] : '') ?><?= esc($parent['alter_en_name'] ? ', ' . $parent['alter_en_name'] : '') ?>
+                <?= esc($parent['alter_cn_name'] ? '(' . $parent['alter_cn_name'] . ')' : '') ?><?= esc($parent['alter_phone'] ? ', ' . $parent['alter_phone'] : '') ?></TD>
             </TR>
             <TR>
               <TD align="right" width="109">Home Address</TD>
-              <TD align="left" width="500"><?= $parent['address'] ?></TD>
+              <TD align="left" width="500"><?= esc($parent['address']) ?></TD>
             </TR>
           </table>
     </div>
@@ -59,9 +59,9 @@
       <tr>
         <td width=10><?= ++$number ?></td>
         <td>Student Name</td>
-        <td><?= $student['en_name'] ?><?= $student['cn_name'] ? '(' . $student['cn_name'] . ')' : '' ?></td>
-        <td align="center" colspan="2"><?= $student['birthday'] ?></td>
-        <td align="center"><?= $student['gender'] ?></td>
+        <td><?= esc($student['en_name']) ?><?= esc($student['cn_name'] ? '(' . $student['cn_name'] . ')' : '') ?></td>
+        <td align="center" colspan="2"><?= esc($student['birthday']) ?></td>
+        <td align="center"><?= esc($student['gender']) ?></td>
       <tr>
         <th>&nbsp;</th>
         <th colspan=5>Registered Classes</th>
@@ -86,11 +86,11 @@
         ?>
         <tr>
           <td width=10>&nbsp;</td>
-          <td><?= $class['class_code'] ?></td>
-          <td style="white-space: nowrap;"><?= $class['class_name'] ?></td>
-          <td><?= $class['classroom'] ?></td>
-          <td><?= $class['meeting_time'] ?></td>
-          <td>$<?= $fees ?></td>
+          <td><?= esc($class['class_code']) ?></td>
+          <td style="white-space: nowrap;"><?= esc($class['class_name']) ?></td>
+          <td><?= esc($class['classroom']) ?></td>
+          <td><?= esc($class['meeting_time']) ?></td>
+          <td>$<?= esc($fees) ?></td>
         </tr>
       <? }
       $total_tuition += $tuition[$student['student_id']];
@@ -99,9 +99,9 @@
       $total += $sub_total[$student['student_id']];?>
       <tr>
         <td width=10>&nbsp;</td>
-        <td colspan=2 align=center>Tuition: <?= $tuition[$student['student_id']] ?>, Book &amp; Material: <?= $book_material[$student['student_id']] ?></td>
+        <td colspan=2 align=center>Tuition: <?= esc($tuition[$student['student_id']]) ?>, Book &amp; Material: <?= esc($book_material[$student['student_id']]) ?></td>
         <td align=right colspan=2>Subtotal:</td>
-        <td>$<?= $sub_total[$student['student_id']] ?>&nbsp;</td>
+        <td>$<?= esc($sub_total[$student['student_id']]) ?>&nbsp;</td>
       </tr>
     <?
     }
@@ -122,15 +122,15 @@
   </tr>
   <tr>
     <td colspan=5 align=right>Non-refundable Registration fee per
-      family: <?= session()->get('current_semester')['registration_fee'] ?>&nbsp;</td>
+      family: <?= esc(session()->get('current_semester')['registration_fee']) ?>&nbsp;</td>
 
-    <td>$<?= $reg_fee ?></td>
+    <td>$<?= esc($reg_fee) ?></td>
   </tr>
 
   <tr>
-    <td colspan=5 align=right>Tuition: <?=$total_tuition?>, Book &amp; Material: <?=$total_book_material?>&nbsp;</td>
+    <td colspan=5 align=right>Tuition: <?=esc($total_tuition)?>, Book &amp; Material: <?=esc($total_book_material)?>&nbsp;</td>
 
-    <td>$<?=$total?>&nbsp;</td>
+    <td>$<?=esc($total)?>&nbsp;</td>
   </tr>
   <tr>
     <td colspan=5 align=right><b>Total: </b></td>
@@ -139,21 +139,21 @@
   </tr>
   <tr>
     <td colspan=5 align=right>Parents on duty charge:</td>
-    <td>$<?=$pod?></td>
+    <td>$<?=esc($pod)?></td>
   </tr>
   <tr>
     <td colspan=5 align=right>Discount:</td>
-    <td>$<?=$discount?></td>
+    <td>$<?=esc($discount)?></td>
   </tr>
   <tr>
     <td colspan=5 align=right>Paid Amount:</td>
-    <td>$<?=$paid?></td>
+    <td>$<?=esc($paid)?></td>
   </tr>
 
   <tr>
     <td colspan=5 align=right><b>Balance Due: </b></td>
     <?php $balance = $total + $reg_fee + $pod - $discount - $paid?>
-    <td><b>$<?=$balance?></b></td>
+    <td><b>$<?=esc($balance)?></b></td>
   </tr>
 
   <tr>
@@ -225,14 +225,14 @@
             <input type="hidden" name="business" value="support@6dlink.com">
             <input type="hidden" name="item_name" value="Chinese School Payment #<?= $parent['parent_id'] ?>">
             <input type="hidden" name="item_number" value="<?= $parent['parent_id'] ?>">
-            <input type="hidden" name="amount" value="<?= $online_total?>">
+            <input type="hidden" name="amount" value="<?= esc($online_total, 'attr')?>">
             <input type="hidden" name="currency_code" value="USD">
             <input type="hidden" name="image_url" value="http://6dlink.com/img/logo-pay.png">
             <input type="hidden" name="no_shipping" value="1">
             <input type="hidden" name="undefined_quantity" value="0">
             <input type="hidden" name="no_note" value="1">
-            <input type="hidden" name="return" id="return" value="//<?=$_SERVER['SERVER_NAME']?>/account/online_payment/<?=$balance?>/<?=$fee?>" autocomplete="off">
-            <input type="hidden" name="cancel_return" value="//<?=$_SERVER['SERVER_NAME']?>/account/invoice/online">
+            <input type="hidden" name="return" id="return" value="//<?=esc($_SERVER['SERVER_NAME'], 'attr')?>/account/online_payment/<?=esc($balance, 'attr')?>/<?=esc($fee, 'attr')?>" autocomplete="off">
+            <input type="hidden" name="cancel_return" value="//<?=esc($_SERVER['SERVER_NAME'], 'attr')?>/account/invoice/online">
             <input type="image" id="paypay_btn" src="/common/img/paynow.png" border="0" name="submit" alt="Make payments with PayPal - it's fast, free and secure!"
                    style="display: block !important;margin: auto !important;" disabled autocomplete="off" onclick="precheck(); return false;">
           </form>
@@ -256,7 +256,7 @@
                                     <input type="email" name="email" class="form-control" placeholder="Email" required>
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" name="password" class="form-control" placeholder="Password"
+                                    <input type="password" name="password" autocomplete="current-password" class="form-control" placeholder="Password"
                                            required>
                                 </div>
                                 <button type="submit" class="btn btn-primary">LOGIN</button>

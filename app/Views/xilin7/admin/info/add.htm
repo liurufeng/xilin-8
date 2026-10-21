@@ -82,7 +82,7 @@ function checkSubmit()
 <body topmargin="8">
   <table width="98%" border="0" align="center" cellpadding="0" cellspacing="0">
     <tr>
-      <td width="60%" height="30"><IMG height=14 src="<?php echo base_url();?>/admin/images/book1.gif" width=20>&nbsp;<a href="<?=$_SESSION['admin_path']?>info/index?cid=<?php echo $cid?>"><u>文章列表</u></a> &gt;&gt; 发布文章</td>
+      <td width="60%" height="30"><IMG height=14 src="<?php echo base_url();?>/admin/images/book1.gif" width=20>&nbsp;<a href="<?=$_SESSION['admin_path']?>info/index?cid=<?php echo esc($cid, 'attr')?>"><u>文章列表</u></a> &gt;&gt; 发布文章</td>
       <td width="30%" align='right'>&nbsp; <? if(session()->get('id')== 88){ ?><a href="<?=$_SESSION['admin_path']?>column/index">[<u>栏目管理</u>]</a> <?}?> </td>
     </tr>
   </table>
@@ -97,9 +97,9 @@ function checkSubmit()
 	}
   ?>
   
-<form name="form1" action="<?php echo $posturl?>" enctype="multipart/form-data" method="post" onSubmit="return checkSubmit()">
+<form name="form1" action="<?php echo esc($posturl, 'attr')?>" enctype="multipart/form-data" method="post" onSubmit="return checkSubmit()">
   <input type="hidden" name="dopost" value="save" />
-  <input type="hidden" name="aid" value="<?= $ainfo['id'] ?? '' ?>" />
+  <input type="hidden" name="aid" value="<?= esc($ainfo['id'] ?? '', 'attr') ?>" />
   <table width="98%"  border="0" align="center" cellpadding="2" cellspacing="2" id="needset" style="border:1px solid #cfcfcf;background:#ffffff;">
    <tr>
       <td height="24" colspan="5" class="bline">
@@ -107,8 +107,8 @@ function checkSubmit()
         <tr>
           <td width="90">&nbsp;文章主栏目：</td>
           <td>
-		  <input type="hidden" name="reid" id ="reid" value="<?php echo $cid??$ainfo['unitid']?>" />
-          <span id='typeidct'><?php echo $unitname?></span>
+		  <input type="hidden" name="reid" id ="reid" value="<?php echo esc($cid??$ainfo['unitid'], 'attr')?>" />
+          <span id='typeidct'><?php echo esc($unitname)?></span>
 		</td>
         </tr>
       </table></td>
@@ -118,8 +118,8 @@ function checkSubmit()
       <td height="24" colspan="5" class="bline">
       	<table width="800" border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td width="90">&nbsp;<?php echo $modelvarr['title']['t_name']?>：</td>
-            <td><input name="title" type="text" id="title" value='<?= $ainfo['title']??'' ?>' style="width:388px" /></td>
+            <td width="90">&nbsp;<?php echo esc($modelvarr['title']['t_name'])?>：</td>
+            <td><input name="title" type="text" id="title" value='<?= esc($ainfo['title']??'', 'attr') ?>' style="width:388px" /></td>
           </tr>
         </table>
 		</td>
@@ -130,9 +130,9 @@ function checkSubmit()
       <td height="24" colspan="5" class="bline">
       	<table width="800" border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td width="90">&nbsp;<?php echo $modelvarr['ttitle']['t_name']?>：</td>
+            <td width="90">&nbsp;<?php echo esc($modelvarr['ttitle']['t_name'])?>：</td>
             <td>
-            	<input name="ttitle" type="text" id="ttitle" style="width:388px"  value='<?php echo $ainfo['ttitle']; ?>' />
+            	<input name="ttitle" type="text" id="ttitle" style="width:388px"  value='<?php echo esc($ainfo['ttitle'], 'attr'); ?>' />
             </td>
           </tr>
         </table>
@@ -144,9 +144,9 @@ function checkSubmit()
       <td height="24" colspan="5" class="bline">
       	<table width="800" border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td width="90">&nbsp;<?php echo $modelvarr['shorttitle']['t_name']?>：</td>
+            <td width="90">&nbsp;<?php echo esc($modelvarr['shorttitle']['t_name'])?>：</td>
             <td>
-            	<input name="shorttitle" type="text" id="shorttitle" style="width:250px"  value='<?php echo $ainfo['shorttitle']; ?>' />
+            	<input name="shorttitle" type="text" id="shorttitle" style="width:250px"  value='<?php echo esc($ainfo['shorttitle'], 'attr'); ?>' />
             </td>
           </tr>
         </table>
@@ -159,7 +159,7 @@ function checkSubmit()
       <td height="24" colspan="5" class="bline">
       	<table width="800" border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td  width="90">&nbsp;<?php echo $modelvarr['flag']['t_name']?></td>
+            <td  width="90">&nbsp;<?php echo esc($modelvarr['flag']['t_name'])?></td>
             <td align="left">
             	<?php
             	$sql = "Select * From ".$this->db->dbprefix('arcatt')." order by sortid asc";
@@ -171,9 +171,9 @@ function checkSubmit()
 						$ischecked = ' checked="checked"';
 					}
             		if($v['att']=='j')
-            		echo "<input class='np' type='checkbox' name='flags[]' id='flags".$v['att']."' value='".$v['att']."' ".$ischecked."  onclick='ShowUrlTr()'>".$v['attname']."[".$v['att']."]";
+            		echo "<input class='np' type='checkbox' name='flags[]' id='flags".$v['att']."' value='".$v['att']."' ".$ischecked."  onclick='ShowUrlTr()'>".esc($v['attname'])."[".$v['att']."]";
             		else
-            		echo "<input class='np' type='checkbox' name='flags[]' id='flags".$v['att']."' value='".$v['att']."' ".$ischecked." >".$v['attname']."[".$v['att']."]";
+            		echo "<input class='np' type='checkbox' name='flags[]' id='flags".$v['att']."' value='".$v['att']."' ".$ischecked." >".esc($v['attname'])."[".$v['att']."]";
             	}
             	?>
             </td>
@@ -188,7 +188,7 @@ function checkSubmit()
           <tr>
             <td width="90">&nbsp;跳转网址：</td>
             <td>
-            	<input name="redirecturl" type="text" id="redirecturl" style="width:300px" value='<?php echo $ainfo['jumpurl']; ?>' />
+            	<input name="redirecturl" type="text" id="redirecturl" style="width:300px" value='<?php echo esc($ainfo['jumpurl'], 'attr'); ?>' />
             </td>
 			
           </tr>
@@ -202,7 +202,7 @@ function checkSubmit()
       	<table width="800" border="0" cellspacing="0" cellpadding="0">
           <tr>
 			<td width="90">&nbsp;权重：</td>
-            <td><input name="weight" type="text" id="weight" style="width:50px" value='<?php if(isset($ainfo) && ($ainfo['sortrank']=="0"||$ainfo['sortrank'])){echo $ainfo['sortrank'];}else{echo"999";}?>' />(越小越靠前,0为置顶)</td>
+            <td><input name="weight" type="text" id="weight" style="width:50px" value='<?php if(isset($ainfo) && ($ainfo['sortrank']=="0"||$ainfo['sortrank'])){echo esc($ainfo['sortrank'], 'attr');}else{echo"999";}?>' />(越小越靠前,0为置顶)</td>
           </tr>
         </table>
        </td>
@@ -214,7 +214,7 @@ function checkSubmit()
       <td height="24" colspan="5" class="bline">
       	<table width="800" border="0" cellspacing="0" cellpadding="0">
           <tr>
-			<td width="90">&nbsp;<?php echo $modelvarr['typeid']['t_name']?>：</td>
+			<td width="90">&nbsp;<?php echo esc($modelvarr['typeid']['t_name'])?>：</td>
             <td>
 			<?php
 				if($modelvarr['typeid']['egroupid']){
@@ -232,11 +232,11 @@ function checkSubmit()
 							 }
 							 if($row1['evalue']%500==0 || $arr['issign']==1)
 							 {
-									$options .= "<option value='{$row1['evalue']}' {$typeidselected}>{$row1['ename']}</option>\r\n";
+									$options .= "<option value='".esc($row1['evalue'])."' {$typeidselected}>".esc($row1['ename'])."</option>\r\n";
 							 }
 							 else
 							 {
-									$options .= "<option value='{$row1['evalue']}' {$typeidselected}>  └─{$row1['ename']}</option>\r\n";
+									$options .= "<option value='".esc($row1['evalue'])."' {$typeidselected}>  └─".esc($row1['ename'])."</option>\r\n";
 							 }
 					  }
 				}else{
@@ -260,7 +260,7 @@ function checkSubmit()
       <td height="24" colspan="5" class="bline">
       	<table width="800" border="0" cellspacing="0" cellpadding="0">
           <tr>
-			<td width="90">&nbsp;<?php echo $modelvarr['typeid2']['t_name']?>：</td>
+			<td width="90">&nbsp;<?php echo esc($modelvarr['typeid2']['t_name'])?>：</td>
             <td>
 			<?php
 				$options = '';
@@ -279,11 +279,11 @@ function checkSubmit()
 							 }
 							 if($row1['evalue']%500==0 || $arr['issign']==1)
 							 {
-									$options .= "<option value='{$row1['evalue']}' {$typeidselected}>{$row1['ename']}</option>\r\n";
+									$options .= "<option value='".esc($row1['evalue'])."' {$typeidselected}>".esc($row1['ename'])."</option>\r\n";
 							 }
 							 else
 							 {
-									$options .= "<option value='{$row1['evalue']}' {$typeidselected}>  └─{$row1['ename']}</option>\r\n";
+									$options .= "<option value='".esc($row1['evalue'])."' {$typeidselected}>  └─".esc($row1['ename'])."</option>\r\n";
 							 }
 					  }
 				}else{
@@ -307,7 +307,7 @@ function checkSubmit()
       <td height="24" colspan="5" class="bline">
       	<table width="800" border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td width="90"> &nbsp;<?php echo $modelvarr['picname']['t_name']?>：</td>
+            <td width="90"> &nbsp;<?php echo esc($modelvarr['picname']['t_name'])?>：</td>
             <td width="100" align="center">
 			
 			<div id='divpicview' class='divpre'>
@@ -341,7 +341,7 @@ function checkSubmit()
       <td height="24" colspan="5" class="bline">
       	<table width="800" border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td width="90"> &nbsp;<?php echo $modelvarr['picname2']['t_name']?>：</td>
+            <td width="90"> &nbsp;<?php echo esc($modelvarr['picname2']['t_name'])?>：</td>
 			<td width="100" align="center">
             <div id='divpicview2' class='divpre'>
 			<?php if($ainfo['picid2']){ ?>
@@ -355,7 +355,7 @@ function checkSubmit()
                 <tr>
 					
                   <td height="30">
-                  <input name="picname2" type="hidden" id="picname2" style="width:240px" value="<?php echo $ainfo['picid2']?>" />
+                  <input name="picname2" type="hidden" id="picname2" style="width:240px" value="<?php echo esc($ainfo['picid2'], 'attr')?>" />
                   <input type="button"  value="本地上传" style="width:70px;cursor:pointer;" />
                   <iframe name='uplitpicfra' id='uplitpicfra' src='' width='200' height='200' style='display:none'></iframe>
                   <span class="litpic_span"><input name="litpic2" type="file" id="litpic"  onChange="SeePicNew(this, 'divpicview2', 'uplitpicfra', 165, '<?php echo $picupurl?>');" size="1" class='np coolbg'/></span>
@@ -375,7 +375,7 @@ function checkSubmit()
       <td height="24" colspan="5" class="bline">
       	<table width="800" border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td width="90"> &nbsp;<?php echo $modelvarr['pics']['t_name']?>：</td>
+            <td width="90"> &nbsp;<?php echo esc($modelvarr['pics']['t_name'])?>：</td>
             <td width="100" align="center">
 			
 			<div id='' class='divpre'>
@@ -398,7 +398,7 @@ function checkSubmit()
             	<table width="100%" border="0" cellspacing="1" cellpadding="1">
                 <tr>
                   <td height="30">
-                  <input name="pics" type="hidden" id="pics" style="width:240px" value="<?php echo $ainfo['pics']?>" />
+                  <input name="pics" type="hidden" id="pics" style="width:240px" value="<?php echo esc($ainfo['pics'], 'attr')?>" />
                   <input type="button"  value="本地上传" style="width:70px;cursor:pointer;" />
                   <iframe name='uplitpicfra' id='uplitpicfra' src='' width='200' height='200' style='display:none'></iframe>
                   <span class="litpic_span"><input name="litpics" type="file" id="litpic"  onChange="SeePicsNew(this, 'divpicsview', 'uplitpicfra', 165, '<?php echo $picupurl?>');" size="1" class='np coolbg'/></span>
@@ -434,9 +434,9 @@ function checkSubmit()
       <td height="24" colspan="5" class="bline">
       	<table width="800" border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td width="90">&nbsp;<?php echo $modelvarr['source']['t_name']?>：</td>
+            <td width="90">&nbsp;<?php echo esc($modelvarr['source']['t_name'])?>：</td>
             <td width="">
-            	<input name="source" type="text" id="source" style="width:160px" value="<?php if($ainfo['source']){echo $ainfo['source'];}else if($desc_id==9){echo '友健康官网';}?>" size="16" />
+            	<input name="source" type="text" id="source" style="width:160px" value="<?php if($ainfo['source']){echo esc($ainfo['source'], 'attr');}else if($desc_id==9){echo '友健康官网';}?>" size="16" />
             </td>
           </tr>
         </table>
@@ -448,9 +448,9 @@ function checkSubmit()
       <td height="24" colspan="5" class="bline">
       	<table width="800" border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td width="90">&nbsp;<?php echo $modelvarr['writer']['t_name']?>：</td>
+            <td width="90">&nbsp;<?php echo esc($modelvarr['writer']['t_name'])?>：</td>
             <td>
-            	<input name="writer" type="text" id="writer" style="width:160px" value="<?php if($ainfo['writer']){echo $ainfo['writer'];}else if($desc_id!=14){echo 'Admin';}?>"/>
+            	<input name="writer" type="text" id="writer" style="width:160px" value="<?php if($ainfo['writer']){echo esc($ainfo['writer'], 'attr');}else if($desc_id!=14){echo 'Admin';}?>"/>
             </td>
           </tr>
         </table>
@@ -462,7 +462,7 @@ function checkSubmit()
 	<td height="24" colspan="4" class="bline">
 	  <table width="800" border="0" cellspacing="0" cellpadding="0">
 		<tr>
-		  <td width="90" height="22">&nbsp;<?php echo $modelvarr['click']['t_name']?>：</td>
+		  <td width="90" height="22">&nbsp;<?php echo esc($modelvarr['click']['t_name'])?>：</td>
 		  
 		  <td width="">
 			
@@ -478,7 +478,7 @@ function checkSubmit()
    <td height="24" colspan="4" class="bline">
       <table width="800" border="0" cellspacing="0" cellpadding="0">
         <tr>
-		  <td width="90">&nbsp;<?php echo $modelvarr['pubdate']['t_name']?>：</td>
+		  <td width="90">&nbsp;<?php echo esc($modelvarr['pubdate']['t_name'])?>：</td>
           <td >
           	<?php
 				  $nowtimestr = $ainfo['senddate']?$ainfo['senddate']:time();
@@ -522,8 +522,8 @@ function checkSubmit()
       <td height="24" colspan="5" class="bline">
       	<table width="800" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <td width="90">&nbsp;<?php echo $modelvarr['keywords']['t_name']?>：</td>
-          <td width=""><input type='text' name="keywords" id="keywords" style="width:80%" value="<?= $ainfo['keywords']??'' ?>" /></td>
+          <td width="90">&nbsp;<?php echo esc($modelvarr['keywords']['t_name'])?>：</td>
+          <td width=""><input type='text' name="keywords" id="keywords" style="width:80%" value="<?= esc($ainfo['keywords']??'', 'attr') ?>" /></td>
           
         </tr>
       </table>
@@ -535,8 +535,8 @@ function checkSubmit()
       <td height="24" colspan="5" class="bline">
       <table width="800" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <td width="90">&nbsp;<?php echo $modelvarr['description']['t_name']?>：</td>
-          <td width="449"><textarea name="description" rows="5" id="description" style="width:80%;height:50px"><?= $ainfo['description']??'' ?></textarea></td>
+          <td width="90">&nbsp;<?php echo esc($modelvarr['description']['t_name'])?>：</td>
+          <td width="449"><textarea name="description" rows="5" id="description" style="width:80%;height:50px"><?= esc($ainfo['description']??'') ?></textarea></td>
           <td width="261">&nbsp;</td>
         </tr>
       </table>
@@ -546,7 +546,7 @@ function checkSubmit()
 	<?php if($modelvarr['content']['checked'] == '1' || $modelvarr['content']['ismust'] == '1') { ?>
 	<tr>
 	  <td height="28" colspan="2" bgcolor="#F9FCEF" class="bline2">
-		<div style='float:left;line-height:28px;'>&nbsp;<strong><?php echo $modelvarr['content']['t_name']?>：</strong></div>
+		<div style='float:left;line-height:28px;'>&nbsp;<strong><?php echo esc($modelvarr['content']['t_name'])?>：</strong></div>
 		<?php echo $c?>
 	  </td>
 	</tr>

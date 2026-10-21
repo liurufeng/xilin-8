@@ -129,7 +129,7 @@ class Menu_note extends Model
         $in .= $v['id'] . ',';
       }
     }
-    $in = $in . $id;
+    $in = $in . (int)$id;
     $result = $this->where("id in($in)")->delete();
     $this->delCache(); //清除缓存
     return $result;
@@ -207,11 +207,11 @@ class Menu_note extends Model
           if (empty($v3['url']) && $v3['nodeid'] != 0) {
 
             $recodearr = $this->db->query("SELECT id,reid,code FROM admin_node
-							where id = " . $v3['nodeid'] . " limit 1")->first_row('array');
+							where id = ? limit 1", [$v3['nodeid']])->first_row('array');
             $recode = $recodearr['code'];
             if ($recodearr['reid']) {
               $codearr = $this->db->query("SELECT id,code FROM admin_node
-							where id = " . $recodearr['reid'] . " limit 1")->first_row('array');
+							where id = ? limit 1", [$recodearr['reid']])->first_row('array');
               $code = $codearr['code'];
             }
             $code = $code . '|' . $recode;
@@ -226,10 +226,14 @@ class Menu_note extends Model
             }
 
             $sql_do = "SELECT id FROM admin_role
-							WHERE id = '" . $this->_groupId . "'
-							AND ( nodeids like '%," . $recodearr['id'] . ",%' OR nodeids like '%," . $codearr['id'] . ",%' OR nodeids ='all' )
+							WHERE id = ?
+							AND ( nodeids like ? ESCAPE '!' OR nodeids like ? ESCAPE '!' OR nodeids ='all' )
 							LIMIT 1";
-            $ispower = $this->db->query($sql_do);
+            $ispower = $this->db->query($sql_do, [
+              $this->_groupId,
+              '%,' . $this->db->escapeLikeString((string)$recodearr['id']) . ',%',
+              '%,' . $this->db->escapeLikeString((string)($codearr['id'] ?? '')) . ',%',
+            ]);
 
             if ($ispower->num_rows() == '1') {
               $allnode[$k]['child'][$k2]['child'][$k3] = $v3;

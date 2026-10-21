@@ -12,11 +12,6 @@
 	     document.form1.email.focus();
 	     return false;
      }
-     if(document.form1.passwd.value==""){
-	     alert("teacher's password is not null！");
-	     document.form1.passwd.focus();
-	     return false;
-     }
      if(document.form1.en_name.value==""){
 	     alert("teacher's English Name is not null！");
 	     document.form1.en_name.focus();
@@ -50,15 +45,11 @@
   		<table width="98%" border="0" cellspacing="1" cellpadding="1">
           <tr> 
             <td width="16%" height="30"><span style="color:red;">*</span>Email：</td>
-            <td width="84%"  style="text-align:left;"><input name="email" type="text" id="email" size="16" style="width:200px" value="<?php echo $info['email']?>"/></td>
-          </tr>
-          <tr> 
-            <td height="30"><span style="color:red;">*</span>Password：</td>
-            <td style="text-align:left;"><input name="passwd" type="password" id="passwd" size="16" style="width:200px"  value="<?php echo $info['passwd']?>"/></td>
+            <td width="84%"  style="text-align:left;"><input name="email" type="text" id="email" size="16" style="width:200px" value="<?php echo esc($info['email'], 'attr')?>"/></td>
           </tr>
           <tr> 
             <td height="30"><span style="color:red;">*</span>English Name：</td>
-            <td style="text-align:left;"><input name="en_name" type="text" id="en_name" size="16" style="width:200px"  value="<?php echo $info['en_name']?>"/></td>
+            <td style="text-align:left;"><input name="en_name" type="text" id="en_name" size="16" style="width:200px"  value="<?php echo esc($info['en_name'], 'attr')?>"/></td>
           </tr>
           <tr> 
             <td height="30">teacher type</td>
@@ -72,7 +63,7 @@
 						if($v['id'] == $info['type']){
 							$selected = "selected";
 						}
-						echo "<option value='".$v['id']."' $selected>".$v['ename']."</option>\r\n";
+						echo "<option value='".$v['id']."' $selected>".esc($v['ename'])."</option>\r\n";
 					}
 					}
 			  	?>
@@ -82,27 +73,27 @@
         
           <tr> 
             <td height="30">Chinese Name：</td>
-            <td style="text-align:left;"><input name="cn_name" type="text" id="cn_name" size="16" style="width:200px"  value="<?php echo $info['cn_name']?>"/></td>
+            <td style="text-align:left;"><input name="cn_name" type="text" id="cn_name" size="16" style="width:200px"  value="<?php echo esc($info['cn_name'], 'attr')?>"/></td>
           </tr>
         
           <tr> 
             <td height="30"><span style="color:red;">*</span>Home Phone：</td>
-            <td style="text-align:left;"><input name="phone1" type="text" id="phone1" size="16" style="width:200px" value="<?php echo $info['phone1']?>"/></td>
+            <td style="text-align:left;"><input name="phone1" type="text" id="phone1" size="16" style="width:200px" value="<?php echo esc($info['phone1'], 'attr')?>"/></td>
           </tr>
         
           <tr> 
             <td height="30">Cell Phone：</td>
-            <td style="text-align:left;"><input name="phone2" type="text" id="phone2" size="16" style="width:200px"  value="<?php echo $info['phone2']?>" /></td>
+            <td style="text-align:left;"><input name="phone2" type="text" id="phone2" size="16" style="width:200px"  value="<?php echo esc($info['phone2'], 'attr')?>" /></td>
           </tr>
         
           <tr> 
             <td height="30">Home Address：</td>
-            <td style="text-align:left;"><input name="address" type="text" id="address" size="16" style="width:200px" value="<?php echo $info['address']?>"/></td>
+            <td style="text-align:left;"><input name="address" type="text" id="address" size="16" style="width:200px" value="<?php echo esc($info['address'], 'attr')?>"/></td>
           </tr>
          
           <tr> 
             <td height="30">Bio URL：</td>
-            <td style="text-align:left;"><input name="desc_link" type="text" id="desc_link" size="16" style="width:200px" value="<?php echo $info['desc_link']?>"/></td>
+            <td style="text-align:left;"><input name="desc_link" type="text" id="desc_link" size="16" style="width:200px" value="<?php echo esc($info['desc_link'], 'attr')?>"/></td>
           </tr>
           <tr> 
             <td height="60">&nbsp;</td>

@@ -18,14 +18,14 @@
       <table width="98%" border="0" cellspacing="0" cellpadding="0">
         <tr> 
           <td width="9%" height="30">组名称：</td>
-          <td width="91%" style="text-align:left;"> <input name="typename" type="text" id="typename" value="<?php echo $groupSet['typename']?>"> 
+          <td width="91%" style="text-align:left;"> <input name="typename" type="text" id="typename" value="<?php echo esc($groupSet['typename'], 'attr')?>"> 
           </td>
         </tr>
         <tr> 
           <td width="9%" height="30">级别值：</td>
           <td width="91%" style="text-align:left;">
-          	<input name="rank" type="hidden" id="rank" value="<?php echo $groupSet['rank']?>">
-          	<?php echo $groupSet['rank']?>
+          	<input name="rank" type="hidden" id="rank" value="<?php echo esc($groupSet['rank'], 'attr')?>">
+          	<?php echo esc($groupSet['rank'])?>
           </td>
         </tr>
         <?php
@@ -63,7 +63,7 @@
         </td>
         </tr>
         <tr> 
-           <td height='25' colspan='2' bgcolor='#F9FAF3' style="text-align:left;"><?php echo $start?>、插件权限</td>
+           <td height='25' colspan='2' bgcolor='#F9FAF3' style="text-align:left;"><?php echo esc($start)?>、插件权限</td>
          </tr>
         <tr>
         <td height='25' colspan='2' style="text-align:left;">

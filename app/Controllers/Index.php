@@ -129,12 +129,12 @@ class Index extends BaseController
       $type = $userinfo['usertype'];
       if ($type == 1) {
         $id = $userinfo[0]['parent_id'];
-        $sql = "select * from parents where parent_id = $id";
+        $sql = "select * from parents where parent_id = ?";
       } else {
         $id = $userinfo[0]['teacher_id'];
-        $sql = "select * from teachers where teacher_id = $id";
+        $sql = "select * from teachers where teacher_id = ?";
       }
-      $userinfodata = $db->query($sql)->getResultArray();
+      $userinfodata = $db->query($sql, [$id])->getResultArray();
       $data['userinfodata'] = $userinfodata;
       $data['usertype'] = $type;
     }

@@ -1,0 +1,10 @@
+# Uploaded files are only ever downloaded: never run a script from here, and never list the folders.
+Options -Indexes
+<FilesMatch "(?i)\.(php\d?|phtml|phar|pht|phps|cgi|pl|py|sh|htaccess|htpasswd)$">
+	<IfModule authz_core_module>
+		Require all denied
+	</IfModule>
+	<IfModule !authz_core_module>
+		Deny from all
+	</IfModule>
+</FilesMatch>

@@ -323,7 +323,7 @@ function register_class(stdid, stname, cid, ctime, cname, bookfee, act, withbook
 function findpass() {
   var header_text = 'Find Password';
   var post_url = '/account/findpass';
-  yes_str = 'Email me my password';
+  yes_str = 'Email me a reset link';
   no_str = 'Cancel';
 
   var elem1 = '<div class="container-fluid"> 	' +

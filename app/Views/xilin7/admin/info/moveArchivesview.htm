@@ -66,9 +66,9 @@ function checkSubmit()
           <td>
 		  <select name="cid">
 		  <?php foreach($result as $k=>$v){ ?>
-		  <option disabled="disabled"><?php echo $v['typename']?></option>
+		  <option disabled="disabled"><?php echo esc($v['typename'])?></option>
 		   <?php foreach($v['child'] as $key=>$val){ ?>
-		   <option value="<?php echo $val['id']?>">--<?php echo $val['typename']?></option>
+		   <option value="<?php echo $val['id']?>">--<?php echo esc($val['typename'])?></option>
 		    <?php } ?>
 		  <?php } ?>
 		</td>
@@ -81,7 +81,7 @@ function checkSubmit()
       	<table width="800" border="0" cellspacing="0" cellpadding="0">
           <tr>
             <td width="90">&nbsp;信息IDS：</td>
-            <td width=''><input name="ids" type="text" id="ids" value="<?php echo $_GET['qstr']; ?>" style="width:388px" /></td>
+            <td width=''><input name="ids" type="text" id="ids" value="<?php echo esc($_GET['qstr'], 'attr'); ?>" style="width:388px" /></td>
           </tr>
         </table>
 		</td>

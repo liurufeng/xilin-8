@@ -7,6 +7,12 @@ use App\Models\{Semester, Subject, Classes, Teacher, Article};
  */
 class Homework extends BaseController
 {
+  private function siteLink()
+  {
+    $url = rtrim(base_url(), '/');
+    return "<p><a href='".$url."'>".$url."</a></p>";
+  }
+
   function __construct()
   {
     parent::__construct();
@@ -19,6 +25,7 @@ class Homework extends BaseController
   {
     $userinfo = session()->get('userresult');
     $where = ' where ';
+    $binds = [];
     //get the semester info
     $this->load->model('semester');
     $semester = new Semester();
@@ -27,12 +34,14 @@ class Homework extends BaseController
     $semester_id = $this->input->get('semester_id');
     if(isset($semester_id) && !empty($semester_id)) {
       session()->set(array('semester_id' => $semester_id));
-      $where .=' w.semester_id='.$semester_id;
+      $where .=' w.semester_id=?';
+      $binds[] = $semester_id;
     } else {
       $current_semester = session()->get('current_semester');
       $current_semester_id = $current_semester['semester_id'];
       session()->set(array('semester_id' => $current_semester_id));
-      $where .=' w.semester_id='.$current_semester_id;
+      $where .=' w.semester_id=?';
+      $binds[] = $current_semester_id;
     }
 
     if (!empty($userinfo)) {
@@ -52,9 +61,9 @@ class Homework extends BaseController
           foreach($student_classes[$s['student_id']] as $c) {
             $sql = "select hw.*, hs.link as sublink, hs.note as subnote, hs.sub_date, hs.grade, hs.comment
             from homework hw
-            left join homework_submission hs on hs.homework_id = hw.homework_id and hs.student_id = " . $s['student_id'] . "
-            where hw.class_id=".$c['class_id'];
-            $hws[$s['student_id']][$c['class_id']] = $this->db->query($sql)->getResultArray();
+            left join homework_submission hs on hs.homework_id = hw.homework_id and hs.student_id = ?
+            where hw.class_id=?";
+            $hws[$s['student_id']][$c['class_id']] = $this->db->query($sql, [$s['student_id'], $c['class_id']])->getResultArray();
           }
         }
         $data['student_classes'] = $student_classes;
@@ -66,7 +75,7 @@ class Homework extends BaseController
         $id = $userinfo[0]['teacher_id'];
         $data['teacher'] = $userinfo[0];
 
-        $where = " and t.teacher_id = $id and w.status = 1 ";
+        $where = " and t.teacher_id = ? and w.status = 1 ";
         //get the selected semester's classes and homework info of this teacher
         $sql = "select w.*, c.*
             from homework w
@@ -75,7 +84,7 @@ class Homework extends BaseController
             ".$where. "
             order by c.class_code, w.homework_id";
 
-        $all_data = $this->db->query($sql)->getResultArray();
+        $all_data = $this->db->query($sql, [$id])->getResultArray();
         $classes = $homework = array();
         foreach($all_data as $a) {
           $classes[$a['class_id']] = $a;
@@ -105,14 +114,14 @@ class Homework extends BaseController
       $current_semester_id = $current_semester['semester_id'];
       $data['semester_id'] = $current_semester_id;
 
-      $where = " where teacher_id = $id and semester_id = $current_semester_id ";
+      $where = " where teacher_id = ? and semester_id = ? ";
       //get the semester info
       $sql = "select c.*
             from classes c
             ".$where. "
             order by c.class_code";
 
-      $all_data = $this->db->query($sql)->getResultArray();
+      $all_data = $this->db->query($sql, [$id, $current_semester_id])->getResultArray();
       $classes = array();
       foreach($all_data as $a) {
         $classes[$a['class_id']] = $a;
@@ -124,9 +133,9 @@ class Homework extends BaseController
         $data['homework_id'] = $this->uri->segment(4);
         $sql = "select *
             from homework h
-            where homework_id = ".$data['homework_id'];
+            where homework_id = ? and teacher_id = ?";
 
-        $homework = $this->db->query($sql)->getRowArray();
+        $homework = $this->db->query($sql, [$data['homework_id'], $id])->getRowArray();
         $data['h'] = $homework;
       }
 
@@ -145,6 +154,13 @@ class Homework extends BaseController
     if (!empty($userinfo)) {
       $type = $userinfo['usertype'];
       if ($type == 2) {
+        // the class must belong to this teacher
+        $owns = $this->db->query("select class_id from classes where class_id = ? and teacher_id = ?",
+          [$this->request->getVar('class_id'), $userinfo[0]['teacher_id']])->getRowArray();
+        if (empty($owns)) {
+          ShowMsg('Login issue!', 'login.php', 0, 1500);
+          return;
+        }
         if($action == 'Add') {
         $insertdata['teacher_id'] = $userinfo[0]['teacher_id'];
         $insertdata['semester_id'] = $this->request->getVar('semester_id');
@@ -163,6 +179,7 @@ class Homework extends BaseController
           $insertdata['link'] = $this->request->getVar('link');
           $insertdata['due_date'] = $this->request->getVar('due_date');
           $wheredata['homework_id'] = $this->request->getVar('homework_id');
+          $wheredata['teacher_id'] = $userinfo[0]['teacher_id'];
 
           $success_msg = 'Your have successfully updated the homework!';
           $result = $this->db->update('homework', $insertdata, $wheredata);
@@ -177,9 +194,9 @@ class Homework extends BaseController
             join students s on p.parent_id = s.parent_id
             join studentclasses sc on s.student_id = sc.student_id
             join classes c on c.class_id = sc.class_id
-            where sc.class_id = ".$this->request->getVar('class_id');
+            where sc.class_id = ?";
 
-            $all_data = $this->db->query($sql)->getResultArray();
+            $all_data = $this->db->query($sql, [$this->request->getVar('class_id')])->getResultArray();
 
             $this->load->library('email');
             $config['wordwrap'] = TRUE;
@@ -216,7 +233,7 @@ class Homework extends BaseController
               }
 
               $message .= "<br><p>Thank you,</p><p>$userinfo[0]['en_name']</p>";
-              $message .= "<p><a href='http://".$_SERVER['HTTP_HOST']."'>http://{$_SERVER['HTTP_HOST']}</a></p>";
+              $message .= $this->siteLink();
 
               $this->email->from($userinfo[0]['email'], $userinfo[0]['en_name']);
               $this->email->to($parent_email);
@@ -232,11 +249,17 @@ class Homework extends BaseController
 
           $other_emails = $this->request->getVar('other_emails');
           if(isset($other_emails) && !empty($other_emails)) {
+            // only keep valid addresses (prevents header injection)
+            $other_emails = implode(',', array_filter(array_map('trim', explode(',', $other_emails)), function($e) {
+              return filter_var($e, FILTER_VALIDATE_EMAIL) !== false;
+            }));
+          }
+          if(isset($other_emails) && !empty($other_emails)) {
             $sql = "select c.class_name
             from classes c
-            where c.class_id = ".$this->request->getVar('class_id');
+            where c.class_id = ?";
 
-            $all_data = $this->db->query($sql)->getRowArray();
+            $all_data = $this->db->query($sql, [$this->request->getVar('class_id')])->getRowArray();
 
             $this->load->library('email');
             $config['wordwrap'] = TRUE;
@@ -264,7 +287,7 @@ class Homework extends BaseController
               $message .= "<p><b>Homework Due:</b> {$this->request->getVar('due_date')}</p>";
             }
             $message .= "<br><p>Thank you,</p><p>{$userinfo[0]['en_name']}</p>";
-            $message .= "<p><a href='http://".$_SERVER['HTTP_HOST']."'>http://{$_SERVER['HTTP_HOST']}</a></p>";
+            $message .= $this->siteLink();
 
             $this->email->from($userinfo[0]['email'], $userinfo[0]['en_name']);
             $this->email->to($other_emails);
@@ -297,6 +320,7 @@ class Homework extends BaseController
         $insertdata['status'] = 0;
 
         $wheredata['homework_id'] = $this->request->getVar('wid');
+        $wheredata['teacher_id'] = $userinfo[0]['teacher_id'];
         $result = $this->db->update('homework', $insertdata, $wheredata);
         $success_msg = 'Your have successfully deleted the homework!';
 
@@ -327,6 +351,7 @@ class Homework extends BaseController
 
     if (empty($student_info)) {
       ShowMsg('Parent and student do not match!', 'login.php', 0, 1500);
+      return;
     }
 
       $type = $userinfo['usertype'];
@@ -341,17 +366,17 @@ class Homework extends BaseController
      //get the semester info
       $sql = "select c.*
             from classes c
-            where class_id = $class_id
+            where class_id = ?
             order by c.class_code";
 
-      $class = $this->db->query($sql)->getRowArray();
+      $class = $this->db->query($sql, [$class_id])->getRowArray();
       $data['c'] = $class;
 
       $sql = "select h.*
             from homework h
-            where h.homework_id = " . $homework_id;
+            where h.homework_id = ?";
 
-      $homework = $this->db->query($sql)->getRowArray();
+      $homework = $this->db->query($sql, [$homework_id])->getRowArray();
       $data['h'] = $homework;
 
       echo view($_SESSION['tm']."common/homework/homework_s.php", $data);
@@ -372,6 +397,7 @@ class Homework extends BaseController
 
       if (empty($student_info)) {
         ShowMsg('Parent and student do not match!', 'login.php', 0, 1500);
+        return;
       }
       $current_semester = session()->get('current_semester');
       $current_semester_id = $current_semester['semester_id'];
@@ -394,9 +420,9 @@ class Homework extends BaseController
             join classes c on c.class_id = h.class_id
             join homework_submission hs on hs.homework_id = h.homework_id
             join teachers t on t.teacher_id = h.teacher_id
-            where h.homework_id = ".$this->request->getVar('homework_id');
+            where h.homework_id = ?";
 
-        $all_data = $this->db->query($sql)->getRowArray();
+        $all_data = $this->db->query($sql, [$this->request->getVar('homework_id')])->getRowArray();
 
         $this->load->library('email');
         $config['wordwrap'] = TRUE;
@@ -423,7 +449,7 @@ class Homework extends BaseController
         }
 
         $message .= "<br><p>Thank you,</p><p>{$all_data['en_name']}</p>";
-        $message .= "<p><a href='http://".$_SERVER['HTTP_HOST']."'>http://{$_SERVER['HTTP_HOST']}</a></p>";
+        $message .= $this->siteLink();
 
         $this->email->from($all_data['email'], $all_data['en_name']);
         $this->email->to($userinfo[0]['email']);
@@ -454,12 +480,12 @@ class Homework extends BaseController
       $sql = "select w.homework_id as hid, w.title, hs.*, s.en_name, s.cn_name, s.student_id as sid, sc.class_id
             from students s
             join studentclasses sc on sc.student_id = s.student_id and deleted != 1
-            join homework w on w.class_id = sc.class_id and w.homework_id = $homework_id
+            join homework w on w.class_id = sc.class_id and w.homework_id = ?
             left join homework_submission hs on hs.student_id = s.student_id and hs.homework_id = w.homework_id
-            where w.teacher_id = $id
+            where w.teacher_id = ?
             order by s.en_name";
 
-      $data['hws'] = $this->db->query($sql)->getResultArray();
+      $data['hws'] = $this->db->query($sql, [$homework_id, $id])->getResultArray();
       echo view($_SESSION['tm']."common/homework/grading.php", $data);
     } else {
       ShowMsg('Login is not correct!', 'login.php', 0, 1500);
@@ -490,12 +516,12 @@ class Homework extends BaseController
       //get the selected classes and homework info of this teacher
       $sql = "select w.title, w.note as tnote, w.link as tlink, w.due_date, hs.*, s.en_name, s.cn_name, c.*
             from homework w
-            join students s on s.student_id = $student_id
+            join students s on s.student_id = ?
             join classes c on c.class_id = w.class_id
             left join homework_submission hs on hs.student_id = s.student_id and hs.homework_id = w.homework_id
-            where w.teacher_id = $id and w.homework_id = $homework_id";
+            where w.teacher_id = ? and w.homework_id = ?";
 
-      $data['h'] = $this->db->query($sql)->getRowArray();
+      $data['h'] = $this->db->query($sql, [$student_id, $id, $homework_id])->getRowArray();
 
       echo view($_SESSION['tm']."common/homework/grade_homework.php", $data);
     } else {
@@ -519,14 +545,15 @@ class Homework extends BaseController
       //verify the teacher owns the hw and student
       $sql = "select w.title, w.note as tnote, w.link as tlink, w.due_date, hs.*, s.en_name, s.cn_name, c.*
             from homework w
-            join students s on s.student_id = $student_id
+            join students s on s.student_id = ?
             join classes c on c.class_id = w.class_id
             left join homework_submission hs on hs.student_id = s.student_id and hs.homework_id = w.homework_id
-            where w.teacher_id = $id and w.homework_id = $homework_id";
+            where w.teacher_id = ? and w.homework_id = ?";
 
-      $hw = $this->db->query($sql)->getRowArray();
+      $hw = $this->db->query($sql, [$student_id, $id, $homework_id])->getRowArray();
       if (empty($hw)) {
         ShowMsg('Login issue!', 'login.php', 0, 1500);
+        return;
       }
 
       if($hw_sub_id) { //student has submitted hw
@@ -534,6 +561,7 @@ class Homework extends BaseController
         $insertdata['comment'] = $this->request->getVar('comment');
         $insertdata['updated'] = date("Y-m-d H:i:s");
         $wheredata['hw_sub_id'] = $hw_sub_id;
+        $wheredata['homework_id'] = $homework_id;
         $result = $this->db->update('homework_submission', $insertdata, $wheredata);
       } else {
 
@@ -559,13 +587,13 @@ class Homework extends BaseController
 
         $sql = "select w.title, w.note as tnote, w.link as tlink, w.due_date, hs.*, s.en_name, s.cn_name, c.*, p.email, p.alter_contact_email
             from homework w
-            join students s on s.student_id = $student_id
+            join students s on s.student_id = ?
             join parents p on p.parent_id = s.parent_id
             join classes c on c.class_id = w.class_id
             left join homework_submission hs on hs.student_id = s.student_id and hs.homework_id = w.homework_id
-            where w.teacher_id = $id and w.homework_id = $homework_id";
+            where w.teacher_id = ? and w.homework_id = ?";
 
-        $hw = $this->db->query($sql)->getRowArray();
+        $hw = $this->db->query($sql, [$student_id, $id, $homework_id])->getRowArray();
 
         $subject = $hw['class_name'].' Homework Has Been Graded';
 
@@ -585,7 +613,7 @@ class Homework extends BaseController
         }
 
         $message .= "<br><p>Thank you,</p><p>{$userinfo[0]['en_name']}</p>";
-        $message .= "<p><a href='http://".$_SERVER['HTTP_HOST']."'>http://{$_SERVER['HTTP_HOST']}</a></p>";
+        $message .= $this->siteLink();
 
         $this->email->from($userinfo[0]['email'], $userinfo[0]['en_name']);
         $this->email->to($hw['email']);

@@ -24,23 +24,25 @@ class Semester extends Model
   function getSemester($semester_id)
   {
     $sql = "select * from semester
-              where semester_id = $semester_id
+              where semester_id = ?
               limit 1";
-    return $this->db->query($sql)->getRowArray();
+    return $this->db->query($sql, [$semester_id])->getRowArray();
   }
 
   function getCurrentSemester()
   {
     $user_semester_id = session()->get('user_semester_id');
+    $binds = [];
     if($user_semester_id && $user_semester_id > 0) {
       $sql = "select * from semester
-              where semester_id = ".$user_semester_id;
+              where semester_id = ?";
+      $binds[] = $user_semester_id;
     } else {
       $sql = "select * from semester
               where status = 1 and semester_status = 'Current'";
     }
 
-    $result = $this->db->query($sql)->getResultArray();
+    $result = $this->db->query($sql, $binds)->getResultArray();
     if (empty($result)) {
       return false;
     }
@@ -56,7 +58,7 @@ class Semester extends Model
     session()->set(array('late_date' => $late_date));
     session()->set(array('is_late' => $is_late));
 
-    return $this->db->query($sql)->getResultArray();
+    return $this->db->query($sql, $binds)->getResultArray();
   }
 
   function getGroupList($where = "")

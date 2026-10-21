@@ -49,7 +49,7 @@ $picupurl = site_url('schooluser/add');
                     <select id="semester_id" name="semester_id">
                         <?php foreach($semesters as $semester) { ?>
                         <option value="<?=$semester['semester_id']?>" <?php if($semester['semester_id'] == session()->get('semester_id')) echo 'selected'; ?> >
-                        <?=$semester['semester_year']?> <?=$semester['semester_name']?>
+                        <?=esc($semester['semester_year'])?> <?=esc($semester['semester_name'])?>
                         </option>
                         <?php } ?>
                     </select>
@@ -61,7 +61,7 @@ $picupurl = site_url('schooluser/add');
                     <select id="parent_id" name="parent_id">
                         <?php foreach($parents as $p) {?>
                         <option value="<?=$p['parent_id']?>" >
-                            <?=$p['parent_id']?> | <?=$p['email']?> | <?=$p['primary_en_name']?> | <?=$p['alter_en_name']?> | <?=$p['alter_contact_email']?>
+                            <?=$p['parent_id']?> | <?=esc($p['email'])?> | <?=esc($p['primary_en_name'])?> | <?=esc($p['alter_en_name'])?> | <?=esc($p['alter_contact_email'])?>
                         </option>
                         <?php } ?>
                     </select>
@@ -86,7 +86,7 @@ $picupurl = site_url('schooluser/add');
 				if($groupList){
 					foreach($groupList as $k=>$v)
 					{
-						echo "<option value='".$v['id']."'>".$v['ename']."</option>\r\n";
+						echo "<option value='".$v['id']."'>".esc($v['ename'])."</option>\r\n";
 					}
 					}
 			  	?>

@@ -29,12 +29,14 @@ class Podreports extends MY_Controller
     $data['school_year'] = $this->db->query($sql)->getResultArray();
 
     $school_year_id = $this->request->getVar('school_year_id');
+    $binds = [];
 
     if(isset($school_year_id) && !empty($school_year_id)) {
       session()->set(array('school_year_id' => $school_year_id));
       $sql = "select *
             from school_year
-            where id=".$school_year_id;
+            where id = ?";
+      $binds = [$school_year_id];
     } else {
       session()->set(array('school_year_id' => $school_year_id));
       $sql = "select *
@@ -43,8 +45,8 @@ class Podreports extends MY_Controller
             order by name desc
             limit 1";
     }
-    $school_year_info = $this->db->query($sql)->getResultArray();
-    $semesters = '('.$school_year_info[0]['semesters'].')';
+    $school_year_info = $this->db->query($sql, $binds)->getResultArray();
+    $semesters = $this->_semesterList($school_year_info[0]['semesters']);
 
     $sql = "select distinct p.* from
             parents p
@@ -73,11 +75,13 @@ class Podreports extends MY_Controller
   {
     $parent_id = $this->request->getVar('parent_id');
     $school_year_id = $this->request->getVar('sy_id');
+    $binds = [];
     if(isset($school_year_id) && !empty($school_year_id)) {
       session()->set(array('school_year_id' => $school_year_id));
       $sql = "select *
             from school_year
-            where id=".$school_year_id;
+            where id = ?";
+      $binds = [$school_year_id];
     } else {
       session()->set(array('school_year_id' => $school_year_id));
       $sql = "select *
@@ -87,8 +91,8 @@ class Podreports extends MY_Controller
             limit 1";
     }
 
-    $school_year_info = $this->db->query($sql)->getResultArray();
-    $semesters = '('.$school_year_info[0]['semesters'].')';
+    $school_year_info = $this->db->query($sql, $binds)->getResultArray();
+    $semesters = $this->_semesterList($school_year_info[0]['semesters']);
 
     $sql = "select distinct p.* from
             parents p
@@ -98,10 +102,11 @@ class Podreports extends MY_Controller
             where sc.semester_id in {$semesters}
             and sc.deleted != 1
             and p.pod_waiver = 0
-            and p.parent_id = {$parent_id}
+            and p.parent_id = ?
             ";
+    $binds = [$parent_id];
 
-    $parents = $this->db->query($sql)->getResultArray();
+    $parents = $this->db->query($sql, $binds)->getResultArray();
     $this->load->model('pod_model');
     $pod_m = new Pod_model();
     $pod = array();
@@ -113,20 +118,21 @@ class Podreports extends MY_Controller
             FROM helpers h
             JOIN events e on h.event_id = e.event_id
             WHERE e.semester_id  in {$semesters}
-            AND h.parent_id = {$parent_id}";
+            AND h.parent_id = ?";
+      $binds = [$parent_id];
     }
-    if($res = $this->db->query($sql)->result_array() ) {
+    if($res = $this->db->query($sql, $binds)->result_array() ) {
       foreach($res as $r) {
         $pod['registered'][] = $r;
       }
     }
 //var_dump($pod['registered']);
-    $html = "<br><div>Parent Id: {$parent_id} | Parent Name: ".$parents[0]['primary_en_name']."</div><br>";
+    $html = "<br><div>Parent Id: ".esc($parent_id)." | Parent Name: ".esc($parents[0]['primary_en_name'])."</div><br>";
     $html .= "<div>Need: ".$pod['nums']['need']." | Done: ".$pod['nums']['done']." | Manual record: ".$pod['nums']['manually']." | Missed: ".$pod['nums']['missed'].", Registered and undone: ".$pod['nums']['todo']." </div><br>";
     if(count($pod['registered']) > 0) {
       $html .= "<div><br>POD Registrations:<br></div>";
       foreach($pod['registered'] as $reg){
-        $html .= "<div><br>Date: ".($reg['month']+1)."/".$reg['date']."/".$reg['year']." | Time: ".$reg['start_time']." - ".$reg['end_time']." | Signed In: ".($reg['signin']?$reg['signin']:'No')." | Signed Out: ".($reg['signout']?$reg['signout']:'No')."<br></div>";
+        $html .= "<div><br>Date: ".($reg['month']+1)."/".esc($reg['date'])."/".esc($reg['year'])." | Time: ".esc($reg['start_time'])." - ".esc($reg['end_time'])." | Signed In: ".esc($reg['signin']?$reg['signin']:'No')." | Signed Out: ".esc($reg['signout']?$reg['signout']:'No')."<br></div>";
       }
     } else {
       $html .= "<div><br>NO POD Registrations</div>";
@@ -134,6 +140,22 @@ class Podreports extends MY_Controller
 
     echo $html;
     return;
+  }
+
+  /**
+   * Build the "(id,id,...)" list used in IN clauses from school_year.semesters,
+   * keeping only integer ids so the stored value cannot inject SQL.
+   */
+  private function _semesterList($raw)
+  {
+    $ids = array();
+    foreach (explode(',', (string)$raw) as $v) {
+      $v = trim($v);
+      if ($v !== '' && ctype_digit($v)) {
+        $ids[] = (int)$v;
+      }
+    }
+    return '(' . (count($ids) ? implode(',', $ids) : '0') . ')';
   }
 
 }

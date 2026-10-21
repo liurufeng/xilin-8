@@ -20,7 +20,7 @@ class Scheduler extends BaseController
     if($uri->getTotalSegments() > 1 ) {
       $p = $uri->getSegment(2);
     }
-    if($p!="qDqAxn24w!0@o9!*@o15") die();
+    if(!is_cli() && !hash_equals((string)xilin_secret('cron_token', 'qDqAxn24w!0@o9!*@o15'), (string)$p)) die();
     $from = "ec@xilinnschinese.org";
     $from_header = "From: $from\r\nReply-To: $from\r\n";
     $from_header .= "Cc: ec@xilinnschinese.org,jiong.han@xilinnschinese.org\r\n";
@@ -38,12 +38,13 @@ class Scheduler extends BaseController
         $eid = $e['event_id'];
         $sql = "SELECT IF(ISNULL(primary_en_name),'No Name?',primary_en_name) as pname,email
         FROM helpers h,parents p
-        WHERE event_id=$eid AND p.parent_id=h.parent_id";
+        WHERE event_id=? AND p.parent_id=h.parent_id";
 
-        $helpers = $this->db->query($sql)->getResultArray();
+        $helpers = $this->db->query($sql, [$eid])->getResultArray();
 
         foreach($helpers as $h) {
           $email = $h['email'];
+          if(filter_var($email, FILTER_VALIDATE_EMAIL) === false) continue;
           $mdy = $e['edate'];
           $t1 = $e['start_time'];
           $t2 = $e['end_time'];

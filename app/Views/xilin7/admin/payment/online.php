@@ -15,11 +15,11 @@
     	<table width="96%" border="0" cellspacing="1" cellpadding="1">
         <tr>
           <td width="85%" style="padding-left:5px;">
-            <form action="<?= site_url('payment/online">
+            <form action="<?=$_SESSION['admin_path']?>payment/online">
             <select id="semester_id" name="semester_id" onchange="submit();">
               <? foreach($semesters as $semester) {?>
               <option value="<?=$semester['semester_id']?>" <? if($semester['semester_id'] == $semester_id) echo 'selected'; ?> >
-                <?=$semester['semester_year']?> <?=$semester['semester_name']?>
+                <?=esc($semester['semester_year'])?> <?=esc($semester['semester_name'])?>
               </option>
               <? } ?>
             </select>
@@ -54,18 +54,18 @@
   foreach($payments as $p) { ?>
     <tr align="center" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
       <td><?= $p['parent_id']?></td>
-      <td><?= $p['primary_en_name']?></td>
-      <td><?= $p['email']?></td>
-      <td><?= $p['primary_phone']?></td>
-      <td><?= $p['alter_en_name']?></td>
-      <td><?= $p['alter_contact_email']?></td>
-      <td><?= $p['signature']?></td>
-      <td><?= $p['pdate']?></td>
-      <td><?= $p['school_fee']?></td>
-      <td><?= $p['online_fee']?></td>
-      <td id="status_<?= $p['pay_id']?>"><?= $p['status']?></td>
-      <td id="dt_<?= $p['pay_id']?>"><?= $p['processed_date']?></td>
-      <td id="by_<?= $p['pay_id']?>"><?= $p['processed_by']?></td>
+      <td><?= esc($p['primary_en_name'])?></td>
+      <td><?= esc($p['email'])?></td>
+      <td><?= esc($p['primary_phone'])?></td>
+      <td><?= esc($p['alter_en_name'])?></td>
+      <td><?= esc($p['alter_contact_email'])?></td>
+      <td><?= esc($p['signature'])?></td>
+      <td><?= esc($p['pdate'])?></td>
+      <td><?= esc($p['school_fee'])?></td>
+      <td><?= esc($p['online_fee'])?></td>
+      <td id="status_<?= $p['pay_id']?>"><?= esc($p['status'])?></td>
+      <td id="dt_<?= $p['pay_id']?>"><?= esc($p['processed_date'])?></td>
+      <td id="by_<?= $p['pay_id']?>"><?= esc($p['processed_by'])?></td>
     <td>
       <input type="submit" onclick="updatePayment('<?=$p['pay_id']?>', 'Approved');" value="Aprv" name="Aprv" style="color: green; font-weight: bold">
       <input type="submit" onclick="updatePayment('<?=$p['pay_id']?>', 'Declined');" value="Dcln" name="Dcln" style="color: #ffa655; font-weight: bold">
@@ -94,11 +94,11 @@
 <script type="text/javascript">
 
   function updatePayment(pay_id, act){
-    var realname = "<?=session()->get('realname";
+    var realname = <?= json_encode((string) session()->get('realname'), JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP) ?>;
     var r = confirm("Are you sure to set the status of this online payment to be " + act + "?");
     if (r == true) {
     $("#ajax_loader").show();
-    $.post("<?= site_url('/payment/update_online",
+    $.post("<?=$_SESSION['admin_path']?>payment/update_online",
       { pay_id: pay_id,
         act: act
       },

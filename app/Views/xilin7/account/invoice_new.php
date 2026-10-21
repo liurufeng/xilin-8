@@ -40,7 +40,7 @@
     <tbody>
     <tr>
         <td style="width: 140px;">Invoice Date:</td>
-        <td style="width: 288px;"><?= $invoice_date?></td>
+        <td style="width: 288px;"><?= esc($invoice_date)?></td>
         <td style="width: 275px; text-align: right;">&nbsp;Tax ID: 30-0332045</td>
     </tr>
     <tr>
@@ -50,17 +50,17 @@
     </tr>
     <tr>
         <td style="font: bold; color: red;">Payment Code:</td>
-        <td style="font: bold; color: red;"><?= $pay_code ?></td>
+        <td style="font: bold; color: red;"><?= esc($pay_code) ?></td>
         <td style="text-align: right;">&nbsp;Skokie, IL 60077</td>
     </tr>
     <tr>
         <td>Phone:</td>
-        <td><?= $parent['primary_phone'] ?></td>
+        <td><?= esc($parent['primary_phone']) ?></td>
         <td style="text-align: right;">&nbsp;www.xilinnschinese.org</td>
     </tr>
     <tr>
         <td>email:</td>
-        <td><?= $parent['email'] ?></td>
+        <td><?= esc($parent['email']) ?></td>
         <td>&nbsp;</td>
     </tr>
     <tr>
@@ -118,14 +118,14 @@
         ?>
 
           <tr>
-              <td><?= $student['en_name'] ?></td>
-              <td><?=$semester['semester_name'] .' ' . $semester['semester_year']?></td>
-              <td><?= $class['class_code'] ?></td>
-              <td><?= $class['class_name'] ?></td>
-              <td><?= $class['classroom'] ?></td>
-              <td><?= $class['meeting_time'] ?></td>
-              <td><?= $class_tuition ?></td>
-              <td><?= $book_fee  ?></td>
+              <td><?= esc($student['en_name']) ?></td>
+              <td><?=esc($semester['semester_name'] .' ' . $semester['semester_year'])?></td>
+              <td><?= esc($class['class_code']) ?></td>
+              <td><?= esc($class['class_name']) ?></td>
+              <td><?= esc($class['classroom']) ?></td>
+              <td><?= esc($class['meeting_time']) ?></td>
+              <td><?= esc($class_tuition) ?></td>
+              <td><?= esc($book_fee)  ?></td>
               <td style="width: 45px; text-align: right;"><?= $class['material_fee'] ? $class['material_fee'] : '' ?></td>
               <td style="width: 70px; text-align: right;"> </td>
           </tr>
@@ -188,7 +188,7 @@
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td style="width: 50px; text-align: right;" colspan="3">Registration Fee</td>
-        <td style="width: 45px; text-align: right;">$<?=$reg_fee?></td>
+        <td style="width: 45px; text-align: right;">$<?=esc($reg_fee)?></td>
     <td>&nbsp;</td>
     </tr>
     <?php } ?>
@@ -212,7 +212,7 @@
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td style="text-align: right;">POD Fine</td>
-        <td style="text-align: right;">$<?=$pod['penalty']?></td>
+        <td style="text-align: right;">$<?=esc($pod['penalty'])?></td>
         <td>&nbsp;</td>
     </tr>
     <tr>
@@ -236,7 +236,7 @@
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td style="text-align: right;">Discount</td>
-        <td style="text-align: right;">$<?=$discount?></td>
+        <td style="text-align: right;">$<?=esc($discount)?></td>
         <td>&nbsp;</td>
     </tr>
     <?php if(count($prorate) > 0) : ?>
@@ -250,7 +250,7 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td style="text-align: right;">Proration</td>
-            <td style="text-align: right;">$<?=$p?></td>
+            <td style="text-align: right;">$<?=esc($p)?></td>
             <td>&nbsp;</td>
         </tr>
     <?php endforeach ?>
@@ -276,7 +276,7 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td style="text-align: right;" colspan="2">Late Fee</td>
-            <td style="text-align: right;">$<?=$late_fee?></td>
+            <td style="text-align: right;">$<?=esc($late_fee)?></td>
             <td>&nbsp;</td>
         </tr>
     <?php } ?>
@@ -297,7 +297,7 @@
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td style="text-align: right;"><strong><span style="font: bold; color: red;">*</span>Total Due</strong></td>
-        <td style="text-align: right;">$<?=$balance?></td>
+        <td style="text-align: right;">$<?=esc($balance)?></td>
         <td>&nbsp;</td>
     </tr>
     <tr>
@@ -314,7 +314,7 @@
         <td>&nbsp;</td>
     </tr>
     <tr>
-        <td style="width: 57px;" colspan="10">1. Pay by Zelle to payment@xilinnschinese.org. Please include payment code <span style="font: bold; color: red;"><?= $pay_code ?></span> in memo.</td>
+        <td style="width: 57px;" colspan="10">1. Pay by Zelle to payment@xilinnschinese.org. Please include payment code <span style="font: bold; color: red;"><?= esc($pay_code) ?></span> in memo.</td>
     </tr>
     <tr>
         <td style="width: 57px;" colspan="10">2. Pay by check to "Xilin North Shore Chinese School". Please include payment code in memo.</td>

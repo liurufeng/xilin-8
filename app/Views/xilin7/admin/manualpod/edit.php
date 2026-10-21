@@ -39,7 +39,7 @@
             <select id="semester_id" name="semester_id">
               <?php foreach($semesters as $semester) {?>
                 <option value="<?=$semester['semester_id']?>" <?php if($semester['semester_id'] == $list['semester_id']) echo 'selected'; ?> >
-                  <?=$semester['semester_year']?> <?=$semester['semester_name']?>
+                  <?=esc($semester['semester_year'])?> <?=esc($semester['semester_name'])?>
                 </option>
               <?php } ?>
             </select>
@@ -51,19 +51,19 @@
             <select id="parent_id" name="parent_id">
               <?php foreach($parents as $p) {?>
                 <option value="<?=$p['parent_id']?>"  <?php if($p['parent_id'] == $list['parent_id']) echo 'selected'; ?>>
-                  <?=$p['parent_id']?> | <?=$p['email']?> | <?=$p['primary_en_name']?> | <?=$p['alter_en_name']?>
+                  <?=$p['parent_id']?> | <?=esc($p['email'])?> | <?=esc($p['primary_en_name'])?> | <?=esc($p['alter_en_name'])?>
                 </option>
               <?php } ?>
             </select>
         </tr>
         <tr>
           <td height="30"><span style="color:red;">*</span>manual records</td>
-          <td style="text-align:left;"><input name="manual_records" type="number" id="manual_records" size="16" style="width:200px" value="<?=$list['manual_records']?>"/></td>
+          <td style="text-align:left;"><input name="manual_records" type="number" id="manual_records" size="16" style="width:200px" value="<?=esc($list['manual_records'], 'attr')?>"/></td>
         </tr>
 
         <tr>
           <td height="30"><span style="color:red;">*</span>notes:</td>
-          <td style="text-align:left;"><input name="notes" type="text" id="notes" size="16" style="width:200px" value="<?=$list['notes']?>" /></td>
+          <td style="text-align:left;"><input name="notes" type="text" id="notes" size="16" style="width:200px" value="<?=esc($list['notes'], 'attr')?>" /></td>
         </tr>
 
           <tr> 

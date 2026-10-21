@@ -38,17 +38,18 @@ class Sponsorpayments extends MY_Controller
    */
   function add()
   {
-    if ($this->request->getVar('dopost'] == 'add') {
-      if ($this->request->getVar('sponsor_id']) {
+    if ($this->request->getVar('dopost') == 'add') {
+      if ($this->request->getVar('sponsor_id')) {
         $insertdata['sponsor_id'] = $this->request->getVar('sponsor_id');
         $insertdata['paid_at'] = $this->request->getVar('paid_at');
         $insertdata['paid_amount'] = $this->request->getVar('paid_amount');
-        $this->db->insert('sponsor_payments', $insertdata);
-        ShowMsg("add success!", $_SESSION['admin_path'].'sponsorpayments/index'));
+        $this->db->table('sponsor_payments')
+          ->insert($insertdata);
+        ShowMsg("add success!", $_SESSION['admin_path'].'sponsorpayments/index');
       }
     }
     $sql = "select sponsor_id,name
-				from  sponsor') . "
+				from  sponsor
 				where status = 1";
     $data['groupList'] = $this->db->query($sql)->getResultArray();
     echo view($_SESSION['tm'].'admin/sponsorpayments/add.htm', $data);
@@ -59,26 +60,28 @@ class Sponsorpayments extends MY_Controller
    */
   function edit()
   {
-    if ($this->request->getVar('dopost'] == 'save') {
+    if ($this->request->getVar('dopost') == 'save') {
       // 判断用户名是否存在
-      if ($this->request->getVar('sponsor_pay_id']) {
+      if ($this->request->getVar('sponsor_pay_id')) {
         $insertdata['sponsor_id'] = $this->request->getVar('sponsor_id');
         $insertdata['paid_at'] = $this->request->getVar('paid_at');
         $insertdata['paid_amount'] = $this->request->getVar('paid_amount');
         $wheredata['sponsor_pay_id'] = $this->request->getVar('sponsor_pay_id');
-        $this->db->update('sponsor_payments', $insertdata, $wheredata);
-        ShowMsg('edit success!', $_SESSION['admin_path'].'sponsorpayments/index'));
+        $this->db->table('sponsor_payments')
+          ->where($wheredata)
+          ->update($insertdata);
+        ShowMsg('edit success!', $_SESSION['admin_path'].'sponsorpayments/index');
       }
     }
     $sponsor_pay_id = (int)$this->request->getVar('sponsor_pay_id');
     if (empty($sponsor_pay_id)) {
-      ShowMsg('param error', $_SESSION['admin_path'].'sponsorpayments/index'));
+      ShowMsg('param error', $_SESSION['admin_path'].'sponsorpayments/index');
     }
     $sql = "select sponsor_id,name
 				from sponsor
 				where status = 1";
     $data['groupList'] = $this->db->query($sql)->getResultArray();
-    $sql = " SELECT * FROM  sponsor_payments') . " WHERE sponsor_pay_id = $sponsor_pay_id";
+    $sql = " SELECT * FROM  sponsor_payments WHERE sponsor_pay_id = $sponsor_pay_id";
     $data['info'] = $this->db->query($sql)->getRowArray();
     echo view($_SESSION['tm'].'admin/sponsorpayments/edit.htm', $data);
   }
@@ -91,11 +94,11 @@ class Sponsorpayments extends MY_Controller
 
     $sponsor_pay_id = (int)$this->request->getVar('sponsor_pay_id');
     if (empty($sponsor_pay_id)) {
-      ShowMsg('param error', $_SESSION['admin_path'].'sponsorpayments/index'));
+      ShowMsg('param error', $_SESSION['admin_path'].'sponsorpayments/index');
     }
     $sql = " update  sponsor_payments set status = '2' WHERE sponsor_pay_id = $sponsor_pay_id";
     $this->db->query($sql);
-    ShowMsg('delete success!', $_SESSION['admin_path'].'sponsorpayments/index'));
+    ShowMsg('delete success!', $_SESSION['admin_path'].'sponsorpayments/index');
   }
 }
 

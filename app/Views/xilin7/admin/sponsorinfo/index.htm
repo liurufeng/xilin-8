@@ -36,19 +36,19 @@
   <?php foreach($list as $k=>$v){ ?>
   <tr align="center" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
     <td><?php echo $v['sponsor_id']?></td>
-    <td><?php echo $v['name']?></td>
-    <td><?php echo $v['lename']?></td>
+    <td><?php echo esc($v['name'])?></td>
+    <td><?php echo esc($v['lename'])?></td>
     <?php if($v['image_path']){?>
-    <td><img src="<?php echo $v['image_path']?>" height="20px;"/></td>
+    <td><img src="<?php echo esc($v['image_path'], 'attr')?>" height="20px;"/></td>
     <?php }else{?>
     <td></td>
     <?php }?>
-    <td><?php echo $v['created_at']?></td>
-    <td><?php echo $v['updated_at']?></td>
-    <td><?php echo $v['next_pay_day']?></td>
-    <td><?php echo $v['next_pay_amount']?></td>
+    <td><?php echo esc($v['created_at'])?></td>
+    <td><?php echo esc($v['updated_at'])?></td>
+    <td><?php echo esc($v['next_pay_day'])?></td>
+    <td><?php echo esc($v['next_pay_amount'])?></td>
     <td><?php if($v['active']){ echo 'yes';}else{ echo 'no';}?></td>
-    <td><?php echo $v['show_order']?></td>
+    <td><?php echo esc($v['show_order'])?></td>
     <td>
 		<a href='<?=$_SESSION['admin_path']?>sponsorinfo/edit?sponsor_id=<?php echo $v['sponsor_id']?>'><u>edit</u></a> |
 		<a href='<?=$_SESSION['admin_path']?>sponsorinfo/del?sponsor_id=<?php echo $v['sponsor_id']?>' onclick="return confirm('Are you sure to delete this sponsor?')"><u>delete</u></a>

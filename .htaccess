@@ -1,0 +1,18 @@
+# The site lives in public/ (CodeIgniter 4). When the web server's document root is this folder rather than
+# public/, every request is served from public/, so app/, vendor/, writable/ and the rest can't be reached.
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+
+	# drop a trailing slash here (public/.htaccess would send the browser to /public/...)
+	RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} !-d
+	RewriteCond %{REQUEST_URI} (.+)/$
+	RewriteRule ^ %1 [L,R=301]
+
+	RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+	Require all denied
+</IfModule>

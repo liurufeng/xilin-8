@@ -15,14 +15,14 @@
    <div class="login-main">
     <!--<form name="form1" method="post" action="<?=$_SESSION['admin_path']?>login/check_login');?>">-->
 	   <form name="form1" method="post" action="<?=$_SESSION['admin_path']?>login/check_login">
-      <input type="hidden" name="gotopage" value="<?php if(!empty($gotopage)) echo RemoveXSS($gotopage);?>" />
+      <input type="hidden" name="gotopage" value="<?php if(!empty($gotopage)) echo esc($gotopage, 'attr');?>" />
       <input type="hidden" name="dopost" value="login" />
       <input name='act' type='hidden' value='ok' />
       <dl>
 	   <dt>Username：</dt>
 	   <dd><input type="text" name="username"/></dd>
 	   <dt>Password：</dt>
-	   <dd><input type="password" class="alltxt" name="pwd"/></dd>
+	   <dd><input type="password" class="alltxt" name="pwd" autocomplete="current-password"/></dd>
 	   <!--<dt>Verify Code：</dt>
 	   <dd>
 		<input id="vdcode" type="text" name="captcha" /> <img id="vdimgck" align="absmiddle" onClick="this.src=this.src+'?'" style="cursor: pointer;" alt="Click refresh" src="<?=$_SESSION['admin_path']?>imgcheck/vimg');?>" />

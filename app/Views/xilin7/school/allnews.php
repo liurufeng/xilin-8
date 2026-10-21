@@ -19,7 +19,7 @@
                     <td width="600" align="left" valign="top" class="plainBlackText">
                         <div align=left style="width: 798px; border: 1px solid #999999; background: #FFFFFF;
                           margin: 0px; padding-left: 5px;">
-                            <font class=smallBoldBlackText><?=$item['lastupdate']?></font>
+                            <font class=smallBoldBlackText><?=esc($item['lastupdate'])?></font>
                             <br>
                           <?= html_entity_decode($item['body']) ?>
 

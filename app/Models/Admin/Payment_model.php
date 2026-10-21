@@ -22,11 +22,12 @@ class Payment_model extends Model
     $semester->getCurrentSemester();
 
     if (isset($semester_id) && !empty($semester_id)) {
+      $semester_id = (int)$semester_id;
       session()->set(array('semester_id' => $semester_id));
       $where = ' where sc.semester_id=' . $semester_id;
     } else {
       $current_semester = session()->get('current_semester');
-      $semester_id = $current_semester['semester_id'];
+      $semester_id = (int)$current_semester['semester_id'];
       session()->set(array('semester_id' => $semester_id));
       $where = ' where sc.semester_id=' . $semester_id;
     }
@@ -38,12 +39,12 @@ class Payment_model extends Model
             WHERE (semester_id) IN
             ( SELECT MAX(semester_id)
               FROM semester
-              where semester_id < " . $data['this_semester']['semester_id'] . "
+              where semester_id < ?
               and status = 1
               -- and semester_status = 'Previous'
             )";
 
-    $prev_semester = $this->db->query($sql)->getRowArray();
+    $prev_semester = $this->db->query($sql, [$data['this_semester']['semester_id']])->getRowArray();
 
     $sql = "select p.*, s.*,c.*, sc.*, sc.deleted as unregistered, sc.update_time, lf.amount as late_fee 
             from parents p
@@ -135,9 +136,9 @@ class Payment_model extends Model
       //get paid check
       $sql = "select *
               from checks
-              where parent_id = $k
-              and semester_id = " . $data['this_semester']['semester_id'];
-      $checks[$k] = $this->db->query($sql)->getResultArray();
+              where parent_id = ?
+              and semester_id = ?";
+      $checks[$k] = $this->db->query($sql, [$k, $data['this_semester']['semester_id']])->getResultArray();
       //Grand totals
       $data['totalT'] += $total[$k];
       $data['tuition_totalT'] += $t;

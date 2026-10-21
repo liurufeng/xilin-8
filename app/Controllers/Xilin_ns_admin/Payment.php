@@ -21,6 +21,8 @@ class Payment extends MY_Controller
   function index()
   {
     $semester_id = $this->request->getVar('semester_id');
+    // passed on to Payment_model SQL; force an integer id
+    $semester_id = empty($semester_id) ? $semester_id : (int)$semester_id;
 
     $payment = new Payment_model();
     $data = $payment->getPaymentData($semester_id);
@@ -98,12 +100,12 @@ class Payment extends MY_Controller
 
     if(isset($semester_id) && !empty($semester_id)) {
       session()->set(array('semester_id' => $semester_id));
-      $where =' where semester_id='.$semester_id;
+      $where =' where semester_id = ?';
     } else {
       $current_semester = session()->get('current_semester');
       $semester_id = $current_semester['semester_id'];
       session()->set(array('semester_id' => $semester_id));
-      $where =' where semester_id='.$semester_id;
+      $where =' where semester_id = ?';
     }
 
     $data['semester_id'] = $semester_id;
@@ -117,7 +119,7 @@ class Payment extends MY_Controller
             and status != 'Deleted'
             order by status DESC, processed_date, parent_id";
 
-    $data['payments'] = $this->db->query($sql)->getResultArray();
+    $data['payments'] = $this->db->query($sql, [$semester_id])->getResultArray();
 
     echo view($_SESSION['tm'].'admin/payment/online.php', $data);
   }
@@ -137,9 +139,9 @@ class Payment extends MY_Controller
       //now update the checks table for this online payment
       $sql = "select op.*
             from online_payment op
-            where pay_id = " . $this->request->getVar('pay_id');
+            where pay_id = ?";
 
-      $pay_info = $this->db->query($sql)->getRowArray();
+      $pay_info = $this->db->query($sql, [$this->request->getVar('pay_id')])->getRowArray();
 
       if($this->request->getVar('act') == 'Approved') {
         $insertdata1['semester_id'] = $pay_info['semester_id'];

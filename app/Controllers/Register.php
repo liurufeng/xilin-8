@@ -1,4 +1,5 @@
 <?php namespace App\Controllers;
+use App\Libraries\Passwords;
 use App\Models\{Semester, Subject, Classes, Teacher, Article};
 
 /**
@@ -40,20 +41,20 @@ class Register extends BaseController
         ShowMsg("Your Email address ".$insertdata['email']." is invalid", '/');
       }
 
-      $sql = " SELECT parent_id FROM parents WHERE email = '{$insertdata['email']}'";
-      $rst = $this->db->query($sql);
+      $sql = " SELECT parent_id FROM parents WHERE email = ?";
+      $rst = $this->db->query($sql, [$insertdata['email']]);
       if ($rst->getNumRows() > 0) {
         ShowMsg('The email already existed in our system. You can retrieve your password if you forgot it by clicking Find Password button.', '/', 0, 3000);
       }
 
-      $sql = " SELECT parent_id FROM parents WHERE alter_contact_email = '{$insertdata['email']}'";
-      $rst = $this->db->query($sql);
+      $sql = " SELECT parent_id FROM parents WHERE alter_contact_email = ?";
+      $rst = $this->db->query($sql, [$insertdata['email']]);
       if ($rst->getNumRows() > 0) {
         ShowMsg('Your family account already existed, please contact school admin if you need to create another account', '/', 0, 3000);
       }
 
-      $pass = str_replace("'","[$!)", $this->request->getVar('passwd'));
-      $insertdata['passwd'] = $pass;
+      $plain = (string)$this->request->getVar('passwd');
+      $insertdata['passwd'] = $plain === '' ? '' : Passwords::forStorage('parents', 'passwd', $plain, Passwords::parentLegacy($plain));
       $insertdata['primary_en_name'] = $this->request->getVar('primary_en_name');
       $insertdata['primary_cn_name'] = $this->request->getVar('primary_cn_name');
       $insertdata['primary_phone'] = $this->request->getVar('primary_phone');
@@ -81,10 +82,13 @@ class Register extends BaseController
       $this->db->table('parents')
         ->insert($insertdata);
 
-      $sql = "select * from parents where email = '{$insertdata['email']}'";
-      $result = $this->db->query($sql)->getResultArray();
-      $result['usertype'] = 1;
-      session()->set(array('userresult'=> $result));
+      $sql = "select * from parents where email = ?";
+      $result = $this->db->query($sql, [$insertdata['email']])->getResultArray();
+      // signed in as the new account: a new session id, and the password (hash) stays out of the session
+      session()->regenerate(true);
+      $parent = $result[0];
+      unset($parent['passwd']);
+      session()->set(array('userresult'=> array(0 => $parent, 'usertype' => 1)));
 
       // insert referral info if there is referer ID
       $referrer_id = trim($this->request->getVar('referrer_id'));

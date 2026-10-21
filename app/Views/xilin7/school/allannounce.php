@@ -19,7 +19,7 @@
                     <td width="600" align="left" valign="top" class="plainBlackText">
                       <div align=left style="width: 798px; border: 1px solid #999999; background: #FFFFFF;
                           margin: 0px; padding-left: 5px;">
-                        <span class=smallBoldBlackText><?=$item['lastupdate']?></span>
+                        <span class=smallBoldBlackText><?=esc($item['lastupdate'])?></span>
                         <br>
                         <?= html_entity_decode($item['body']) ?>
 

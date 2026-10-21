@@ -24,13 +24,14 @@ class Discounter extends MY_Controller
 
     $semester_id = $this->request->getVar('semester_id');
     if(isset($semester_id) && !empty($semester_id)) {
+      $semester_id = (int)$semester_id;
       session()->set(array('semester_id' => $semester_id));
       $where =' where pd.semester_id='.$semester_id;
     } else {
       $current_semester = session()->get('current_semester');
       $current_semester_id = $current_semester['semester_id'];
       session()->set(array('semester_id' => $current_semester_id));
-      $where =' where pd.semester_id='.$current_semester_id;
+      $where =' where pd.semester_id='.(int)$current_semester_id;
     }
     $sql = "select *
 				from parents p
@@ -52,8 +53,8 @@ class Discounter extends MY_Controller
       $parent_id = $this->request->getVar('parent_id');
       $semester_id = $this->request->getVar('semester_id');
 
-      $sqlx = "select parent_id from schooluser where parent_id = ".$parent_id." and semester_id = ".$semester_id;
-      $resultx = $this->db->query($sqlx)->getRowArray();
+      $sqlx = "select parent_id from schooluser where parent_id = ? and semester_id = ?";
+      $resultx = $this->db->query($sqlx, [$parent_id, $semester_id])->getRowArray();
       if(isset($resultx) && isset($resultx['parent_id']) && !empty($resultx['parent_id'])) {
         ShowMsg("Add failed! The account is already in school admin!", $_SESSION['admin_path'].'discounter/index');
       }

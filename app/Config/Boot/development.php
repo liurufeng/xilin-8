@@ -32,8 +32,3 @@ defined('SHOW_DEBUG_BACKTRACE') || define('SHOW_DEBUG_BACKTRACE', true);
  | items. It can always be used within your own application too.
  */
 defined('CI_DEBUG') || define('CI_DEBUG', true);
-
-session()->set(array('tm' => 'xilin7/'));
-session()->set(array('admin_path' => '/Xilin_ns_admin/'));
-session()->set(array('site_email' => 'webmaster@xilinnschinese.org'));
-session()->set(array('check_class_conflict' => true));

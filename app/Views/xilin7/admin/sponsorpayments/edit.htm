@@ -34,7 +34,7 @@
 						if($v['sponsor_id'] == $info['sponsor_id']){
 							$selected="selected";
 						}
-						echo "<option value='".$v['sponsor_id']."' $selected>".$v['name']."</option>\r\n";
+						echo "<option value='".$v['sponsor_id']."' $selected>".esc($v['name'])."</option>\r\n";
 					}
 				}
 			?>
@@ -43,11 +43,11 @@
           </tr>        
           <tr> 
             <td height="30">Payments at:</td>
-            <td style="text-align:left;"><input name="paid_at" type="text" id="paid_at" size="16" style="width:200px" value="<?php echo $info['paid_at']?>"/></td>
+            <td style="text-align:left;"><input name="paid_at" type="text" id="paid_at" size="16" style="width:200px" value="<?php echo esc($info['paid_at'], 'attr')?>"/></td>
           </tr>      
           <tr> 
             <td height="30">Payments amount:</td>
-            <td style="text-align:left;"><input name="paid_amount" type="text" id="paid_amount" size="16" style="width:200px" value="<?php echo $info['paid_amount']?>"/></td>
+            <td style="text-align:left;"><input name="paid_amount" type="text" id="paid_amount" size="16" style="width:200px" value="<?php echo esc($info['paid_amount'], 'attr')?>"/></td>
           </tr>
           <tr> 
             <td height="60">&nbsp;</td>

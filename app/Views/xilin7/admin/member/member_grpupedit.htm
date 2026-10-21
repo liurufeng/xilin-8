@@ -30,7 +30,7 @@
       <table width="98%" border="0" cellspacing="0" cellpadding="0">
         <tr> 
           <td width="9%" height="30"><span style="color:red">*</span>group name：</td>
-          <td width="91%" style="text-align:left;"> <input name="groupname" type="text" id="groupname" value="<?php echo $info['name'];?>"/> 
+          <td width="91%" style="text-align:left;"> <input name="groupname" type="text" id="groupname" value="<?php echo esc($info['name'], 'attr');?>"/> 
           </td>
         </tr>
         <tr>
@@ -40,7 +40,7 @@
 	        <?php foreach($gouplists as $k=>$v){?>
 			<tr>
 				<td>
-					<input type="checkbox" value="<?php echo $v['id']?>" class="np" name="nodeids[]" <?php if(in_array($v['id'],$info['nodeidsarr'])){ echo "checked";}?>><?php echo $v['name']?></font>
+					<input type="checkbox" value="<?php echo $v['id']?>" class="np" name="nodeids[]" <?php if(in_array($v['id'],$info['nodeidsarr'])){ echo "checked";}?>><?php echo esc($v['name'])?></font>
 				</td>
 			</tr>
 			<?php }?>
@@ -50,7 +50,7 @@
         </tr>
         <tr> 
           <td width="9%" height="30">description：</td>
-          <td width="91%" style="text-align:left;"> <textarea name="description" type="text" id="description" rows="3" cols="50"><?php echo $info['description'];?></textarea>
+          <td width="91%" style="text-align:left;"> <textarea name="description" type="text" id="description" rows="3" cols="50"><?php echo esc($info['description']);?></textarea>
           </td>
         </tr>
        

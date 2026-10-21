@@ -70,7 +70,7 @@
         if($start) echo "</div>";
         ?>
         <div class="heading1 row text-center sponsor-level">
-            <h2><a href="#"><?=$s['level_name'] ?></a></h2>
+            <h2><a href="#"><?=esc($s['level_name']) ?></a></h2>
         </div>
       <?php
 
@@ -89,10 +89,10 @@
 
         <div class="col-md-4 col-sm-6">
             <div class="sponsor-card">
-                <a href="<?= $s['link']; ?>" target="_blank">
-                    <img src="<?= $s['image_path']; ?>"
+                <a href="<?= esc($s['link'], 'attr'); ?>" target="_blank">
+                    <img src="<?= esc($s['image_path'], 'attr'); ?>"
                          class="img-responsive"
-                         alt="<?= $s['note'] ? $s['note'] : '' ?>l">
+                         alt="<?= esc($s['note'] ? $s['note'] : '', 'attr') ?>l">
                 </a>
             </div>
         </div>

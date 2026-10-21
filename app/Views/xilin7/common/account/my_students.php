@@ -6,7 +6,7 @@
       <?php echo view($_SESSION['tm'].'uc/account_header.php') ?>
         <div style="clear:both;"></div>
       <?php if (session()->getFlashdata('success_msg')) { ?>
-        <div class="row success-flash account-top"><b><?= session()->flashdata('success_msg'); ?></b></div>
+        <div class="row success-flash account-top"><b><?= esc(session()->flashdata('success_msg')); ?></b></div>
       <?php } ?>
       <?php if (isset($address_error) && $address_error) { ?>
         <script>
@@ -58,31 +58,31 @@
 
                     <tr id="ms-<?=$student['student_id']?>">
                         <td>
-                          <?= $student['en_name'] ?>
+                          <?= esc($student['en_name']) ?>
                         </td>
                         <td>
-                          <?= $student['cn_name'] ?>
+                          <?= esc($student['cn_name']) ?>
                         </td>
                         <td>
-                          <?= $student['birthday'] ?>
+                          <?= esc($student['birthday']) ?>
                         </td>
                         <td>
-                          <?= $student['gender'] ?>
+                          <?= esc($student['gender']) ?>
                         </td>
                         <td>
-                          <?= $student['race'] ?>
+                          <?= esc($student['race']) ?>
                         </td>
                         <td>
                             <a href="/register_class?stdid=<?= $student['student_id'] ?>"
                                class="btn btn-primary btn-sm">Register</a>
                             <a href="" class="btn btn-info btn-sm edit_student" stdid="<?= $student['student_id'] ?>"
-                               sname="<?= $student['en_name'] ?>"
-                               cname="<?= $student['cn_name'] ?>" bday="<?= $student['birthday'] ?>"
-                               gender="<?= $student['gender'] ?>" race="<?= $student['race'] ?>"
+                               sname="<?= esc($student['en_name'], 'attr') ?>"
+                               cname="<?= esc($student['cn_name'], 'attr') ?>" bday="<?= esc($student['birthday'], 'attr') ?>"
+                               gender="<?= esc($student['gender'], 'attr') ?>" race="<?= esc($student['race'], 'attr') ?>"
                                     >Edit</a>
                             <a href="" class="btn btn-danger btn-sm remove_student" stdid="<?= $student['student_id']
                               ?>"
-                               sname="<?= $student['en_name'] ?>">Remove</a>
+                               sname="<?= esc($student['en_name'], 'attr') ?>">Remove</a>
                         </td>
                     </tr>
 

@@ -38,6 +38,17 @@ Events::on('pre_system', static function (): void {
         ob_start(static fn ($buffer) => $buffer);
     }
 
+    // Settings the controllers and views read from $_SESSION. Set once the session has started (setting them earlier,
+    // as before, lost them on a visitor's first request).
+    if (! is_cli()) {
+        session()->set([
+            'tm'                   => 'xilin7/',
+            'admin_path'           => '/Xilin_ns_admin/',
+            'site_email'           => 'webmaster@xilinnschinese.org',
+            'check_class_conflict' => true,
+        ]);
+    }
+
     /*
      * --------------------------------------------------------------------
      * Debug Toolbar Listeners.

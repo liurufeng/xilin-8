@@ -24,7 +24,7 @@
       &nbsp; &nbsp; &nbsp; <span style="background-color: #ffff00;"><b>学期</b> <select id="semester_id" name="semester_id" style="background-color: #ffff00;">
         <?php foreach($semesters as $semester) {?>
           <option value="<?=$semester['semester_id']?>" <?php if($semester['semester_id'] == session()->get('semester_id')) echo 'selected'; ?> >
-            <?=$semester['semester_year']?> <?=$semester['semester_name']?>
+            <?=esc($semester['semester_year'])?> <?=esc($semester['semester_name'])?>
           </option>
         <?php } ?>
       </select></span>

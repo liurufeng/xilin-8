@@ -1,4 +1,4 @@
-<?php view( . 'uc/header.php') ?>
+<?php echo view($_SESSION['tm'].'uc/header.php') ?>
 
 <div class="Section1">
 
@@ -14,4 +14,4 @@
     </table>
 </div>
 
-<?php view( . 'uc/footer.php') ?>
+<?php echo view($_SESSION['tm'].'uc/footer.php') ?>

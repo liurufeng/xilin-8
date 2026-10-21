@@ -45,7 +45,7 @@
 					if($subject){
 					foreach($subject as $k=>$v)
 					{
-						echo "<option value='".$v['subject_id']."'>".$v['subject_name']."</option>\r\n";
+						echo "<option value='".$v['subject_id']."'>".esc($v['subject_name'])."</option>\r\n";
 					}
 					}
 			  	?>
@@ -60,7 +60,7 @@
 					if($semester){
 					foreach($semester as $k=>$v)
 					{
-						echo "<option value='".$v['semester_id']."'>".$v['semester_name']."</option>\r\n";
+						echo "<option value='".$v['semester_id']."'>".esc($v['semester_name'])."</option>\r\n";
 					}
 					}
 			  	?>
@@ -75,7 +75,7 @@
 					if($teachers){
 					foreach($teachers as $k=>$v)
 					{
-						echo "<option value='".$v['teacher_id']."'>".$v['en_name']."</option>\r\n";
+						echo "<option value='".$v['teacher_id']."'>".esc($v['en_name'])."</option>\r\n";
 					}
 					}
 			  	?>

@@ -1,4 +1,4 @@
-<?php view( . 'uc/header.php') ?>
+<?php echo view($_SESSION['tm'].'uc/header.php') ?>
 
   <table class="MsoNormalTable" style="width:6.25in;background:#E6E6E6;border:outset #CC99FF 6.0pt" width="780" cellspacing="0" cellpadding="0" border="1">
     <tbody><tr style="height:30.0pt">
@@ -163,4 +163,4 @@
 
       </td></tr></tbody></table>
 
-<?php view( . 'uc/footer.php') ?>
+<?php echo view($_SESSION['tm'].'uc/footer.php') ?>

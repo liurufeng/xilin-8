@@ -36,20 +36,20 @@
   		<table width="98%" border="0" cellspacing="1" cellpadding="1">        
           <tr> 
             <td height="30"><span style="color:red;">*</span>name:</td>
-            <td style="text-align:left;"><input name="name" type="text" id="name" size="16" style="width:200px" value="<?php echo $info['name'];?>" /></td>
+            <td style="text-align:left;"><input name="name" type="text" id="name" size="16" style="width:200px" value="<?php echo esc($info['name'], 'attr');?>" /></td>
           </tr>       
           <tr> 
             <td height="30">url:</td>
             <td style="text-align:left;">
 			    <!--<input type="file" name="url" value="" id="url" />-->
-			    <input type="text" name="url" value="<?php echo $info['url'];?>" size="80"/>
+			    <input type="text" name="url" value="<?php echo esc($info['url'], 'attr');?>" size="80"/>
             </td>
           </tr>
             <tr>
                 <td height="30">image url:</td>
                 <td style="text-align:left;">
                     <!--<input type="file" name="url" value="" id="url" />-->
-                    <input type="text" name="img_url" value="<?php echo $info['img_url'];?>" id="url" size="80"/>
+                    <input type="text" name="img_url" value="<?php echo esc($info['img_url'], 'attr');?>" id="url" size="80"/>
                 </td>
             </tr>
           <tr> 
@@ -61,11 +61,11 @@
           </tr>        
           <tr> 
             <td height="30">desc:</td>
-            <td style="text-align:left;"><input name="desc" type="text" id="desc" size="16" style="width:200px" value="<?php echo $info['desc'];?>" /></td>
+            <td style="text-align:left;"><input name="desc" type="text" id="desc" size="16" style="width:200px" value="<?php echo esc($info['desc'], 'attr');?>" /></td>
           </tr>        
           <tr> 
             <td height="30">seq:</td>
-            <td style="text-align:left;"><input name="seq" type="text" id="seq" size="16" style="width:200px"  value="<?php echo $info['seq'];?>"/></td>
+            <td style="text-align:left;"><input name="seq" type="text" id="seq" size="16" style="width:200px"  value="<?php echo esc($info['seq'], 'attr');?>"/></td>
           </tr> 
           <tr> 
             <td height="60">&nbsp;</td>

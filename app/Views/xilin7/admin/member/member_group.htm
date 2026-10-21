@@ -39,10 +39,10 @@
         <?php echo $v['id']?>
       </td>
       <td height="24">
-      	<?php echo $v['name']?>
+      	<?php echo esc($v['name'])?>
       </td>
       <td height="24"> 
-        <?php echo $v['description']?>
+        <?php echo esc($v['description'])?>
       </td>
       <td>
         <a href='<?=$_SESSION['admin_path']?>member/groupedit?id=<?php echo $v['id']?>'>edit</a> |

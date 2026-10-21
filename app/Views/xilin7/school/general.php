@@ -5,7 +5,7 @@
                 <div class="col-md-9">
                     <?php if (session()->get('error')) { ?>
                     <div class='alert alert-dismissable alert-success'>
-                    <?= session()->get('error');?>
+                    <?= esc(session()->get('error'));?>
                     </div>
                     <?php } ?>
                     <div class="heading4">

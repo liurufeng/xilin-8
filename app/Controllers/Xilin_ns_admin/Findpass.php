@@ -1,5 +1,7 @@
 <?php namespace App\Controllers\Xilin_ns_admin;
 
+use App\Libraries\Passwords;
+
 class Findpass extends MY_Controller
 {
 
@@ -28,19 +30,20 @@ class Findpass extends MY_Controller
   {
     $search = $this->request->getVar('search');
     if (isset($search) && trim($search) != '') {
+      $like = '%' . $this->db->escapeLikeString($search) . '%';
       $sql = "SELECT * FROM parents
-      WHERE email like '%$search%'
-      OR primary_en_name like '%$search%'
-      OR primary_cn_name like '%$search%'
-      OR primary_phone like '%$search%'
-      OR alter_en_name like '%$search%'
-      OR alter_cn_name like '%$search%'
-      OR alter_phone like '%$search%'
-      OR alter_contact_email like '%$search%'
-      OR address like '%$search%'
-      OR parent_id like '%$search%' ";
+      WHERE email like ? ESCAPE '!'
+      OR primary_en_name like ? ESCAPE '!'
+      OR primary_cn_name like ? ESCAPE '!'
+      OR primary_phone like ? ESCAPE '!'
+      OR alter_en_name like ? ESCAPE '!'
+      OR alter_cn_name like ? ESCAPE '!'
+      OR alter_phone like ? ESCAPE '!'
+      OR alter_contact_email like ? ESCAPE '!'
+      OR address like ? ESCAPE '!'
+      OR parent_id like ? ESCAPE '!' ";
 
-      $data['matches'] = $this->db->query($sql)->getResultArray();
+      $data['matches'] = $this->db->query($sql, array_fill(0, 10, $like))->getResultArray();
       if(count($data['matches']) == 0) {
         ShowMsg('No parents found!', $_SESSION['admin_path'].'findpass/index');
       }
@@ -50,6 +53,23 @@ class Findpass extends MY_Controller
     }
 
 
+  }
+
+  /**
+   * Sets a parent's password (passwords are stored as hashes, so they can't be looked up any more).
+   */
+  function setpass()
+  {
+    $parent_id = (int)$this->request->getPost('parent_id');
+    $pass = (string)$this->request->getPost('passwd');
+    if ($parent_id <= 0 || mb_strlen($pass) < Passwords::MIN_LENGTH) {
+      ShowMsg('Please type a new password of at least ' . Passwords::MIN_LENGTH . ' characters.', '-1');
+    }
+
+    $this->db->table('parents')
+      ->where('parent_id', $parent_id)
+      ->update(array('passwd' => Passwords::forStorage('parents', 'passwd', $pass, Passwords::parentLegacy($pass))));
+    ShowMsg('The new password of parent #' . $parent_id . ' is saved.', $_SESSION['admin_path'].'findpass/index');
   }
 
 }

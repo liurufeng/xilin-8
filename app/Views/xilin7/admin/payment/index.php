@@ -29,7 +29,7 @@
               <?php foreach($semesters as $semester) {?>
               <option value="<?=$semester['semester_id']?>" <?php if($semester['semester_id'] == $semester_id) {
                 echo 'selected';} ?> >
-                <?=$semester['semester_year']?> <?=$semester['semester_name']?>
+                <?=esc($semester['semester_year'])?> <?=esc($semester['semester_name'])?>
               </option>
               <?php } ?>
             </select>
@@ -63,12 +63,12 @@
             <tr>
               <td width="10%">
                 <div style="padding-top: 8px;">
-                  <a href="mailto:<?=$p['email']?>">Parent #<?=$p['parent_id']?><br><?=$p['primary_en_name']?></a>
-                  <br><?=$p['primary_phone']?>
-                  <br><?=$p['email']?>
+                  <a href="mailto:<?=esc($p['email'], 'attr')?>">Parent #<?=$p['parent_id']?><br><?=esc($p['primary_en_name'])?></a>
+                  <br><?=esc($p['primary_phone'])?>
+                  <br><?=esc($p['email'])?>
                   <br>
                   <br>
-                  <a href="/account/invoice/<?=$semester_id?>/<?=$p['parent_id']?>" class="button" target="_blank">Print Invoice</a>
+                  <a href="/account/invoice/<?=esc($semester_id, 'attr')?>/<?=$p['parent_id']?>" class="button" target="_blank">Print Invoice</a>
                 </div>
               </td>
               <td width="88%">
@@ -76,20 +76,20 @@
                   <tbody>
                   <?php foreach($students[$pk] as $sk => $s) {?>
                     <tr>
-                      <td width="10%"><?=$s['en_name']?> #<?=$s['student_id']?></td>
+                      <td width="10%"><?=esc($s['en_name'])?> #<?=$s['student_id']?></td>
                       <td width="90%">
                         <table width="100%" cellspacing="0" cellpadding="2" border="1" align="left">
                           <tbody>
                           <?php foreach($classes[$pk][$sk] as $ck => $c) {?>
                           <tr id="<?=$s['student_id']?>-<?=$c['class_id']?>">
-                            <td><?=$c['class_code']?> - <?=$c['class_name']?>
+                            <td><?=esc($c['class_code'])?> - <?=esc($c['class_name'])?>
                               <?php if($c['unregistered'] == 1) {?>
-                                <span style="color: red">Unregistered @<?=$c['update_time']?></span>
+                                <span style="color: red">Unregistered @<?=esc($c['update_time'])?></span>
                               <?php } else {?>
                               <input type="button" onclick="unregister(<?=$s['student_id']?>,<?=$c['class_id']?>,<?=$p['parent_id']?>);" value="Unregister">
                               <?php } ?>
                             </td>
-                            <td>$<?=$c['tuition']?>+$<?=$c['book_fee']?>+$<?=$c['material_fee']?></td>
+                            <td>$<?=esc($c['tuition'])?>+$<?=esc($c['book_fee'])?>+$<?=esc($c['material_fee'])?></td>
                           </tr>
                           <?php }?>
                           </tbody>
@@ -102,8 +102,8 @@
                     <td>
                         <table width="100%" cellspacing="0" cellpadding="2" border="1" align="left">
                             <tr style="background-color: <?= $pod[$pk]['missed'] > 0? '#FFEE00' : ''?>">
-                                <td>$<?php echo $reg_fee[$pk]; ?></td>
-                                <td><?= $late_fee[$pk] > 0 ? 'Late Fee: $'. $late_fee[$pk] : '' ?></td>
+                                <td>$<?php echo esc($reg_fee[$pk]); ?></td>
+                                <td><?= esc($late_fee[$pk] > 0 ? 'Late Fee: $'. $late_fee[$pk] : '') ?></td>
                             </tr>
                         </table>
                     </td>
@@ -114,12 +114,12 @@
                       <td>
                         <table width="100%" cellspacing="0" cellpadding="2" border="1" align="left">
                           <tr style="background-color: <?= $pod[$pk]['missed'] > 0? '#FFEE00' : ''?>">
-                            <td>Waiver: <?=$pod[$pk]['waiver']?></td>
-                            <td>Needed: <?=$pod[$pk]['need']?></td>
-                            <td>Done: <?=$pod[$pk]['done']?></td>
-                            <td>Manual Record: <?=$pod[$pk]['manually']?></td>
-                            <td>Missed: <?=$pod[$pk]['missed']?></td>
-                            <td>Penalty: <?=$pod[$pk]['penalty']?></td>
+                            <td>Waiver: <?=esc($pod[$pk]['waiver'])?></td>
+                            <td>Needed: <?=esc($pod[$pk]['need'])?></td>
+                            <td>Done: <?=esc($pod[$pk]['done'])?></td>
+                            <td>Manual Record: <?=esc($pod[$pk]['manually'])?></td>
+                            <td>Missed: <?=esc($pod[$pk]['missed'])?></td>
+                            <td>Penalty: <?=esc($pod[$pk]['penalty'])?></td>
                           </tr>
                         </table>
                       </td>
@@ -144,9 +144,9 @@
                           <td align="center">Discount</td>
                           <?php foreach($checks[$pk] as $check) { ?>
                             <td align="center">
-                              <?=$check['pay_type'] ? $check['pay_type'].'/' : ''?>
-                              <?=$check['pay_form'] ? $check['pay_form'].'/' : ''?>
-                              <?=$check['check_number'] ? $check['check_number'].'/' : ''?>
+                              <?=esc($check['pay_type'] ? $check['pay_type'].'/' : '')?>
+                              <?=esc($check['pay_form'] ? $check['pay_form'].'/' : '')?>
+                              <?=esc($check['check_number'] ? $check['check_number'].'/' : '')?>
                               <?=date("m.d.y",strtotime($check['check_date'])) ?>
                             </td>
                           <?php }?>
@@ -155,8 +155,8 @@
                             <select id="pay_type_<?=$pk?>" name="pay_type_<?=$pk?>">
                               <option value="">Pay Type</option>
                               <?php foreach($pay_types as $pt) {?>
-                                <option value="<?=$pt?>">
-                                  <?=$pt?>
+                                <option value="<?=esc($pt, 'attr')?>">
+                                  <?=esc($pt)?>
                                 </option>
                               <?php } ?>
                             </select>
@@ -165,8 +165,8 @@
                             <select id="pay_form_<?=$pk?>" name="pay_form_<?=$pk?>">
                               <option value="">Pay Form</option>
                               <?php foreach($pay_forms as $fm) {?>
-                                <option value="<?=$fm?>">
-                                  <?=$fm?>
+                                <option value="<?=esc($fm, 'attr')?>">
+                                  <?=esc($fm)?>
                                 </option>
                               <?php } ?>
                             </select>
@@ -176,15 +176,15 @@
                           </td>
                         </tr>
                         <tr>
-                          <td align="center"><?=$total[$pk]?></td>
-                          <td align="center"><?=$pod[$pk]['penalty']?></td>
-                          <td align="center" id="discount_<?=$pk?>" class="discount"><?=$discount[$pk]?></td>
+                          <td align="center"><?=esc($total[$pk])?></td>
+                          <td align="center"><?=esc($pod[$pk]['penalty'])?></td>
+                          <td align="center" id="discount_<?=$pk?>" class="discount"><?=esc($discount[$pk])?></td>
 
                           <?php $paid = 0;
                           foreach($checks[$pk] as $check) {
                             $paid += $check['check_amount'];
                             ?>
-                            <td align="center"><?=$check['check_amount']?></td>
+                            <td align="center"><?=esc($check['check_amount'])?></td>
                           <?php }
                             $total_paid += $paid;
                           ?>
@@ -192,7 +192,7 @@
                             <?php $balance = $total[$pk] + $pod[$pk]['penalty'] - $discount[$pk] - $paid;
                             $total_balance += $balance;
                             ?>
-                            <?=$balance?>
+                            <?=esc($balance)?>
                           </td>
                           <td align="center"><input type="text" id="check_money_<?=$pk?>" name="check_money_<?=$pk?>" size="6" placeholder="Amount"></td>
                           <td align="center">
@@ -200,7 +200,7 @@
                           </td>
                           <td align="center">
 
-                            <input type="submit" onclick="updateCheck('<?=$pk?>', '<?=$semester_id?>');" value="Update" name="update" class="update">
+                            <input type="submit" onclick="updateCheck('<?=$pk?>', '<?=(int) $semester_id?>');" value="Update" name="update" class="update">
                         </tr>
                         </tbody>
                       </table>
@@ -226,7 +226,7 @@
     <tr>
       <?php
       $grandTotal = $totalT + $podT - $discountT;?>
-      <td>Total</td><td><?=count($parents)?></td><td><?=$studentsT?></td><td><?=$classesT?></td><td><?=$grandTotal?> (<?=$tuition_totalT?> + <?=$book_totalT?> + <?=$material_totalT?> + <?=$podT?> + <?=$reg_feeT?> + <?=$late_feeT?> - <?=$discountT?>)</td><td><?=$total_paid?></td><td><?=$total_balance?></td>
+      <td>Total</td><td><?=count($parents)?></td><td><?=esc($studentsT)?></td><td><?=esc($classesT)?></td><td><?=esc($grandTotal)?> (<?=esc($tuition_totalT)?> + <?=esc($book_totalT)?> + <?=esc($material_totalT)?> + <?=esc($podT)?> + <?=esc($reg_feeT)?> + <?=esc($late_feeT)?> - <?=esc($discountT)?>)</td><td><?=esc($total_paid)?></td><td><?=esc($total_balance)?></td>
     </tr>
   </tbody>
 </table>

@@ -50,7 +50,7 @@ $picupurl = site_url('schooluser/edit');
                     <select id="semester_id" name="semester_id">
                         <?php foreach($semesters as $semester) {?>
                         <option value="<?=$semester['semester_id']?>" <?php if($semester['semester_id'] == $info['semester_id']) echo 'selected'; ?> >
-                        <?=$semester['semester_year']?> <?=$semester['semester_name']?>
+                        <?=esc($semester['semester_year'])?> <?=esc($semester['semester_name'])?>
                         </option>
                         <?php } ?>
                     </select>
@@ -62,22 +62,22 @@ $picupurl = site_url('schooluser/edit');
                     <select id="parent_id" name="parent_id">
                         <?php foreach($parents as $p) {?>
                         <option value="<?=$p['parent_id']?>" <?php if($info['parent_id'] == $p['parent_id']) echo 'selected'; ?> >
-                            <?=$p['parent_id']?> | <?=$p['email']?> | <?=$p['primary_en_name']?> | <?=$p['alter_en_name']?> | <?=$p['alter_contact_email']?>
+                            <?=$p['parent_id']?> | <?=esc($p['email'])?> | <?=esc($p['primary_en_name'])?> | <?=esc($p['alter_en_name'])?> | <?=esc($p['alter_contact_email'])?>
                         </option>
                         <?php } ?>
                     </select>
             </tr>
           <tr> 
             <td height="30"><span style="color:red;">*</span>Name:</td>
-            <td style="text-align:left;"><input name="name" type="text" id="name" size="16" style="width:200px"  value="<?php echo $info['name']?>"/></td>
+            <td style="text-align:left;"><input name="name" type="text" id="name" size="16" style="width:200px"  value="<?php echo esc($info['name'], 'attr')?>"/></td>
           </tr>       
           <tr> 
             <td height="30">Phone:</td>
-            <td style="text-align:left;"><input name="phone" type="text" id="phone" size="16" style="width:200px"  value="<?php echo $info['phone']?>"/></td>
+            <td style="text-align:left;"><input name="phone" type="text" id="phone" size="16" style="width:200px"  value="<?php echo esc($info['phone'], 'attr')?>"/></td>
           </tr>        
           <tr> 
             <td height="30">Email:</td>
-            <td style="text-align:left;"><input name="email" type="text" id="email" size="16" style="width:200px"  value="<?php echo $info['email']?>"/></td>
+            <td style="text-align:left;"><input name="email" type="text" id="email" size="16" style="width:200px"  value="<?php echo esc($info['email'], 'attr')?>"/></td>
           </tr>      
           <tr> 
             <td height="30">Type:</td>
@@ -91,7 +91,7 @@ $picupurl = site_url('schooluser/edit');
 						if($v['id'] == $info['id']){
 							$selected="selected";
 						}
-						echo "<option value='".$v['id']."' $selected>".$v['ename']."</option>\r\n";
+						echo "<option value='".$v['id']."' $selected>".esc($v['ename'])."</option>\r\n";
 					}
 					}
 			  	?>
@@ -107,7 +107,7 @@ $picupurl = site_url('schooluser/edit');
           </tr>
         <tr>
           <td height="30">Show Order:</td>
-          <td style="text-align:left;"><input name="show_order" type="text" id="show_order" size="16" style="width:200px"  value="<?php echo $info['show_order']?>"/></td>
+          <td style="text-align:left;"><input name="show_order" type="text" id="show_order" size="16" style="width:200px"  value="<?php echo esc($info['show_order'], 'attr')?>"/></td>
         </tr>
         <tr>
             <td height="30">Image:</td>
@@ -129,16 +129,16 @@ $picupurl = site_url('schooluser/edit');
          	 <td height="30">&nbsp;</td>
          	 <td>
          	 	<?php if($info['image']){?>
-         	 		<div id='divpicview' class='divpre'><img src="<?php echo $info['image']?>" alt="" /></div>
+         	 		<div id='divpicview' class='divpre'><img src="<?php echo esc($info['image'], 'attr')?>" alt="" /></div>
          	 	<?php }else{?>
      	 	        <div id='divpicview' class='divpre'></div>
          	 	<?php }?>
-         	 	<input type="hidden"  value="<?php echo $info['image']?>" id="icon" name="icon" />
+         	 	<input type="hidden"  value="<?php echo esc($info['image'], 'attr')?>" id="icon" name="icon" />
          	 </td>
           </tr>          
           <tr> 
             <td height="30">desc:</td>
-            <td style="text-align:left;"><input name="desc" type="text" id="desc" size="16" style="width:200px"  value="<?php echo $info['desc']?>"/></td>
+            <td style="text-align:left;"><input name="desc" type="text" id="desc" size="16" style="width:200px"  value="<?php echo esc($info['desc'], 'attr')?>"/></td>
           </tr>
           <tr> 
             <td height="60">&nbsp;</td>

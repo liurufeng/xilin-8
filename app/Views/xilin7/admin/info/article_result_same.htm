@@ -84,11 +84,11 @@ a {
     </td>
   </tr>
   <form name="form2" method="POST" action="article_test_same.php">
-   <input type='hidden' name='deltype' value='<?php echo $deltype; ?>' />
+   <input type='hidden' name='deltype' value='<?php echo esc($deltype, 'attr'); ?>' />
    <input type='hidden' name='dopost' value='delsel' />
-   <input type='hidden' name='pagesize' value='<?php echo $pagesize; ?>' />
-   <input type='hidden' name='channelid' value='<?php echo $channelid; ?>' />
-   <input type='hidden' name='maintable' value='<?php echo $maintable; ?>' />
+   <input type='hidden' name='pagesize' value='<?php echo esc($pagesize, 'attr'); ?>' />
+   <input type='hidden' name='channelid' value='<?php echo esc($channelid, 'attr'); ?>' />
+   <input type='hidden' name='maintable' value='<?php echo esc($maintable, 'attr'); ?>' />
    <input type='hidden' name='titles' value='' />
   <tr bgcolor="#F8FBFB" height="24" align="center">
     <td width="9%"> 选择 </td>
@@ -107,11 +107,11 @@ a {
     <td>
     <?php
      $allarc += $row['dd'];
-     echo $row['dd'];
+     echo esc($row['dd']);
     ?>
     </td>
     <td>
-    	<?php echo $row['title']; ?>
+    	<?php echo esc($row['title']); ?>
     </td>
   </tr>
  <?php
@@ -126,7 +126,7 @@ a {
      &nbsp;
      <input type='button' name='bt3' value='删除' onclick='delArc()' />
      &nbsp;
-     (共有 <?php echo $allarc; ?> 篇重复标题的文档！)
+     (共有 <?php echo esc($allarc); ?> 篇重复标题的文档！)
    </td>
  </tr>
 </form>

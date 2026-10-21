@@ -2,6 +2,7 @@
 namespace App\Controllers\Xilin_ns_admin;
 
 use App\Controllers\BaseController;
+use CodeIgniter\HTTP\Exceptions\RedirectException;
 /*
  *
  */
@@ -84,8 +85,9 @@ class MY_Controller extends BaseController
 		}
 		else
 		{
-			$currenturl = current_url();
-      return redirect()->to(site_url('/login').'?back='.$currenturl);
+			// called from the constructors, where a returned redirect would be ignored (the filter admin in
+			// Config/Routes.php checks first; this stays for pages reached another way)
+			throw new RedirectException(redirect()->to('/Xilin_ns_admin/login'));
 		}
 		
 		// 权限检测

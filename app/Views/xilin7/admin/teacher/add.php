@@ -12,11 +12,6 @@
 	     document.form1.email.focus();
 	     return false;
      }
-     if(document.form1.passwd.value==""){
-	     alert("teacher's password is not null！");
-	     document.form1.passwd.focus();
-	     return false;
-     }
      if(document.form1.en_name.value==""){
 	     alert("teacher's English Name is not null！");
 	     document.form1.en_name.focus();
@@ -52,10 +47,6 @@
             <td width="84%"  style="text-align:left;"><input name="email" type="text" id="email" size="16" style="width:200px" /></td>
           </tr>
           <tr> 
-            <td height="30"><span style="color:red;">*</span>Password：</td>
-            <td style="text-align:left;"><input name="passwd" type="password" id="passwd" size="16" style="width:200px" /></td>
-          </tr>
-          <tr> 
             <td height="30"><span style="color:red;">*</span>English Name：</td>
             <td style="text-align:left;"><input name="en_name" type="text" id="en_name" size="16" style="width:200px" /></td>
           </tr>
@@ -67,7 +58,7 @@
 				if($groupList){
 					foreach($groupList as $k=>$v)
 					{
-						echo "<option value='".$v['id']."'>".$v['ename']."</option>\r\n";
+						echo "<option value='".$v['id']."'>".esc($v['ename'])."</option>\r\n";
 					}
 					}
 			  	?>

@@ -41,6 +41,7 @@ class Info extends MY_Controller
     $cid = empty($cid) ? $this->request->getVar('reid') ? (int)$this->request->getVar('reid') : '' : $cid;
     $data['cid'] = $cid;
     $addurl = $addsql = '';
+    $binds = [];
 
     if ($cid) {
       $addsql .= " and unitid = $cid";
@@ -50,18 +51,20 @@ class Info extends MY_Controller
     }
     $keyword = $this->request->getVar('keyword') ? $this->request->getVar('keyword') : '';
     if ($keyword) {
-      $addsql .= " and title like '%$keyword%' ";
-      $addurl .= "&keyword=" . $keyword;
+      $addsql .= " and title like ? ESCAPE '!' ";
+      $binds[] = '%' . $this->db->escapeLikeString($keyword) . '%';
+      $addurl .= "&keyword=" . urlencode($keyword);
     }
     $flag = $this->request->getVar('flag') ? $this->request->getVar('flag') : '';
     if ($flag) {
-      $addsql .= " and  flag like '%$flag%' ";
-      $addurl .= "&flag=" . $flag;
+      $addsql .= " and  flag like ? ESCAPE '!' ";
+      $binds[] = '%' . $this->db->escapeLikeString($flag) . '%';
+      $addurl .= "&flag=" . urlencode($flag);
     }
     $sql = "SELECT 1 FROM archives 
 	  		    WHERE status <> '2' and status <> '3' $addsql
 	  		    ";
-    $rst = $this->db->query($sql)->getResultArray();
+    $rst = $this->db->query($sql, $binds)->getResultArray();
 
     helper('page');
     isset($_GET['page']) ? $page = (int)$_GET['page'] : $page = '0';
@@ -78,7 +81,7 @@ class Info extends MY_Controller
 				order by senddate desc, id desc 
 				LIMIT $beginpages,$page_size ";
 
-     $rst = $this->db->query($sql);
+     $rst = $this->db->query($sql, $binds);
     $data['lists'] = $rst->getResultArray();
     $statusarr = array(
       '0' => '未发布',
@@ -133,7 +136,7 @@ class Info extends MY_Controller
       $insertdata['keywords'] = $this->request->getVar('keywords');
       $insertdata['senddate'] = strtotime($this->request->getVar('pubdate'));
       $insertdata['company'] = 0; //',' . implode(',', $this->request->getVar('company')) . ',';
-      echo $this->request->getVar('pubdate');
+      echo esc($this->request->getVar('pubdate'));
       $insertdata['description'] = $this->request->getVar('description');
       $editorValue = $this->request->getVar('editorValue');
       //自动提取摘要 description
@@ -170,14 +173,14 @@ class Info extends MY_Controller
       $this->db->table('addonarticle')
         ->insert($addarc);
 
-      $cid = $insertdata['unitid'];
+      $cid = (int)$insertdata['unitid'];
       ShowMsg('添加成功', $_SESSION['admin_path'].'info/index' . '?cid=' . $cid, 0, 1000);
     }
 //    $sql = "select * from company
 //    where status = 1 order by sort DESC ";
 //    $data['company'] = $this->db->query($sql)->getResultArray();
     $data['company'] = 0;
-    $cid = $this->request->getVar('cid');
+    $cid = (int)$this->request->getVar('cid');
     if (empty($cid)) {
       ShowMsg('栏目id不能为空', $_SESSION['admin_path'].'info/index', 0, 1000);
     }
@@ -275,7 +278,7 @@ class Info extends MY_Controller
         ->where($addwhere)
         ->update($addarc);
 
-      ShowMsg('编辑成功', $_SESSION['admin_path'].'info/index' . '?cid=' . $this->request->getVar('reid'), 0, 1000);
+      ShowMsg('编辑成功', $_SESSION['admin_path'].'info/index' . '?cid=' . (int)$this->request->getVar('reid'), 0, 1000);
     }
     //$aid = $this->uri->segment(3);
     $uri = service('uri');
@@ -313,7 +316,7 @@ class Info extends MY_Controller
     $ainfo_body = is_array($ainfo) && $ainfo['body'] ? $ainfo['body'] : '';
     $data['c'] = $ueditor->getueditor('other', '100', '100', 'utf-8', $ainfo_body);
 
-    $cid = is_array($ainfo) && $ainfo['unitid'] ? $ainfo['unitid'] : 0; // $ainfo['unitid'];
+    $cid = is_array($ainfo) && $ainfo['unitid'] ? (int)$ainfo['unitid'] : 0; // $ainfo['unitid'];
     $data['cid'] = $cid;
     $sql = "SELECT channeltypeid FROM arctype where id = $cid";
     $arctypeinfo = $this->db->query($sql)->getRowArray();
@@ -499,7 +502,7 @@ class Info extends MY_Controller
         $modelv_model = new Modelv_model();
         $info_model =  new Info_model();
 
-        $cid = $this->request->getVar('cid');
+        $cid = (int)$this->request->getVar('cid');
         $result = $typeunit_model->getChildList(0);
         $url = $result[$cid]['url'];
 
@@ -514,9 +517,9 @@ class Info extends MY_Controller
             $info_model->search_api($v['id'], $v, 'delete');
             // 修改栏目id和url
             $sql = "update archives
-		    					set unitid = '$cid',url = '$url' 
-		            			WHERE id = " . $v['id'];
-            $this->db->query($sql);
+		    					set unitid = ?,url = ? 
+		            			WHERE id = ?";
+            $this->db->query($sql, [$cid, $url, (int)$v['id']]);
             $sql = "select * from archives
 		            			WHERE id = " . $v['id'];
             // 创建搜索
@@ -581,6 +584,10 @@ class Info extends MY_Controller
   function archives_do()
   {
     $type = $this->request->getVar('type') ? $this->request->getVar('type') : 'divpicview';
+    // $type is echoed into JS below: only allow known element ids
+    if (!in_array($type, ['divpicview', 'divpicview2', 'divpicsview'], true)) {
+      $type = 'divpicview';
+    }
     if ($type == 'divpicview2') {
       $picname = 'picname2';
       $filename = 'litpic2';
@@ -694,8 +701,8 @@ class Info extends MY_Controller
     } else {
       $val = time();
     }
-    $sql = "update archives set sortrank =" . $_GET['val'] . ",topdate=" . $val . " where id = " . $_GET['id'] . "";
-    $id = $this->db->query($sql);
+    $sql = "update archives set sortrank = ?, topdate = ? where id = ?";
+    $id = $this->db->query($sql, [(int)$_GET['val'], (int)$val, (int)$_GET['id']]);
     if ($id) {
       echo "11";
     }

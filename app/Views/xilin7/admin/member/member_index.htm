@@ -33,11 +33,11 @@
   </tr>
   <?php foreach($list as $k=>$v){ ?>
   <tr align="center" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
-    <td><?php echo $v['username']?></td>
-    <td><?php echo $v['realname']?></td>
-    <td><?php echo $v['name']?></td>
+    <td><?php echo esc($v['username'])?></td>
+    <td><?php echo esc($v['realname'])?></td>
+    <td><?php echo esc($v['name'])?></td>
     <td align="left">
-	login num：<?php echo $v['loginCount']?> <br />
+	login num：<?php echo esc($v['loginCount'])?> <br />
 	login time：<?php echo date('Y-m-d H:i:s',$v['lastLoginTime'])?><br />
 	login  IP：<?php echo long2ip($v['lastLoginIp'])?><br />
 	</td>

@@ -19,9 +19,9 @@
     <div class="container-wrapper">
       <div class="container">
         <form action="<?php echo site_url('homework/submit_hw')?>" method="POST">
-          <input type="hidden" name="homework_id" value="<?= $homework_id?>">
-          <input type="hidden" name="class_id" value="<?=$class_id?>">
-          <input type="hidden" name="student_id" value="<?=$student_id?>">
+          <input type="hidden" name="homework_id" value="<?= esc($homework_id, 'attr')?>">
+          <input type="hidden" name="class_id" value="<?=esc($class_id, 'attr')?>">
+          <input type="hidden" name="student_id" value="<?=esc($student_id, 'attr')?>">
           <div class="row">
             <?php echo view($_SESSION['tm'].'uc/account_header.php') ?>
             <div style="clear:both;"></div>
@@ -36,30 +36,30 @@
                   <tr>
                     <td style="text-align:right;">Class:</td>
                     <td style="padding:3px; text-align:left;">
-                      <?=$c['class_name']?> (<?=$c['class_code']?> <?=$c['meeting_time']?>)
+                      <?=esc($c['class_name'])?> (<?=esc($c['class_code'])?> <?=esc($c['meeting_time'])?>)
                     </td>
                   </tr>
 
                   <tr>
                     <td style="text-align:right;">Homework Title:</td>
-                    <td style="padding:3px;"><?= $h['title'] ?></td>
+                    <td style="padding:3px;"><?= esc($h['title']) ?></td>
                   </tr>
 
                   <tr>
                     <td style="text-align:right;">Notes:</td>
                     <td style="padding:3px;">
-                      <?= $h['note'] ?>
+                      <?= esc($h['note']) ?>
                     </td>
                   </tr>
 
                   <tr>
                     <td style="text-align:right;">Homework Link:</td>
-                    <td style="padding:3px;"><?= $h['link'] ?></td>
+                    <td style="padding:3px;"><?= esc($h['link']) ?></td>
                   </tr>
 
                   <tr>
                     <td style="text-align:right;">Due Date:</td>
-                    <td style="padding:3px;"><?= $h['due_date'] ?></td>
+                    <td style="padding:3px;"><?= esc($h['due_date']) ?></td>
                   </tr>
 
                   <tr>
@@ -108,7 +108,7 @@
                   <input type="email" name="email" class="form-control" placeholder="Email" required>
                 </div>
                 <div class="form-group">
-                  <input type="password" name="password" class="form-control" placeholder="Password"
+                  <input type="password" name="password" autocomplete="current-password" class="form-control" placeholder="Password"
                          required>
                 </div>
                 <button type="submit" class="btn btn-primary">LOGIN</button>

@@ -33,9 +33,9 @@
   <?php foreach($event_dates as $k=>$v){ ?>
   <tr align="center" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
     <td><?php echo $v['event_date_id']?></td>
-    <td><?php echo $v['year']?></td>
+    <td><?php echo esc($v['year'])?></td>
     <td><?php echo $v['month']+1?></td>
-    <td><?php echo $v['date']?></td>
+    <td><?php echo esc($v['date'])?></td>
     <td>
 		<a href='<?=$_SESSION['admin_path']?>event_dates/editEventDate?eid=<?php echo $v['event_date_id']?>'><u>edit</u></a> |
 		<a href='<?=$_SESSION['admin_path']?>event_dates/deleteEventDate?eid=<?php echo $v['event_date_id']?>' onclick="return confirm('Are you sure to delete this event?')"><u>delete</u></a>

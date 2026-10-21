@@ -16,7 +16,7 @@
             <select id="semester_id" name="semester_id" onchange="submit();">
               <?php foreach($semesters as $semester) {?>
               <option value="<?=$semester['semester_id']?>" <?php if($semester['semester_id'] == session()->get('semester_id')) echo 'selected'; ?> >
-                <?=$semester['semester_year']?> <?=$semester['semester_name']?>
+                <?=esc($semester['semester_year'])?> <?=esc($semester['semester_name'])?>
               </option>
               <?php } ?>
             </select>
@@ -28,7 +28,7 @@
               <select id="from_semester_id" name="from_semester_id">
                 <?php foreach($semesters as $semester) {?>
                   <option value="<?=$semester['semester_id']?>" <?php if($semester['semester_id'] == session()->get('semester_id')) echo 'selected'; ?> >
-                    <?=$semester['semester_year']?> <?=$semester['semester_name']?>
+                    <?=esc($semester['semester_year'])?> <?=esc($semester['semester_name'])?>
                   </option>
                 <?php } ?>
               </select>
@@ -37,7 +37,7 @@
               <?php foreach($semesters as $semester) {
                 if($semester['semester_status'] == 'Future') {?>
                 <option value="<?=$semester['semester_id']?>" <?php if($semester['semester_id'] == session()->get('semester_id')) echo 'selected'; ?> >
-                  <?=$semester['semester_year']?> <?=$semester['semester_name']?>
+                  <?=esc($semester['semester_year'])?> <?=esc($semester['semester_name'])?>
                 </option>
               <?php } } ?>
             </select>
@@ -63,18 +63,18 @@
     <td width="10%" align="center">operation</td>
   </tr>
 <?php foreach ($subjects as $subject) { ?>
-    <tr><td colspan="9"><?= $subject['subject_name'] ?></td></tr>
+    <tr><td colspan="9"><?= esc($subject['subject_name']) ?></td></tr>
   <?php foreach($list as $k=>$v){
     if ($v['subject_id'] == $subject['subject_id']) {?>
   <tr align="center" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
-    <td><?= $v['meeting_time'] ?></td>
-    <td><?php echo $v['class_name']?></td>
-    <td><?php echo $v['notes']?></td>
-    <td><?php echo $v['teacher']?></td>
+    <td><?= esc($v['meeting_time']) ?></td>
+    <td><?php echo esc($v['class_name'])?></td>
+    <td><?php echo esc($v['notes'])?></td>
+    <td><?php echo esc($v['teacher'])?></td>
     <td>$<?php echo round($v['tuition'])?>+<?php echo round($v['book_fee'])?>+<?= round($v['material_fee']) ?></td>
     <td>$<?= round($v['late_tuition']) ?>+<?= round($v['late_book_fee']) ?>+<?= round($v['material_fee'])
       ?></td>
-    <td><?= $v['classroom'] ?></td>
+    <td><?= esc($v['classroom']) ?></td>
     <td>
 		<a href='<?=$_SESSION['admin_path']?>classes/edit?class_id=<?php echo $v['class_id']?>'><u>edit</u></a> |
     <a href='<?=$_SESSION['admin_path']?>classes/copy?class_id=<?php echo $v['class_id']?>'><u>copy</u></a> |

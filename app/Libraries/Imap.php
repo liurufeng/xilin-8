@@ -501,6 +501,15 @@ class CI_Imap {
     ];
     if ($tmp_path != '')
     {
+      // the attachment name comes from the email sender: drop any path and
+      // never write script/web-executable extensions into $tmp_path
+      $filename = basename(strtr((string) $filename, "\\", '/'));
+      if ($filename === '' || $filename[0] === '.'
+        || preg_match('/\.(php\d*|phtml|phar|pht|phps)(\.|$)/i', $filename)
+        || preg_match('/\.(htaccess|html?|shtml|svg|js|cgi|pl|asp|aspx|jsp)$/i', $filename))
+      {
+        $filename = bin2hex(random_bytes(8)) . '.bin';
+      }
       $file['content'] = $tmp_path . $filename;
       $fp = fopen($file['content'], 'wb');
       fwrite($fp, $message);

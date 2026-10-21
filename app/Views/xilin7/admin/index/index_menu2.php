@@ -139,7 +139,7 @@ a.mm:hover div {
 	?>
 	<!-- Item * Strat -->
 	<dl id="sunitems<?php echo $v2['id']?>_<?php echo $k?>" class="bitem">
-	<dt onclick="showHide(&quot;items<?php echo $v2['id']?>_<?php echo $k?>&quot;)"><b><?php echo $v2['name']?></b></dt>
+	<dt onclick="showHide(&quot;items<?php echo $v2['id']?>_<?php echo $k?>&quot;)"><b><?php echo esc($v2['name'])?></b></dt>
 	<dd id="items<?php echo $v2['id']?>_<?php echo $k?>" class="sitem" style="display:none">
 	<ul class="sitemu">
 		<?php 
@@ -148,7 +148,7 @@ a.mm:hover div {
 			foreach ($v2['child'] as $k3=>$v3)
 			{ 
 			?>
-			<li><a target="main" href="<?php echo $v3['url']?>" title="<?php echo $v3['name']?>"><?php echo $v3['name']?></a>
+			<li><a target="main" href="<?php echo esc($v3['url'], 'attr')?>" title="<?php echo esc($v3['name'], 'attr')?>"><?php echo esc($v3['name'])?></a>
 			</li>
 			<?php 
 			}
@@ -176,97 +176,97 @@ a.mm:hover div {
   if(is_array($auth) && in_array($v['id'], session()->get('authorized_nodes'))) {
     ?>
 	<dl id="sunitems<?php echo $v['id']?>_9999" class="bitem">
-	<dt onclick="showHide(&quot;items<?php echo $v['id']?>_9999&quot;)"><b><?php echo $v['typename']?></b></dt>
+	<dt onclick="showHide(&quot;items<?php echo $v['id']?>_9999&quot;)"><b><?php echo esc($v['typename'])?></b></dt>
 	<dd id="items<?php echo $v['id']?>_9999" class="sitem" style="display:none">
 	<ul class="sitemu">
 		<?php foreach($v['child'] as $key=>$val){
       if(in_array($val['id'], session()->get('authorized_nodes')) && $val['active'] > 0) {
       if($val['typename'] == "Teachers"){?>
-      <li><a target="main" href="<?=$_SESSION['admin_path']?>teacher/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+      <li><a target="main" href="<?=$_SESSION['admin_path']?>teacher/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['typename'] == "Calendar"){?>
-      <li><a target="main" href="<?=$_SESSION['admin_path']?>calendar/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+      <li><a target="main" href="<?=$_SESSION['admin_path']?>calendar/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['typename'] == "Semester"){?>
-      <li><a target="main" href="<?=$_SESSION['admin_path']?>semester/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+      <li><a target="main" href="<?=$_SESSION['admin_path']?>semester/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['typename'] == "Subjects"){?>
-      <li><a target="main" href="<?=$_SESSION['admin_path']?>subjects/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+      <li><a target="main" href="<?=$_SESSION['admin_path']?>subjects/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['typename'] == "Classes"){?>
-      <li><a target="main" href="<?=$_SESSION['admin_path']?>classes/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+      <li><a target="main" href="<?=$_SESSION['admin_path']?>classes/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['typename'] == "Sponsor Level"){?>
-      <li><a target="main" href="<?=$_SESSION['admin_path']?>sponsorlevel/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+      <li><a target="main" href="<?=$_SESSION['admin_path']?>sponsorlevel/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['typename'] == "Sponsors Info"){?>
-      <li><a target="main" href="<?=$_SESSION['admin_path']?>sponsorinfo/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+      <li><a target="main" href="<?=$_SESSION['admin_path']?>sponsorinfo/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['typename'] == "Sponsor Payments"){?>
-      <li><a target="main" href="<?=$_SESSION['admin_path']?>sponsorpayments/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+      <li><a target="main" href="<?=$_SESSION['admin_path']?>sponsorpayments/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['id'] == "50"){?>
-      <li><a target="main" href="<?=$_SESSION['admin_path']?>schooluser/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+      <li><a target="main" href="<?=$_SESSION['admin_path']?>schooluser/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['typename'] == "Admin Groups"){?>
-      <li><a target="main" href="<?=$_SESSION['admin_path']?>member/group?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+      <li><a target="main" href="<?=$_SESSION['admin_path']?>member/group?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['typename'] == "Admin Users"){?>
-      <li><a target="main" href="<?=$_SESSION['admin_path']?>member/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+      <li><a target="main" href="<?=$_SESSION['admin_path']?>member/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['id'] == "82"){?>
-      <li><a target="main" href="<?=$_SESSION['admin_path']?>pod/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+      <li><a target="main" href="<?=$_SESSION['admin_path']?>pod/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['typename'] == "Newsletters"){?>
-      <li><a target="main" href="<?=$_SESSION['admin_path']?>newsletters/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+      <li><a target="main" href="<?=$_SESSION['admin_path']?>newsletters/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['id'] == "89"){?>
-        <li><a target="main" href="<?=$_SESSION['admin_path']?>classstudents/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+        <li><a target="main" href="<?=$_SESSION['admin_path']?>classstudents/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['id'] == "90"){?>
-        <li><a target="main" href="<?=$_SESSION['admin_path']?>teacherstudents/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+        <li><a target="main" href="<?=$_SESSION['admin_path']?>teacherstudents/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['id'] == "91"){?>
-        <li><a target="main" href="<?=$_SESSION['admin_path']?>parentemails/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+        <li><a target="main" href="<?=$_SESSION['admin_path']?>parentemails/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['id'] == "92"){?>
-        <li><a target="main" href="<?=$_SESSION['admin_path']?>findpass/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+        <li><a target="main" href="<?=$_SESSION['admin_path']?>findpass/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['id'] == "93"){?>
-        <li><a target="main" href="<?=$_SESSION['admin_path']?>failedpod/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+        <li><a target="main" href="<?=$_SESSION['admin_path']?>failedpod/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['id'] == "94"){?>
-        <li><a target="main" href="<?=$_SESSION['admin_path']?>manualpod/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+        <li><a target="main" href="<?=$_SESSION['admin_path']?>manualpod/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['typename'] == "POD Reports"){?>
-        <li><a target="main" href="<?=$_SESSION['admin_path']?>podreports/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+        <li><a target="main" href="<?=$_SESSION['admin_path']?>podreports/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['id'] == "96"){?>
-        <li><a target="main" href="<?=$_SESSION['admin_path']?>payment/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+        <li><a target="main" href="<?=$_SESSION['admin_path']?>payment/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['id'] == "98"){?>
-        <li><a target="main" href="<?=$_SESSION['admin_path']?>payment/todate?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+        <li><a target="main" href="<?=$_SESSION['admin_path']?>payment/todate?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['id'] == "99"){?>
-        <li><a target="main" href="<?=$_SESSION['admin_path']?>event_dates/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+        <li><a target="main" href="<?=$_SESSION['admin_path']?>event_dates/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['id'] == "100"){?>
-        <li><a target="main" href="<?=$_SESSION['admin_path']?>podwaiver/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+        <li><a target="main" href="<?=$_SESSION['admin_path']?>podwaiver/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['id'] == "101"){?>
-        <li><a target="main" href="<?=$_SESSION['admin_path']?>discounter/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+        <li><a target="main" href="<?=$_SESSION['admin_path']?>discounter/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['id'] == "102"){?>
-        <li><a target="main" href="<?=$_SESSION['admin_path']?>payment/online?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+        <li><a target="main" href="<?=$_SESSION['admin_path']?>payment/online?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['id'] == "103"){?>
-        <li><a target="main" href="<?=$_SESSION['admin_path']?>email_list/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+        <li><a target="main" href="<?=$_SESSION['admin_path']?>email_list/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       elseif($val['id'] == "120"){?>
-        <li><a target="main" href="<?=$_SESSION['admin_path']?>roster/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+        <li><a target="main" href="<?=$_SESSION['admin_path']?>roster/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       else{?>
-      <li><a target="main" href="<?=$_SESSION['admin_path']?>info/index?cid=<?php echo $val['id']?>" title="<?php echo $val['typename']?>"><?php echo leftStr2($val['typename'],16)?></a></li>
+      <li><a target="main" href="<?=$_SESSION['admin_path']?>info/index?cid=<?php echo $val['id']?>" title="<?php echo esc($val['typename'], 'attr')?>"><?php echo esc(leftStr2($val['typename'],16))?></a></li>
       <?php }
       }
     }?>

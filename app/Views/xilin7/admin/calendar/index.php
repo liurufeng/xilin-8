@@ -34,13 +34,13 @@
   <?php foreach($list as $k=>$v){ ?>
   <tr align="center" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
     <td><?php echo $v['calendar_id']?></td>
-    <td><?php echo $v['semester_name'] .' '.$v['semester_year'];?></td>
-    <td><?php echo $v['header']?></td>
-    <td><?php echo $v['date']?></td>
-    <td><?php echo $v['session']?></td>
-    <td><?php echo $v['note']?></td>
+    <td><?php echo esc($v['semester_name'] .' '.$v['semester_year']);?></td>
+    <td><?php echo esc($v['header'])?></td>
+    <td><?php echo esc($v['date'])?></td>
+    <td><?php echo esc($v['session'])?></td>
+    <td><?php echo esc($v['note'])?></td>
     <td><?php if($v['calendar_show_flag'] > 0 ) { echo "yes";} else { echo "no";}?></td>
-    <td><?php echo $v['show_order']?></td>
+    <td><?php echo esc($v['show_order'])?></td>
     <td>
 		<a href='<?=$_SESSION['admin_path']?>calendar/edit?calendar_id=<?php echo $v['calendar_id']?>'><u>edit</u></a> |
     <a href='<?=$_SESSION['admin_path']?>calendar/copy?calendar_id=<?php echo $v['calendar_id']?>'><u>copy</u></a> |

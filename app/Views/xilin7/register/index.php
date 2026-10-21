@@ -33,7 +33,7 @@
                               </tr>
                                 <tr>
                                     <td style="text-align:right;"><span style="color:red;">*</span>Password:</td>
-                                    <td style="padding:3px;"><input type="password" value="" name="passwd"
+                                    <td style="padding:3px;"><input type="password" value="" name="passwd" autocomplete="new-password"
                                                                     style="width:300px; margin-left:20px;"/></td>
                                 </tr>
                                 <tr>

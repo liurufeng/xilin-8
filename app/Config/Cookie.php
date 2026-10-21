@@ -63,7 +63,7 @@ class Cookie extends BaseConfig
      *
      * Cookie will only be accessible via HTTP(S) (no JavaScript).
      */
-    public bool $httponly = true;
+    public bool $httponly = false; // the page script reads the CSRF cookie (public/common/js/csrf.js); CodeIgniter 4 always makes the session cookie HttpOnly
 
     /**
      * --------------------------------------------------------------------------
@@ -104,4 +104,14 @@ class Cookie extends BaseConfig
      * @see https://tools.ietf.org/html/rfc2616#section-2.2
      */
     public bool $raw = false;
+
+    public function __construct()
+    {
+        require_once __DIR__ . '/xilin_environment.php';
+
+        parent::__construct();
+
+        // cookies only over HTTPS once the site is reached over HTTPS
+        $this->secure = xilin_is_https();
+    }
 }

@@ -17,11 +17,6 @@
 	     document.form1.realname.focus();
 	     return false;
      }
-     if(document.form1.pwd.value==""){
-	     alert("password is not null！");
-	     document.form1.pwd.focus();
-	     return false;
-     }
      return true;
  }
 </script>
@@ -45,16 +40,16 @@
   <table width="98%" border="0" cellspacing="1" cellpadding="1">
           <tr> 
             <td width="16%" height="30">name：</td>
-            <td width="84%"  style="text-align:left;"><input name="username" type="text" id="username" size="16" style="width:200px" value="<?php echo $info['name'];?>"/>
+            <td width="84%"  style="text-align:left;"><input name="username" type="text" id="username" size="16" style="width:200px" value="<?php echo esc($info['name'], 'attr');?>"/>
     		</td>
           </tr>
           <tr> 
             <td height="30">real name：</td>
-            <td style="text-align:left;"><input name="realname" type="text" id="realname" size="16" style="width:200px" value="<?php echo $info['realname'];?>"/></td>
+            <td style="text-align:left;"><input name="realname" type="text" id="realname" size="16" style="width:200px" value="<?php echo esc($info['realname'], 'attr');?>"/></td>
           </tr>
           <tr> 
             <td height="30">password：</td>
-            <td style="text-align:left;"><input name="pwd" type="password" id="pwd" size="16" style="width:200px" value="<?php echo $info['pass'];?>"/> </td>
+            <td style="text-align:left;"><input name="pwd" type="password" id="pwd" size="16" style="width:200px" value="" placeholder="leave blank to keep" autocomplete="new-password"/> </td>
           </tr>
           <tr> 
             <td height="30">admin group：</td>
@@ -68,7 +63,7 @@
 						if($v['id'] == $info['group_id']){
 							$selected = "selected";
 						}
-						echo "<option value='".$v['id']."' $selected>".$v['name']."</option>\r\n";
+						echo "<option value='".$v['id']."' $selected>".esc($v['name'])."</option>\r\n";
 					}
 					}
 			  	?>

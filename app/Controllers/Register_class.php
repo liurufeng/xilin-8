@@ -23,7 +23,9 @@ class Register_class extends BaseController
     $this->sess = session();
     if (session()->get('userresult')) {
       $this->parent_id = session()->get('userresult')[0]['parent_id'];
-    } else if (isset($_GET['pid']) && !empty($_GET['pid'])) {
+    } else if (isset($_GET['pid']) && !empty($_GET['pid'])
+      && session()->get('id') && session()->get('group_id') && session()->get('name')) {
+      // acting on behalf of a parent is for admins only
       $this->parent_id = $_GET['pid'];
     } else {
       $this->parent_id = session()->get('userresult')[0]['parent_id'];
@@ -81,6 +83,13 @@ class Register_class extends BaseController
     $current_semester_id = session()->get('current_semester')['semester_id'];
     $class_id = $this->request->getVar('class_id');
 
+    // the posted student must be the verified student from stdid
+    if ((string)$this->request->getVar('student_id') !== (string)$this->student_id) {
+      $resp = array('success' => FALSE, 'msg' => 'Parent and student do not match!');
+      sendJson($resp);
+      return;
+    }
+
     //update parent table of agreed
     if($act !== '1' && (empty(session()->get('userresult')[0]['agreed']) || session()->get('userresult')[0]['agreed'] != $current_semester_id )) {
       $updatedata['agreed'] = $current_semester_id;
@@ -121,10 +130,10 @@ class Register_class extends BaseController
       //1. get the class time
       $sql = "SELECT meeting_time
             FROM classes c
-            WHERE  class_id = " . $class_id . "
-            AND  c.semester_id=".$current_semester_id;
+            WHERE  class_id = ?
+            AND  c.semester_id=?";
 
-      $mt = $this->db->query($sql)->getRowArray();
+      $mt = $this->db->query($sql, [$class_id, $current_semester_id])->getRowArray();
 
       //2. compare the class time with existing class starting times
       if($_SESSION['check_class_conflict']) {
@@ -193,22 +202,22 @@ class Register_class extends BaseController
 
       //2. did the parent request book?
 
-      $sql = "SELECT (CASE WHEN( date_format(date(registration_time),'%Y-%m-%d')  < date_format(date('".session()->get('current_semester')['late_registration']."'),'%Y-%m-%d')) THEN book_fee ELSE late_book_fee END) as book_fee, sc.buy_book
+      $sql = "SELECT (CASE WHEN( date_format(date(registration_time),'%Y-%m-%d')  < date_format(date(?),'%Y-%m-%d')) THEN book_fee ELSE late_book_fee END) as book_fee, sc.buy_book
             FROM classes c, studentclasses sc
             WHERE  sc.class_id=c.class_id
-            AND  student_id = " . $this->request->getVar('student_id') . "
-            AND  sc.class_id = " . $class_id . "
-            AND  c.semester_id=".$current_semester_id;
+            AND  student_id = ?
+            AND  sc.class_id = ?
+            AND  c.semester_id=?";
 
-      $cs = $this->db->query($sql)->getResultArray();
+      $cs = $this->db->query($sql, [session()->get('current_semester')['late_registration'], $this->request->getVar('student_id'), $class_id, $current_semester_id])->getResultArray();
 
       if($cs[0]['book_fee'] > 0 && $cs[0]['buy_book'] > 0) {
         //3. has the parent paid?
         $sql = "select *
               from checks
-              where parent_id = $this->parent_id
-              and semester_id = " . $current_semester_id;
-        $checks = $this->db->query($sql)->getResultArray();
+              where parent_id = ?
+              and semester_id = ?";
+        $checks = $this->db->query($sql, [$this->parent_id, $current_semester_id])->getResultArray();
         $paid = 0;
         foreach($checks as $check) {
           $paid += $check['check_amount'];
@@ -271,16 +280,16 @@ class Register_class extends BaseController
    * @param $current_semester_id
    * @param $config
    */
-  public function send_email($current_semester_id, $class_id, $type = 'new')
+  protected function send_email($current_semester_id, $class_id, $type = 'new')
   {
 // get the teacher's email and name
     $sql = "SELECT c.class_name, c.meeting_time, t.en_name, t.email
                   FROM classes c 
                   JOIN teachers t on t.teacher_id = c.teacher_id 
-                  WHERE class_id = " . $class_id . "
-                  AND  c.semester_id=" . $current_semester_id;
+                  WHERE class_id = ?
+                  AND  c.semester_id=?";
 
-    $teacher_class = $this->db->query($sql)->getRowArray();
+    $teacher_class = $this->db->query($sql, [$class_id, $current_semester_id])->getRowArray();
     $student_name = $this->student_info[0]['en_name'];
 
     $email = \Config\Services::email();

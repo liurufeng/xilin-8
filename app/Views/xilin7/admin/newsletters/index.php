@@ -32,11 +32,11 @@
   <?php foreach($list as $k=>$v){ ?>
   <tr align="center" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
     <td><?php echo $v['id']?></td>
-    <td><?php echo $v['name']?></td>
-    <td><a href="<?php echo $v['url']?>">click</a></td>
+    <td><?php echo esc($v['name'])?></td>
+    <td><a href="<?php echo esc($v['url'], 'attr')?>">click</a></td>
     <td><?php if($v['isshow']){ echo 'yes';}else{ echo 'no';}?></td>
-    <td><?php echo $v['desc']?></td>
-    <td><?php echo $v['seq']?></td>
+    <td><?php echo esc($v['desc'])?></td>
+    <td><?php echo esc($v['seq'])?></td>
     <td>
 		<a href='<?=$_SESSION['admin_path']?>newsletters/edit?id=<?php echo $v['id']?>'><u>edit</u></a> |
 		<a href='<?=$_SESSION['admin_path']?>newsletters/del?id=<?php echo $v['id']?>' onclick="return confirm('Are you sure to delete this newsletter?')"><u>delete</u></a>

@@ -25,34 +25,34 @@ class Discount_model extends Model
     // if the parent was set as a discounter
     $sql = "select *
             from parent_discounter pd
-            where pd.semester_id = ".$semester['semester_id']."
-            and pd.parent_id=".$parent['parent_id'];
+            where pd.semester_id = ?
+            and pd.parent_id=?";
 
-    $row = $this->db->query($sql)->getResultArray();
+    $row = $this->db->query($sql, [$semester['semester_id'], $parent['parent_id']])->getResultArray();
     if (count($row) > 0) {
       $teacher_discount = $semester['teacher_discount_base'];
     } else {
       // check if the parent is board or EC
       $sql = "select * 
             from schooluser su
-            where su.semester_id = ".$semester['semester_id']."
-            and su.parent_id=".$parent['parent_id']."
+            where su.semester_id = ?
+            and su.parent_id=?
             and su.status = 1 ";
-      $row = $this->db->query($sql)->getResultArray();
+      $row = $this->db->query($sql, [$semester['semester_id'], $parent['parent_id']])->getResultArray();
       if (count($row) > 0) {
         $teacher_discount = $semester['teacher_discount_base'];
       }
     }
 
-    $sql = "SELECT (CASE WHEN( date_format(date(registration_time),'%Y-%m-%d')  < date_format(date('".session()->get('current_semester')['late_registration']."'),'%Y-%m-%d')) THEN tuition ELSE late_tuition END) as tuition
+    $sql = "SELECT (CASE WHEN( date_format(date(registration_time),'%Y-%m-%d')  < date_format(date(?),'%Y-%m-%d')) THEN tuition ELSE late_tuition END) as tuition
     FROM classes c, studentclasses sc
     WHERE  sc.class_id=c.class_id
     and ((c.subject_id in (1) and c.semester_id <= 34) or (c.subject_id in (1,5) and c.semester_id > 34))
     and sc.deleted != 1
-    AND  student_id IN (SELECT student_id FROM students WHERE parent_id=".$parent['parent_id'].")
-    AND  c.semester_id=".$semester['semester_id']."
+    AND  student_id IN (SELECT student_id FROM students WHERE parent_id=?)
+    AND  c.semester_id=?
     order by tuition desc";
-    $mlps = $this->db->query($sql)->getResultArray();
+    $mlps = $this->db->query($sql, [session()->get('current_semester')['late_registration'], $parent['parent_id'], $semester['semester_id']])->getResultArray();
     //var_dump($sql); exit;
     if(count($mlps) >=2) {
       $diff = $tuition_total - $mlps[0]['tuition'] - $mlps[1]['tuition'] - $teacher_discount;

@@ -33,6 +33,7 @@ class Classes extends MY_Controller
     $semester_id = $this->request->getVar('semester_id'); //$this->request->getVar('semester_id');
     $semester_id = str_replace('.php','',$semester_id);
     if(isset($semester_id) && !empty($semester_id)) {
+      $semester_id = (int)$semester_id;
       session()->set(array('semester_id' => $semester_id));
       session()->set(array('semester_id' => $semester_id));
       $where =' and se.semester_id='.$semester_id;
@@ -40,7 +41,7 @@ class Classes extends MY_Controller
       $current_semester = session()->get('current_semester');
       $current_semester_id = $current_semester['semester_id'];
       session()->set(array('semester_id' => $current_semester_id));
-      $where =' and se.semester_id='.$current_semester_id;
+      $where =' and se.semester_id='.(int)$current_semester_id;
     }
 
     $sql = "select c.*,s.subject_name subject,t.en_name teacher,concat(se.semester_name,' ',se.semester_year) semester
@@ -67,8 +68,8 @@ class Classes extends MY_Controller
       // 判断class是否存在
       if ($this->request->getVar('class_code')) {
         $class_code = trim($this->request->getVar('class_code'));
-        $sql = " SELECT 1 FROM  classes WHERE class_code = '$class_code' and status=1 and semester_id = ".$this->request->getVar('semester_id');
-         $rst = $this->db->query($sql)->getResultArray();
+        $sql = " SELECT 1 FROM  classes WHERE class_code = ? and status=1 and semester_id = ?";
+         $rst = $this->db->query($sql, [$class_code, (int)$this->request->getVar('semester_id')])->getResultArray();
         if (is_array($rst) && count($rst) > 0) {
           ShowMsg('Classes Code already exists', $_SESSION['admin_path'].'classes/add');
         }
@@ -92,7 +93,7 @@ class Classes extends MY_Controller
         //$this->db->insert('classes', $insertdata);
         $this->db->table('classes')
           ->insert($insertdata);
-        ShowMsg("add success!", $_SESSION['admin_path'].'classes/index?semester_id='.$this->request->getVar('semester_id'));
+        ShowMsg("add success!", $_SESSION['admin_path'].'classes/index?semester_id='.(int)$this->request->getVar('semester_id'));
       }
     }
     $sql = "select subject_id,subject_name
@@ -145,7 +146,7 @@ class Classes extends MY_Controller
         $this->db->table('classes')
           ->where($wheredata)
           ->update($insertdata);
-        ShowMsg('edit success!', $_SESSION['admin_path'].'classes/index?semester_id='.$this->request->getVar('semester_id'));
+        ShowMsg('edit success!', $_SESSION['admin_path'].'classes/index?semester_id='.(int)$this->request->getVar('semester_id'));
       }
     }
     $sql = "select subject_id,subject_name
@@ -183,7 +184,7 @@ class Classes extends MY_Controller
     }
     $sql = " update   classes set status = '2' WHERE class_id = $class_id";
     $this->db->query($sql);
-    ShowMsg('delete success!', $_SESSION['admin_path'].'classes/index?semester_id='.session()->get('semester_id'));
+    ShowMsg('delete success!', $_SESSION['admin_path'].'classes/index?semester_id='.(int)session()->get('semester_id'));
   }
 
   /**
@@ -201,7 +202,7 @@ class Classes extends MY_Controller
 				tuition,late_tuition,book_fee,late_book_fee,material_fee,meeting_time,classroom,student_amount_limit,new_class_flag,seq from 
         classes where class_id = $class_id";
     $this->db->query($sql);
-    ShowMsg('copy success!', $_SESSION['admin_path'].'classes/index?semester_id='.session()->get('semester_id'));
+    ShowMsg('copy success!', $_SESSION['admin_path'].'classes/index?semester_id='.(int)session()->get('semester_id'));
   }
 
   /**

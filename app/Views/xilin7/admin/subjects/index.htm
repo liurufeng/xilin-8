@@ -30,8 +30,8 @@
   <?php foreach($list as $k=>$v){ ?>
   <tr align="center" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
     <td><?php echo $v['subject_id']?></td>
-    <td><?php echo $v['subject_name']?></td>
-    <td><?php echo $v['seq']?></td>
+    <td><?php echo esc($v['subject_name'])?></td>
+    <td><?php echo esc($v['seq'])?></td>
     <td><?= $v['status'] === '1' ? 'Yes' : 'No' ?></td>
     <td>
 		<a href='<?=$_SESSION['admin_path']?>subjects/edit?subject_id=<?php echo $v['subject_id']?>'><u>edit</u></a> |

@@ -1,5 +1,6 @@
 <?php namespace App\Controllers\Xilin_ns_admin;
 
+use App\Libraries\Passwords;
 use App\Models\Admin\{Member_model};
 /**
  *
@@ -22,7 +23,7 @@ class Login extends MY_Controller
     $is_login = parent::_is_login();
 
     if ($is_login) {
-      redirect()->to($_SESSION['admin_path'].'index'. '?1');
+      return redirect()->to($_SESSION['admin_path'].'index');
     }
     echo view($_SESSION['tm'].'admin/login/login.htm');
 
@@ -30,37 +31,27 @@ class Login extends MY_Controller
 
   function check_login()
   {
-    //$validate = empty($this->request->getVar('captcha']) ? '' : strtolower(trim($this->request->getVar('captcha']));
-    $name = trim($this->request->getVar('username'));
-    $pass = $this->request->getVar('pwd');
+    $name = trim((string)$this->request->getPost('username'));
+    $pass = (string)$this->request->getPost('pwd');
 
-    /*if (empty($this->request->getVar('captcha'])) {
-      ShowMsg('Verify code cannot be empty!', 'login.php', 0, 1500);
-    }
-    $this->load->helper('validate_m');
-    $svali = strtolower(GetCkVdValue());
-    if (($validate == '' || $validate != $svali)) {
-      ResetVdValue();
-      ShowMsg('Verify code error!', 'login.php', 0, 1500);
-    }*/
     if (empty($name)) {
       ShowMsg('Username cannot be empty!', $_SESSION['admin_path'].'login', 0, 1500);
-    } elseif (empty($pass)) {
+    } elseif ($pass === '') {
       ShowMsg('Password cannot be empty!', $_SESSION['admin_path'].'login', 0, 1500);
     }
+    if (!Passwords::attemptAllowed('admin', $name)) {
+      ShowMsg('Too many sign-in attempts. Please wait 10 minutes and try again.', $_SESSION['admin_path'].'login', 0, 3000);
+    }
     $member_model = new Member_model();
-    $uid = $member_model->user_login(trim($name), $pass, TRUE);
+    $uid = $member_model->user_login($name, $pass);
     if ($uid > 0) {
       $userinfo = $member_model->getuserinfo($uid);
       $userinfo['authorized_nodes'] = explode(',', $userinfo['nodeids']);
 
+      // a new session id on sign-in
+      session()->regenerate(true);
       session()->set($userinfo);
-      $data['success'] = true;
-      //redirect($_SESSION['admin_path'].'index'),'refresh');
-      header("location: ".$_SESSION['admin_path']."index");
-      exit;
-      //header("location: ".$_SESSION['admin_path'].'index'));
-      //ShowMsg('Login success,Page is transferred to the system page!', $_SESSION['admin_path'].'index'), 0, 1500);
+      return redirect()->to($_SESSION['admin_path'].'index');
     } else {
       ShowMsg('Login failed!', $_SESSION['admin_path'].'login/', 0, 1500);
     }
@@ -68,12 +59,8 @@ class Login extends MY_Controller
 
   function logout()
   {
-    helper('cookie');
     session()->destroy();
-    $userdata = array('id' => '', 'name' => '', 'realname' => '', 'loginCount' => '', 'group_id' => '');
-    //$this->session->unset_userdata($userdata);
-    delete_cookie('csrf_cookie_name', $_SERVER['HTTP_HOST'], '/');
-    return redirect()->to($_SESSION['admin_path'].'login/');
+    return redirect()->to('/Xilin_ns_admin/login/');
 
   }
 

@@ -29,7 +29,7 @@
                 <?php $year = (int) date('Y');
                 for($y = $year; $y < $year+3; $y++) {
                   ?>
-                <option value="<?=$y?>"><?=$y?></option>
+                <option value="<?=esc($y, 'attr')?>"><?=esc($y)?></option>
                 <?php }?>
               </select>
             </td>
@@ -40,7 +40,7 @@
             <td style="text-align:left;">
               <select name='month' style='width:200px'>
                 <?php for($m = 1; $m < 13; $m++) { ?>
-                  <option value="<?=$m - 1?>"><?=$m?></option>
+                  <option value="<?=$m - 1?>"><?=esc($m)?></option>
                 <?php } ?>
               </select>
             </td>
@@ -51,7 +51,7 @@
             <td style="text-align:left;">
               <select name='date' style='width:200px'>
                 <?php for($d = 1; $d < 32; $d++) { ?>
-                  <option value="<?=$d?>"><?=$d?></option>
+                  <option value="<?=esc($d, 'attr')?>"><?=esc($d)?></option>
                 <?php }?>
               </select>
             </td>

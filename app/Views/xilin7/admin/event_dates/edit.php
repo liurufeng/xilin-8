@@ -30,7 +30,7 @@
             <?php $year = (int) date('Y');
             for($y = $year; $y < $year+3; $y++) {
               ?>
-              <option value="<?=$y?>" <?= $event_date['year'] ==  $y ? 'selected':''?> ><?=$y?></option>
+              <option value="<?=esc($y, 'attr')?>" <?= $event_date['year'] ==  $y ? 'selected':''?> ><?=esc($y)?></option>
             <?php } ?>
           </select>
         </td>
@@ -41,7 +41,7 @@
         <td style="text-align:left;">
           <select name='month' style='width:200px'>
             <?php for($m = 1; $m < 13; $m++) { ?>
-              <option value="<?=$m - 1?>" <?= $event_date['month'] ==  $m ? 'selected':''?> ><?=$m?></option>
+              <option value="<?=$m - 1?>" <?= $event_date['month'] ==  $m ? 'selected':''?> ><?=esc($m)?></option>
             <?php }?>
           </select>
         </td>
@@ -52,7 +52,7 @@
         <td style="text-align:left;">
           <select name='date' style='width:200px'>
             <?php for($d = 1; $d < 32; $d++) { ?>
-              <option value="<?=$d?>" <?= $event_date['date'] ==  $d ? 'selected':''?> ><?=$d?></option>
+              <option value="<?=esc($d, 'attr')?>" <?= $event_date['date'] ==  $d ? 'selected':''?> ><?=esc($d)?></option>
             <?php }?>
           </select>
         </td>

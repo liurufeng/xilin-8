@@ -16,7 +16,7 @@
               School Year <select id="school_year_id" name="school_year_id" onchange="submit();">
               <?php foreach($school_year as $sy) {?>
               <option value="<?=$sy['id']?>" <?php if($sy['id'] == session()->get('school_year_id')) echo 'selected'; ?> >
-                <?=$sy['name']?>
+                <?=esc($sy['name'])?>
               </option>
               <?php } ?>
             </select>
@@ -48,16 +48,16 @@
 
     ?>
   <tr align="center" bgcolor="<?= $missed > 0 ? '#FFCC33' : '#FFFFFF' ?>" onMouseMove="javascript:this.bgColor='<?= $missed > 0 ? '#FFF581' : '#FCFDEE' ?>';" onMouseOut="javascript:this.bgColor='<?= $missed > 0 ? '#FFCC33' : '#FFFFFF' ?>'">
-    <td><a onclick="window.open('/administrator.php/podreports/detail?parent_id=<?=$p['parent_id']?>&sy_id=<?=session()->get('school_year_id')?>', 'null', 'location=no,toolbar=no,menubar=no,height=450,width=730,scrollbars=yes');" style="cursor: pointer; text-decoration: underline">
+    <td><a onclick="window.open('/administrator.php/podreports/detail?parent_id=<?=$p['parent_id']?>&sy_id=<?=esc(session()->get('school_year_id'), 'attr')?>', 'null', 'location=no,toolbar=no,menubar=no,height=450,width=730,scrollbars=yes');" style="cursor: pointer; text-decoration: underline">
          <?php echo $p['parent_id']?></a></td>
-    <td><?php echo $p['primary_en_name']?></td>
-    <td><?php echo $p['email']?></td>
-    <td><?php echo $p['primary_phone']?></td>
-    <td><?php echo $pod[$p['parent_id']]['need']?></td>
-    <td><?php echo $pod[$p['parent_id']]['done']?></td>
-    <td><?php echo $pod[$p['parent_id']]['manually']?></td>
-    <td><?php echo $missed?></td>
-    <td><?php echo $todo?></td>
+    <td><?php echo esc($p['primary_en_name'])?></td>
+    <td><?php echo esc($p['email'])?></td>
+    <td><?php echo esc($p['primary_phone'])?></td>
+    <td><?php echo esc($pod[$p['parent_id']]['need'])?></td>
+    <td><?php echo esc($pod[$p['parent_id']]['done'])?></td>
+    <td><?php echo esc($pod[$p['parent_id']]['manually'])?></td>
+    <td><?php echo esc($missed)?></td>
+    <td><?php echo esc($todo)?></td>
   </tr>
   <?php } ?>
 </table>

@@ -11,17 +11,17 @@
 
   <div class="row account-top" id="view_profile">
     <?php if (isset($success_msg)) { ?>
-      <div class="row success-flash"><b><?= $success_msg ?></b></div>
+      <div class="row success-flash"><b><?= esc($success_msg) ?></b></div>
     <?php } ?>
     <?php if (isset($error_msg)) { ?>
-      <div class="row error-flash"><b><?= $error_msg ?></b></div>
+      <div class="row error-flash"><b><?= esc($error_msg) ?></b></div>
     <?php } ?>
     <?php if (session()->getFlashdata('success_msg')) { ?>
-      <div class="row success-flash"><b><?= session()->flashdata('success_msg'); ?></b></div>
+      <div class="row success-flash"><b><?= esc(session()->flashdata('success_msg')); ?></b></div>
     <?php } ?>
 
     <?php if (session()->getFlashdata('error_msg')) { ?>
-      <div class="row error-flash"><b><?= session()->flashdata('error_msg'); ?></b></div>
+      <div class="row error-flash"><b><?= esc(session()->flashdata('error_msg')); ?></b></div>
     <?php } ?>
     <div class="Profile account-table" data-wow-delay="200ms" data-wow-duration="300ms" class="wow fadeInUp animated"
          style="visibility: visible; animation-duration: 300ms; animation-delay: 200ms; animation-name: fadeInUp;">
@@ -33,7 +33,7 @@
 
           <tr>
             <td style="text-align:right;">Email:</td>
-            <td class="right"><?= $p['email'] ?>
+            <td class="right"><?= esc($p['email']) ?>
             </td>
           </tr>
           <tr>
@@ -44,79 +44,79 @@
           <tr>
             <td style="text-align:right;">Primary Contact English Name:</td>
             <td class="right">
-              <?= $p['primary_en_name'] ?>
+              <?= esc($p['primary_en_name']) ?>
             </td>
           </tr>
           <tr>
             <td style="text-align:right;">Chinese Name:</td>
             <td class="right">
-              <?= $p['primary_cn_name'] ?>
+              <?= esc($p['primary_cn_name']) ?>
             </td>
           </tr>
           <tr>
             <td style="text-align:right;">Relationship:</td>
             <td class="right">
-              <?= $p['primary_relationship'] ?>
+              <?= esc($p['primary_relationship']) ?>
             </td>
           </tr>
           <tr>
             <td style="text-align:right;">Phone:</td>
             <td class="right">
-              <?= $p['primary_phone'] ?>
+              <?= esc($p['primary_phone']) ?>
             </td>
           </tr>
           <tr>
             <td style="text-align:right;">Alternative Contact Email:</td>
             <td class="right">
-              <?= $p['alter_contact_email'] ?>
+              <?= esc($p['alter_contact_email']) ?>
             </td>
           </tr>
           <tr>
             <td style="text-align:right;">Alternative Contact English Name:</td>
             <td class="right">
-              <?= $p['alter_en_name'] ?>
+              <?= esc($p['alter_en_name']) ?>
             </td>
           </tr>
           <tr>
             <td style="text-align:right;">Chinese Name:</td>
             <td class="right">
-              <?= $p['alter_cn_name'] ?>
+              <?= esc($p['alter_cn_name']) ?>
             </td>
           </tr>
           <tr>
             <td style="text-align:right;">Relationship:</td>
             <td class="right">
-              <?= $p['alter_relationship'] ?>
+              <?= esc($p['alter_relationship']) ?>
             </td>
           </tr>
           <tr>
             <td style="text-align:right;">Phone:</td>
             <td class="right">
-              <?= $p['alter_phone'] ?>
+              <?= esc($p['alter_phone']) ?>
             </td>
           </tr>
           <tr>
             <td style="text-align:right;">Street Address:</td>
             <td class="right">
-              <?= $p['address'] ?>
+              <?= esc($p['address']) ?>
             </td>
           </tr>
           <tr>
             <td style="text-align:right;">City:</td>
             <td class="right">
-              <?= $p['city'] ?>
+              <?= esc($p['city']) ?>
             </td>
           </tr>
           <tr>
             <td style="text-align:right;">State:</td>
             <td class="right">
-              <?= $p['state'] ?>
+              <?= esc($p['state']) ?>
             </td>
           </tr>
           <tr>
             <td style="text-align:right;">Zip:</td>
             <td class="right">
-              <?= $p['zip'] ?>
+              <?= esc($p['zip']) ?>
             </td>
           </tr>
         </table>
@@ -139,10 +139,10 @@
     <form action="<?php echo '/account/update_parent' ?>" method="POST">
       <div class="row">
         <?php if (isset($success_msg)) { ?>
-          <div class="row success-flash"><b><?= $success_msg ?></b></div>
+          <div class="row success-flash"><b><?= esc($success_msg) ?></b></div>
         <?php } ?>
         <?php if (isset($error_msg)) { ?>
-          <div class="row error-flash"><b><?= $error_msg ?></b></div>
+          <div class="row error-flash"><b><?= esc($error_msg) ?></b></div>
         <?php } ?>
         <div class="Profile account-table" data-wow-delay="200ms" data-wow-duration="300ms" class="wow fadeInUp animated"
              style="visibility: visible; animation-duration: 300ms; animation-delay: 200ms; animation-name: fadeInUp;">
@@ -154,90 +154,90 @@
 
               <tr>
                 <td style="text-align:right;"><span style="color:red;">*</span>Email:</td>
-                <td class="right"><input type="email" value="<?= $p['email'] ?>" name="email" required
+                <td class="right"><input type="email" value="<?= esc($p['email'], 'attr') ?>" name="email" required
                                          style="width:300px; padding: 3px;"/>
                 </td>
               </tr>
               <tr>
                 <td style="text-align:right;"><span style="color:red;">*</span>Password:</td>
-                <td class="right"><input type="password" value="<?= $p['passwd'] ?>" name="passwd" required
+                <td class="right"><input type="password" value="" placeholder="leave blank to keep" autocomplete="new-password" name="passwd"
                                          style="width:300px; padding: 3px;"/>
                 </td>
               </tr>
               <tr>
                 <td style="text-align:right;"><span style="color:red;">*</span>Primary Contact English Name:</td>
                 <td class="right">
-                  <input type="text" value="<?= $p['primary_en_name'] ?>" name="primary_en_name" required
+                  <input type="text" value="<?= esc($p['primary_en_name'], 'attr') ?>" name="primary_en_name" required
                          style="width:300px; padding: 3px;"/>
                 </td>
               </tr>
               <tr>
                 <td style="text-align:right;">Chinese Name:</td>
                 <td class="right">
-                  <input type="text" value="<?= $p['primary_cn_name'] ?>" name="primary_cn_name"
+                  <input type="text" value="<?= esc($p['primary_cn_name'], 'attr') ?>" name="primary_cn_name"
                          style="width:300px; padding: 3px;"/>
                 </td>
               </tr>
               <tr>
                 <td style="text-align:right;"><span style="color:red;">*</span>Relationship:</td>
                 <td class="right">
-                  <input type="text" value="<?= $p['primary_relationship'] ?>" name="primary_relationship" required
+                  <input type="text" value="<?= esc($p['primary_relationship'], 'attr') ?>" name="primary_relationship" required
                          style="width:300px; padding: 3px;"/>
                 </td>
               </tr>
               <tr>
                 <td style="text-align:right;"><span style="color:red;">*</span>Phone:</td>
                 <td class="right">
-                  <input type="text" value="<?= $p['primary_phone'] ?>" name="primary_phone" required
+                  <input type="text" value="<?= esc($p['primary_phone'], 'attr') ?>" name="primary_phone" required
                          style="width:300px; padding: 3px;"/>
                 </td>
               </tr>
               <tr>
                 <td style="text-align:right;">Alternative Contact Email:</td>
                 <td class="right">
-                  <input type="text" value="<?= $p['alter_contact_email'] ?>" name="alter_contact_email"
+                  <input type="text" value="<?= esc($p['alter_contact_email'], 'attr') ?>" name="alter_contact_email"
                          style="width:300px; padding: 3px;"/>
                 </td>
               </tr>
               <tr>
                 <td style="text-align:right;">Alternative Contact English Name:</td>
                 <td class="right">
-                  <input type="text" value="<?= $p['alter_en_name'] ?>" name="alter_en_name"
+                  <input type="text" value="<?= esc($p['alter_en_name'], 'attr') ?>" name="alter_en_name"
                          style="width:300px; padding: 3px;"/>
                 </td>
               </tr>
               <tr>
                 <td style="text-align:right;">Chinese Name:</td>
                 <td class="right">
-                  <input type="text" value="<?= $p['alter_cn_name'] ?>" name="alter_cn_name"
+                  <input type="text" value="<?= esc($p['alter_cn_name'], 'attr') ?>" name="alter_cn_name"
                          style="width:300px; padding: 3px;"/>
                 </td>
               </tr>
               <tr>
                 <td style="text-align:right;">Relationship:</td>
                 <td class="right">
-                  <input type="text" value="<?= $p['alter_relationship'] ?>" name="alter_relationship"
+                  <input type="text" value="<?= esc($p['alter_relationship'], 'attr') ?>" name="alter_relationship"
                          style="width:300px; padding: 3px;"/>
                 </td>
               </tr>
               <tr>
                 <td style="text-align:right;">Phone:</td>
                 <td class="right">
-                  <input type="text" value="<?= $p['alter_phone'] ?>" name="alter_phone"
+                  <input type="text" value="<?= esc($p['alter_phone'], 'attr') ?>" name="alter_phone"
                          style="width:300px; padding: 3px;"/>
                 </td>
               </tr>
               <tr>
                 <td style="text-align:right;"><span style="color:red;">*</span>Street Address:</td>
                 <td class="right">
-                  <input type="text" value="<?= $p['address'] ?>" name="address" required
+                  <input type="text" value="<?= esc($p['address'], 'attr') ?>" name="address" required
                          style="width:300px; padding: 3px;"/>
                 </td>
               </tr>
               <tr>
                 <td style="text-align:right;"><span style="color:red;">*</span>City:</td>
                 <td class="right">
-                  <input type="text" value="<?= $p['city'] ?>" name="city" required
+                  <input type="text" value="<?= esc($p['city'], 'attr') ?>" name="city" required
                          style="width:300px; padding: 3px;"/>
                 </td>
               </tr>
@@ -300,7 +300,7 @@
               <tr>
                 <td style="text-align:right;"><span style="color:red;">*</span>Zip:</td>
                 <td class="right">
-                  <input type="text" value="<?= $p['zip'] ?>" name="zip" required
+                  <input type="text" value="<?= esc($p['zip'], 'attr') ?>" name="zip" required
                          style="width:300px; padding: 3px;"/>
                 </td>
               </tr>
@@ -332,7 +332,7 @@
               <input type="email" name="email" class="form-control" placeholder="Email" required>
             </div>
             <div class="form-group">
-              <input type="password" name="password" class="form-control" placeholder="Password"
+              <input type="password" name="password" autocomplete="current-password" class="form-control" placeholder="Password"
                      required>
             </div>
             <button type="submit" class="btn btn-primary">LOGIN</button>

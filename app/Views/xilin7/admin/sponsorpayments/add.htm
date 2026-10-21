@@ -29,7 +29,7 @@
 					if($groupList){
 					foreach($groupList as $k=>$v)
 					{
-						echo "<option value='".$v['sponsor_id']."'>".$v['name']."</option>\r\n";
+						echo "<option value='".$v['sponsor_id']."'>".esc($v['name'])."</option>\r\n";
 					}
 				}
 			?>

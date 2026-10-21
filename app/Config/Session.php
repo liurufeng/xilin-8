@@ -125,4 +125,13 @@ class Session extends BaseConfig
      * seconds.
      */
     public int $lockMaxRetries = 300;
+
+    public function __construct()
+    {
+        require_once __DIR__ . '/xilin_environment.php';
+
+        parent::__construct();
+
+        $this->savePath = xilin_session_dir();
+    }
 }

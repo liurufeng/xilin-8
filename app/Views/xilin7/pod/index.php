@@ -83,7 +83,7 @@
                   <input type="email" name="email" class="form-control" placeholder="Email" required>
                 </div>
                 <div class="form-group">
-                  <input type="password" name="password" class="form-control" placeholder="Password"
+                  <input type="password" name="password" autocomplete="current-password" class="form-control" placeholder="Password"
                          required>
                 </div>
                 <button type="submit" class="btn btn-primary">LOGIN</button>

@@ -34,7 +34,7 @@ class Database extends Config
 		'DSN'      => '',
 		'hostname' => 'xilinnuc.startlogicmysql.com',
 		'username' => 'newsite',
-		'password' => 'newsite',
+		'password' => 'newsite', // db_password in secrets.php replaces it when set (see __construct)
 		'database' => 'scdb',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
@@ -105,7 +105,13 @@ class Database extends Config
 
 	public function __construct()
 	{
+		require_once __DIR__ . '/xilin_environment.php';
+
 		parent::__construct();
+
+		// the production login from the server-only secrets.php (app/Config/xilin_environment.php)
+		$this->default['username'] = xilin_secret('db_username', $this->default['username']);
+		$this->default['password'] = xilin_secret('db_password', $this->default['password']);
 
 		// Ensure that we always set the database group to 'tests' if
 		// we are currently running an automated test suite, so that
@@ -114,21 +120,10 @@ class Database extends Config
 		{
 			$this->defaultGroup = 'tests';
 		}
-
-    $host_name = $_SERVER['HTTP_HOST'];
-
-    if(strpos($host_name, 'local.xilin') !== false){
-      $this->defaultGroup = 'development';
-    } else if (strpos($host_name, 'xilinnschinese.org') !== false || strpos($host_name, 'xilinnuc.startlogic.com') !== false){
-      $this->defaultGroup = 'default';
-    } else {
-      echo "Invalid access!!"; exit;
-    }
-
-    $_SESSION['tm'] = 'xilin7/';
-    $_SESSION['admin_path'] = '/Xilin_ns_admin/';
-    $_SESSION['site_email'] = 'webmaster@xilinnschinese.org';
-    $_SESSION['check_class_conflict'] = true;
+		elseif (xilin_environment() === 'local')
+		{
+			$this->defaultGroup = 'development';
+		}
 	}
 
 	//--------------------------------------------------------------------

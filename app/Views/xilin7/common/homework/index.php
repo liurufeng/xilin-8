@@ -12,7 +12,7 @@
           </ul>
           <div style="clear:both;"></div>
           <? if (session()->flashdata('success_msg')) { ?>
-            <div class="row success-flash"><b><?= session()->flashdata('success_msg'); ?></b></div>
+            <div class="row success-flash"><b><?= esc(session()->flashdata('success_msg')); ?></b></div>
           <? } ?>
           <div class="Profile">
             <?php if($usertype == 2){?>
@@ -21,7 +21,7 @@
                 Semester: <select id="semester_id" name="semester_id" onchange="submit();">
                   <? foreach($semesters as $semester) {?>
                     <option value="<?=$semester['semester_id']?>" <? if($semester['semester_id'] == session()->get('semester_id')) echo 'selected'; ?> >
-                      <?=$semester['semester_year']?> <?=$semester['semester_name']?>
+                      <?=esc($semester['semester_year'])?> <?=esc($semester['semester_name'])?>
                     </option>
                   <? } ?>
                 </select>
@@ -60,12 +60,12 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr class="info"><td><?=$c['class_code']?></td>
-                    <td><?=$c['class_name']?></td>
-                    <td><?=$c['meeting_time']?></td>
-                    <td><?=$c['classroom']?></td>
-                    <td><?=$c['notes']?></td>
-                    <td><?=$c['tuition']?>+<?=$c['book_fee']?>+<?=$c['material_fee']?></td>
+                  <tr class="info"><td><?=esc($c['class_code'])?></td>
+                    <td><?=esc($c['class_name'])?></td>
+                    <td><?=esc($c['meeting_time'])?></td>
+                    <td><?=esc($c['classroom'])?></td>
+                    <td><?=esc($c['notes'])?></td>
+                    <td><?=esc($c['tuition'])?>+<?=esc($c['book_fee'])?>+<?=esc($c['material_fee'])?></td>
                   </tr>
                   <?if(count($homeworks[$ck]) > 0){?>
                     <tr><th colspan="6">
@@ -100,15 +100,15 @@
                   <? $i = 0;
                       foreach($homeworks[$ck] as $hk => $w) {?>
                     <tr><td><?=++$i?></td>
-                      <td><?=$w['title']?></td>
-                      <td><?=substr($w['note'], 0, 100)?></td>
-                      <td><?=$w['link']?></td>
-                      <td><?=$w['due_date']?></td>
+                      <td><?=esc($w['title'])?></td>
+                      <td><?=esc(substr($w['note'], 0, 100))?></td>
+                      <td><?=esc($w['link'])?></td>
+                      <td><?=esc($w['due_date'])?></td>
                       <td>
                         <a href="/homework/grade/<?= $w['homework_id'] ?>" class="btn btn-primary btn-md check_homework" wid="<?= $w['homework_id'] ?>">Student Submissions</a>
                         <a href="/homework/add_homework/Edit/<?= $w['homework_id'] ?>" class="btn btn-info btn-md edit_homework" wid="<?= $w['homework_id'] ?>">Edit</a>
                         <a href="#" class="btn btn-danger btn-md remove_homework" wid="<?= $w['homework_id'] ?>"
-                           wtitle="<?= $w['title'] ?>">Delete</a></td>
+                           wtitle="<?= esc($w['title'], 'attr') ?>">Delete</a></td>
                     </tr>
                   <? } ?>
                   </tbody>

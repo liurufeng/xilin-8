@@ -42,8 +42,8 @@ class Subjects extends MY_Controller
       // 判断用户名是否存在
       if ($this->request->getVar('subject_name')) {
         $subject_name = trim($this->request->getVar('subject_name'));
-        $sql = " SELECT 1 FROM  subjects WHERE subject_name = '$subject_name' and status=1";
-         $rst = $this->db->query($sql)->getResultArray();
+        $sql = " SELECT 1 FROM  subjects WHERE subject_name = ? and status=1";
+         $rst = $this->db->query($sql, [$subject_name])->getResultArray();
         if (is_array($rst) && count($rst) > 0) {
           ShowMsg('subject_name already exists', $_SESSION['admin_path'].'subjects/add');
         }
@@ -68,8 +68,8 @@ class Subjects extends MY_Controller
       // 判断用户名是否存在
       if ($this->request->getVar('subject_name')) {
         $subject_name = trim($this->request->getVar('subject_name'));
-        $sql = " SELECT 1 FROM  subjects WHERE subject_name = '$subject_name' and status=1 and subject_id<>" . $this->request->getVar('subject_id');
-         $rst = $this->db->query($sql)->getResultArray();
+        $sql = " SELECT 1 FROM  subjects WHERE subject_name = ? and status=1 and subject_id<> ?";
+         $rst = $this->db->query($sql, [$subject_name, (int)$this->request->getVar('subject_id')])->getResultArray();
         if (is_array($rst) && count($rst) > 0) {
           ShowMsg('Subjects name already exists', $_SESSION['admin_path'].'subjects/add');
         }

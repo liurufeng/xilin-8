@@ -33,7 +33,7 @@ class Imap extends BaseController {
       'SMTPHost' => 'ssl://smtp.googlemail.com',
       'SMTPPort' => 465,
       'SMTPUser' => 'paymentconfirmation@xilinnschinese.org',
-      'SMTPPass' => 'P@ymentc0nfirm',
+      'SMTPPass' => xilin_secret('smtp_payment_password', 'P@ymentc0nfirm'),
       'mailType'  => 'html',
       'wordWrap'  => true,
       'charset'   => 'utf-8'
@@ -45,11 +45,15 @@ class Imap extends BaseController {
   }
   public function index()
   {
+    // a scheduled job (it processes the payment mailbox)
+    if (!xilin_cron_allowed()) {
+      return $this->response->setStatusCode(403)->setBody('no access');
+    }
     $config = array(
       'host'     => '{imap.gmail.com:993/imap/ssl/novalidate-cert}',
       'encrypto' => 'ssl',
       'user'     => 'auto.payment@xilinnschinese.org',
-      'pass'     => '@utoPayment'
+      'pass'     => xilin_secret('imap_password', '@utoPayment')
     );
     $processed = $notpay = $manual_process = [];
 
@@ -217,8 +221,8 @@ class Imap extends BaseController {
           continue;
         } else {
           //$sql = "select * from parents where parent_id = $parent_id and (email like '".$email."%' or alter_contact_email like '".$email."%')";
-          $sql = "select * from parents where parent_id = $parent_id limit 1";
-          $result = $this->db->query($sql)->getRowArray();
+          $sql = "select * from parents where parent_id = ? limit 1";
+          $result = $this->db->query($sql, [$parent_id])->getRowArray();
 
           if($result) {
             $parent_email = $result['email'];
@@ -288,8 +292,8 @@ class Imap extends BaseController {
           $avoid_dup[] = $checking;
           $check_amount = floatval(preg_replace('/[^0-9\.]+/', '', $sent_info[1]));
 
-          $sqlx = "select check_id from checks where parent_id = ".$parent_id." and check_amount = ".$check_amount." and check_date >= NOW() - INTERVAL 30 MINUTE";
-          $resultx = $this->db->query($sqlx)->getRowArray();
+          $sqlx = "select check_id from checks where parent_id = ? and check_amount = ? and check_date >= NOW() - INTERVAL 30 MINUTE";
+          $resultx = $this->db->query($sqlx, [$parent_id, $check_amount])->getRowArray();
           if(isset($resultx) && isset($resultx['check_id']) && !empty($resultx['check_id'])) continue;
 
           $insertdata1['semester_id'] = $semester_id;
@@ -347,7 +351,9 @@ class Imap extends BaseController {
             $headers .= "Reply-To: ec@xilinnschinese.org\r\n";
             $headers .= "MIME-Version: 1.0\r\n";
             $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-            @mail($parent_email, $subject, $msg_p, $headers, '-f paymentconfirmation@xilinnschinese.org');
+            if(filter_var($parent_email, FILTER_VALIDATE_EMAIL)) {
+              @mail($parent_email, $subject, $msg_p, $headers, '-f paymentconfirmation@xilinnschinese.org');
+            }
 
             $processed[] = $msg['uid'];
 
@@ -405,10 +411,10 @@ class Imap extends BaseController {
     exit;
   }
 
-  function payment_process($processed = array(), $notpay = array(), $manual_process = array()){
+  protected function payment_process($processed = array(), $notpay = array(), $manual_process = array()){
     $host = '{imap.gmail.com:993/imap/ssl/novalidate-cert}';
     $user = 'auto.payment@xilinnschinese.org';
-    $pass = '@utoPayment';
+    $pass = xilin_secret('imap_password', '@utoPayment');
     $inbox  = imap_open( $host, $user, $pass );
     $emails = imap_search( $inbox, 'ALL', SE_UID );
 
@@ -427,7 +433,7 @@ class Imap extends BaseController {
     }
   }
 
-  function handle_donation($parent_id, $name, $parent_email, $amount, $semester_id, $memo, $pay_code='') {
+  protected function handle_donation($parent_id, $name, $parent_email, $amount, $semester_id, $memo, $pay_code='') {
 
     $amount = str_replace('$', '', $amount);
     //$date = date("Y-m-d H:i:s");
@@ -496,8 +502,14 @@ class Imap extends BaseController {
 
   }
 
-  function sendInvoiceEmail($content, $parent_email='', $memo_email = '')
+  protected function sendInvoiceEmail($content, $parent_email='', $memo_email = '')
   {
+    if($parent_email && filter_var($parent_email, FILTER_VALIDATE_EMAIL) === false) {
+      $parent_email = '';
+    }
+    if($memo_email && filter_var($memo_email, FILTER_VALIDATE_EMAIL) === false) {
+      $memo_email = '';
+    }
     $ec_email = 'ec@xilinnschinese.org';
     $headers = "From: Xilin Online Payment <paymentconfirmation@xilinnschinese.org>\r\n";
     $headers .= 'Bcc: ' . implode(',', ['rufeng_liu@hotmail.com']) . "\r\n";

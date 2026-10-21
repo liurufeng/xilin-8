@@ -25,31 +25,31 @@
       <TD colspan=2 align=center style="font-size: 15pt; font-weight: bold; color: #660000;">Xilin North Shore Chinese School
         <?if(isset($receipt) && $receipt =='Yes') { ?>
         <br/>Payment Receipt
-        <br/><?=session()->get('current_semester')['semester_year'] .' ' . session()->get('current_semester')['semester_name']?>
+        <br/><?=esc(session()->get('current_semester')['semester_year'] .' ' . session()->get('current_semester')['semester_name'])?>
         <? } ?>
 
       </TD>
   </TR>
   <TR>
     <TD align="right" width="109">Email</TD>
-    <TD align="left" width="500"><?= $parent['email'] ?><span
+    <TD align="left" width="500"><?= esc($parent['email']) ?><span
         style="float:right;">Parent ID: &nbsp;&nbsp;<?= $parent['parent_id'] ?>&nbsp;&nbsp; </span></TD>
   </TR>
   <TR>
     <TD align="right" width="109">Primary Contact</TD>
-    <TD align="left" width="500"><?= $parent['primary_relationship'] ?>
-      , <?= $parent['primary_en_name'] ?><?= $parent['primary_cn_name'] ? '(' . $parent['primary_cn_name'] . ')' : '' ?>
-      , <?= $parent['primary_phone'] ?></TD>
+    <TD align="left" width="500"><?= esc($parent['primary_relationship']) ?>
+      , <?= esc($parent['primary_en_name']) ?><?= esc($parent['primary_cn_name'] ? '(' . $parent['primary_cn_name'] . ')' : '') ?>
+      , <?= esc($parent['primary_phone']) ?></TD>
   </TR>
   <TR>
     <TD align="right" width="109">Altern. Contact</TD>
     <TD align="left"
-        width="500"><?= $parent['alter_relationship'] ? $parent['alter_relationship'] : '' ?><?= $parent['alter_en_name'] ? ', ' . $parent['alter_en_name'] : '' ?>
-      <?= $parent['alter_cn_name'] ? '(' . $parent['alter_cn_name'] . ')' : '' ?><?= $parent['alter_phone'] ? ', ' . $parent['alter_phone'] : '' ?></TD>
+        width="500"><?= esc($parent['alter_relationship'] ? $parent['alter_relationship'] : '') ?><?= esc($parent['alter_en_name'] ? ', ' . $parent['alter_en_name'] : '') ?>
+      <?= esc($parent['alter_cn_name'] ? '(' . $parent['alter_cn_name'] . ')' : '') ?><?= esc($parent['alter_phone'] ? ', ' . $parent['alter_phone'] : '') ?></TD>
   </TR>
   <TR>
     <TD align="right" width="109">Home Address</TD>
-    <TD align="left" width="500"><?= $parent['address'] ?></TD>
+    <TD align="left" width="500"><?= esc($parent['address']) ?></TD>
   </TR>
 </table>
 
@@ -66,9 +66,9 @@
       <tr>
         <td width=10><?= ++$number ?></td>
         <td>Student Name</td>
-        <td><?= $student['en_name'] ?><?= $student['cn_name'] ? '(' . $student['cn_name'] . ')' : '' ?></td>
-        <td align="center" colspan="2"><?= $student['birthday'] ?></td>
-        <td align="center"><?= $student['gender'] ?></td>
+        <td><?= esc($student['en_name']) ?><?= esc($student['cn_name'] ? '(' . $student['cn_name'] . ')' : '') ?></td>
+        <td align="center" colspan="2"><?= esc($student['birthday']) ?></td>
+        <td align="center"><?= esc($student['gender']) ?></td>
       <tr>
         <th>&nbsp;</th>
         <th colspan=5>Registered Classes</th>
@@ -93,11 +93,11 @@
         ?>
         <tr>
           <td width=10>&nbsp;</td>
-          <td><?= $class['class_code'] ?></td>
-          <td style="white-space: nowrap;"><?= $class['class_name'] ?></td>
-          <td><?= $class['classroom'] ?></td>
-          <td><?= $class['meeting_time'] ?></td>
-          <td>$<?= $fees ?></td>
+          <td><?= esc($class['class_code']) ?></td>
+          <td style="white-space: nowrap;"><?= esc($class['class_name']) ?></td>
+          <td><?= esc($class['classroom']) ?></td>
+          <td><?= esc($class['meeting_time']) ?></td>
+          <td>$<?= esc($fees) ?></td>
         </tr>
       <? }
       $total_tuition += $tuition[$student['student_id']];
@@ -106,9 +106,9 @@
       $total += $sub_total[$student['student_id']];?>
       <tr>
         <td width=10>&nbsp;</td>
-        <td colspan=2 align=center>Tuition: <?= $tuition[$student['student_id']] ?>, Book &amp; Material: <?= $book_material[$student['student_id']] ?></td>
+        <td colspan=2 align=center>Tuition: <?= esc($tuition[$student['student_id']]) ?>, Book &amp; Material: <?= esc($book_material[$student['student_id']]) ?></td>
         <td align=right colspan=2>Subtotal:</td>
-        <td>$<?= $sub_total[$student['student_id']] ?>&nbsp;</td>
+        <td>$<?= esc($sub_total[$student['student_id']]) ?>&nbsp;</td>
       </tr>
     <?
     }
@@ -129,15 +129,15 @@
   </tr>
   <tr>
     <td colspan=5 align=right>Non-refundable Registration fee per
-      family: <?= session()->get('current_semester')['registration_fee'] ?>&nbsp;</td>
+      family: <?= esc(session()->get('current_semester')['registration_fee']) ?>&nbsp;</td>
 
-    <td>$<?= $reg_fee ?></td>
+    <td>$<?= esc($reg_fee) ?></td>
   </tr>
 
   <tr>
-    <td colspan=5 align=right>Tuition: <?=$total_tuition?>, Book &amp; Material: <?=$total_book_material?>&nbsp;</td>
+    <td colspan=5 align=right>Tuition: <?=esc($total_tuition)?>, Book &amp; Material: <?=esc($total_book_material)?>&nbsp;</td>
 
-    <td>$<?=$total?>&nbsp;</td>
+    <td>$<?=esc($total)?>&nbsp;</td>
   </tr>
   <tr>
     <td colspan=5 align=right><b>Total: </b></td>
@@ -146,15 +146,15 @@
   </tr>
   <tr>
     <td colspan=5 align=right>Parents on duty charge:</td>
-    <td>$<?=$pod?></td>
+    <td>$<?=esc($pod)?></td>
   </tr>
   <tr>
     <td colspan=5 align=right>Discount:</td>
-    <td>$<?=$discount?></td>
+    <td>$<?=esc($discount)?></td>
   </tr>
   <tr>
     <td colspan=5 align=right>Paid Amount:</td>
-    <td>$<?=$paid?></td>
+    <td>$<?=esc($paid)?></td>
   </tr>
 <!--  <tr>
     <td colspan=5 align=right>Refund:</td>
@@ -163,7 +163,7 @@
   <? $balance = $total + $reg_fee + $pod - $discount - $paid;?>
   <tr>
     <td colspan=5 align=right><b>Balance Due: </b></td>
-    <td><b>$<?=$balance?></b></td>
+    <td><b>$<?=esc($balance)?></b></td>
   </tr>
   <?if(isset($receipt) && $receipt =='Yes') { ?>
     <tr>

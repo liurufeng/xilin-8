@@ -129,12 +129,12 @@ function showSeltype(objname)
             $pardir = '{cmspath}'.$cfg_arcdir;
             if(!empty($typedir)) $pardir = $typedir.'/';
             $pardir = preg_replace("#\/{1,}#", '/', $pardir);
-            echo $pardir;
+            echo esc($pardir);
             ?>
               )
               <input name="referpath" type="radio" id="truepath2" class="np" value="cmspath" />
               CMS根目录
-              <input name="nextdir" type="hidden" id="nextdir" value="<?php echo $pardir; ?>" />
+              <input name="nextdir" type="hidden" id="nextdir" value="<?php echo esc($pardir, 'attr'); ?>" />
             <span id="pathtype" style="display:none"><input name="referpath" type="radio" id="truepath3" class="np" value="typepath" />
             隶属栏目所属的目录</span></td>
           </tr>
@@ -154,8 +154,8 @@ function showSeltype(objname)
                 <?php
             foreach($channelArray as $k=>$arr)
             {
-            	if($k==$channelid) echo "    <option value='{$k}' selected>{$arr['typename']}|{$arr['nid']}</option>\r\n";
-              else  echo "    <option value='{$k}'>{$arr['typename']}|{$arr['nid']}</option>\r\n";
+            	if($k==$channelid) echo "    <option value='{$k}' selected>".esc($arr['typename'])."|".esc($arr['nid'])."</option>\r\n";
+              else  echo "    <option value='{$k}'>".esc($arr['typename'])."|".esc($arr['nid'])."</option>\r\n";
             }
             ?>
               </select>

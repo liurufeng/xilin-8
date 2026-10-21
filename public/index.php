@@ -37,6 +37,20 @@ if (getcwd() . DIRECTORY_SEPARATOR !== FCPATH) {
     chdir(FCPATH);
 }
 
+// error details on screen only on this machine (app/Config/xilin_environment.php); everywhere else production
+require_once FCPATH . '../app/Config/xilin_environment.php';
+define('ENVIRONMENT', xilin_environment() === 'local'
+    && isset($_SERVER['REMOTE_ADDR']) && in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'], true)
+    ? 'development' : 'production');
+
+// only the site's own host names (a forged Host header can't steer links, redirects or emails)
+if (! xilin_known_host()) {
+    header('HTTP/1.1 400 Bad Request', true, 400);
+    echo 'Invalid access!!';
+
+    exit(1);
+}
+
 /*
  *---------------------------------------------------------------
  * BOOTSTRAP THE APPLICATION

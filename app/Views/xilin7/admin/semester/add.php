@@ -48,7 +48,7 @@
 						if($v['ename'] == "Spring"){
 							$selected = "selected";
 						}
-						echo "<option value='".$v['ename']."' $selected >".$v['ename']."</option>\r\n";
+						echo "<option value='".esc($v['ename'])."' $selected >".esc($v['ename'])."</option>\r\n";
 					}
 					}
 			  	?>
@@ -67,7 +67,7 @@
 						if($v['ename'] == "Future"){
 							$selected = "selected";
 						}
-						echo "<option value='".$v['ename']."' $selected>".$v['ename']."</option>\r\n";
+						echo "<option value='".esc($v['ename'])."' $selected>".esc($v['ename'])."</option>\r\n";
 					}
 					}
 			  	?>

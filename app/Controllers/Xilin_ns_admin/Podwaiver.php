@@ -25,12 +25,13 @@ class Podwaiver extends MY_Controller
     $semester_id = $this->request->getVar('semester_id');
     if(isset($semester_id) && !empty($semester_id)) {
       session()->set(array('semester_id' => $semester_id));
-      $where =' where pd.semester_id='.$semester_id;
+      $where =' where pd.semester_id = ?';
     } else {
       $current_semester = session()->get('current_semester');
       $current_semester_id = $current_semester['semester_id'];
       session()->set(array('semester_id' => $current_semester_id));
-      $where =' where pd.semester_id='.$current_semester_id;
+      $where =' where pd.semester_id = ?';
+      $semester_id = $current_semester_id;
     }
 
     $sql = "select *
@@ -39,7 +40,7 @@ class Podwaiver extends MY_Controller
 				" . $where . "
 				order by p.parent_id";
 
-    $data['list'] = $this->db->query($sql)->getResultArray();
+    $data['list'] = $this->db->query($sql, [$semester_id])->getResultArray();
     echo view($_SESSION['tm'].'admin/podwaiver/index.php', $data);
   }
 

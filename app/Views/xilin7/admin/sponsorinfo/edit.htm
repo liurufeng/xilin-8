@@ -46,7 +46,7 @@ $picupurl = $_SESSION['admin_path'].'sponsorinfo/edit';
   		<table width="98%" border="0" cellspacing="1" cellpadding="1">        
           <tr> 
             <td height="30"><span style="color:red;">*</span>name:</td>
-            <td style="text-align:left;"><input name="name" type="text" id="name" size="16" style="width:200px" value="<?php echo $info['name']?>"/></td>
+            <td style="text-align:left;"><input name="name" type="text" id="name" size="16" style="width:200px" value="<?php echo esc($info['name'], 'attr')?>"/></td>
           </tr>        
           <tr> 
             <td height="30">sponsor level:</td>
@@ -60,7 +60,7 @@ $picupurl = $_SESSION['admin_path'].'sponsorinfo/edit';
 						if($v['level_id'] == $info['level_id']){
 							$selected="selected";
 						}
-						echo "<option value='".$v['level_id']."' $selected>".$v['name']."</option>\r\n";
+						echo "<option value='".$v['level_id']."' $selected>".esc($v['name'])."</option>\r\n";
 					}
 				}
 			?>
@@ -70,7 +70,7 @@ $picupurl = $_SESSION['admin_path'].'sponsorinfo/edit';
           <tr> 
             <td height="30">image url:</td>
             <td style="text-align:left;">
-              <input type="text" value="<?php echo $info['image_path']?>" id="icon" name="icon" size="80"/>
+              <input type="text" value="<?php echo esc($info['image_path'], 'attr')?>" id="icon" name="icon" size="80"/>
 
 			    <!--<?php $posturl = '';?>
 			    <table width="100%" border="0" cellspacing="1" cellpadding="1">
@@ -89,7 +89,7 @@ $picupurl = $_SESSION['admin_path'].'sponsorinfo/edit';
          	 <td height="30">&nbsp;</td>
          	 <td>
          	 	<?php if($info['image_path']){?>
-         	 		<div id='divpicview' class='divpre'><img src="<?php echo $info['image_path']?>" alt="" /></div>
+         	 		<div id='divpicview' class='divpre'><img src="<?php echo esc($info['image_path'], 'attr')?>" alt="" /></div>
          	 	<?php }else{?>
      	 	        <div id='divpicview' class='divpre'></div>
          	 	<?php }?>
@@ -97,19 +97,19 @@ $picupurl = $_SESSION['admin_path'].'sponsorinfo/edit';
           </tr>      
           <tr> 
             <td height="30">link:</td>
-            <td style="text-align:left;"><input name="link" type="text" id="link" size="16" style="width:200px"  value="<?php echo $info['link']?>"/></td>
+            <td style="text-align:left;"><input name="link" type="text" id="link" size="16" style="width:200px"  value="<?php echo esc($info['link'], 'attr')?>"/></td>
           </tr>     
           <tr> 
             <td height="30">note:</td>
-            <td style="text-align:left;"><input name="note" type="text" id="note" size="16" style="width:200px"  value="<?php echo $info['note']?>"/></td>
+            <td style="text-align:left;"><input name="note" type="text" id="note" size="16" style="width:200px"  value="<?php echo esc($info['note'], 'attr')?>"/></td>
           </tr>      
           <tr> 
             <td height="30">next pay day:</td>
-            <td style="text-align:left;"><input name="next_pay_day" type="text" id="next_pay_day" size="16" style="width:200px" value="<?php echo $info['next_pay_day']?>"/></td>
+            <td style="text-align:left;"><input name="next_pay_day" type="text" id="next_pay_day" size="16" style="width:200px" value="<?php echo esc($info['next_pay_day'], 'attr')?>"/></td>
           </tr>      
           <tr> 
             <td height="30">next pay amount:</td>
-            <td style="text-align:left;"><input name="next_pay_amount" type="text" id="next_pay_amount" size="16" style="width:200px" value="<?php echo $info['next_pay_amount']?>" /></td>
+            <td style="text-align:left;"><input name="next_pay_amount" type="text" id="next_pay_amount" size="16" style="width:200px" value="<?php echo esc($info['next_pay_amount'], 'attr')?>" /></td>
           </tr>      
           <tr> 
             <td height="30">active:</td>
@@ -120,7 +120,7 @@ $picupurl = $_SESSION['admin_path'].'sponsorinfo/edit';
           </tr>      
           <tr> 
             <td height="30">show order:</td>
-            <td style="text-align:left;"><input name="show_order" type="text" id="show_order" size="16" style="width:200px" value="<?php echo $info['show_order']?>" /></td>
+            <td style="text-align:left;"><input name="show_order" type="text" id="show_order" size="16" style="width:200px" value="<?php echo esc($info['show_order'], 'attr')?>" /></td>
           </tr> 
           <tr> 
             <td height="60">&nbsp;</td>

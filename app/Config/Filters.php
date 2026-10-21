@@ -2,6 +2,8 @@
 
 namespace Config;
 
+use App\Filters\AdminOnly;
+use App\Filters\CsrfScript;
 use CodeIgniter\Config\Filters as BaseFilters;
 use CodeIgniter\Filters\Cors;
 use CodeIgniter\Filters\CSRF;
@@ -34,6 +36,8 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'admin'         => AdminOnly::class,
+        'csrfscript'    => CsrfScript::class,
     ];
 
     /**
@@ -73,12 +77,13 @@ class Filters extends BaseFilters
     public array $globals = [
         'before' => [
             // 'honeypot',
-            // 'csrf',
-            // 'invalidchars',
+            'csrf',
+            'invalidchars',
         ],
         'after' => [
             // 'honeypot',
-            // 'secureheaders',
+            'csrfscript',
+            'secureheaders',
         ],
     ];
 

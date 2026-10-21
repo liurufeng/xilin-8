@@ -35,12 +35,12 @@
     $emails .= $v['email'] .',';
     ?>
   <tr align="center" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
-    <td><?php echo $v['email']?></td>
-    <td><?php echo $v['en_name']?></td>
-    <td><?php echo $v['type']?></td>
-    <td><?php echo $v['cn_name']?></td>
-    <td><?php echo $v['phone1']?></td>
-    <td><?php echo $v['phone2']?></td>
+    <td><?php echo esc($v['email'])?></td>
+    <td><?php echo esc($v['en_name'])?></td>
+    <td><?php echo esc($v['type'])?></td>
+    <td><?php echo esc($v['cn_name'])?></td>
+    <td><?php echo esc($v['phone1'])?></td>
+    <td><?php echo esc($v['phone2'])?></td>
     <td>
 		<a href='<?=$_SESSION['admin_path']?>teacher/edit?teacher_id=<?php echo $v['teacher_id']?>'><u>edit</u></a> |
 		<a href='<?=$_SESSION['admin_path']?>teacher/del?teacher_id=<?php echo $v['teacher_id']?>' onclick="return confirm('Are you sure to delete this teacher?')"><u>delete</u></a>
@@ -50,11 +50,11 @@
 </table>
 <br>
 <p>Email addresses of active teachers</p>
-<textarea cols="80" rows="10"><?=$active_emails?>
+<textarea cols="80" rows="10"><?=esc($active_emails)?>
 </textarea>
 <br>
 <p>Email addresses of all teachers</p>
-<textarea cols="80" rows="10"><?=rtrim($emails,',')?>
+<textarea cols="80" rows="10"><?=esc(rtrim($emails,','))?>
 </textarea>
 </body>
 </html>

@@ -124,3 +124,14 @@ _modules/*
 
 /results/
 /phpunit.xml
+
+#-------------------------
+# Server-only files (app/Config/xilin_environment.php)
+#-------------------------
+# which environment a server is (local/production); exists only on a server, never deployed
+/app/Config/environment.php
+# passwords and tokens of a server
+/app/Config/secrets.php
+# Google API credentials and tokens (Controllers/Payment.php)
+/writable/credentials.json
+/writable/token.json

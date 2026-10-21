@@ -1,5 +1,6 @@
 <?php
 namespace App\Controllers;
+use App\Libraries\Passwords;
 use App\Models\{Semester, Subject, Classes, Teacher, Student, Pod_model,Discount_model};
 
 /**
@@ -28,8 +29,8 @@ class Account extends BaseController
       if ($type == 1) {
         $id = $userinfo[0]['parent_id'];
 
-        $sql = "select * from parents where parent_id = $id";
-        $userinfodata = $this->db->query($sql)->getResultArray();
+        $sql = "select * from parents where parent_id = ?";
+        $userinfodata = $this->db->query($sql, [$id])->getResultArray();
         $data['parent'] = $userinfodata[0];
         $data['usertype'] = $type;
 
@@ -39,7 +40,8 @@ class Account extends BaseController
         $data['teacher'] = $userinfo[0];
         $data['usertype'] = $type;
 
-        $where = " where t.teacher_id = $id and c.status=1 ";
+        $where = " where t.teacher_id = ? and c.status=1 ";
+        $binds = [$id];
         //get the semester info
         $semester = new Semester();
         $data['semesters'] = $semester->getSemesters();
@@ -51,12 +53,14 @@ class Account extends BaseController
         $semester_id = $this->request->getVar('semester_id');
         if(isset($semester_id) && !empty($semester_id)) {
           session()->set(array('semester_id' => $semester_id));
-          $where .=' and c.semester_id='.$semester_id;
+          $where .=' and c.semester_id=?';
+          $binds[] = $semester_id;
         } else {
           $current_semester = session()->get('current_semester');
           $current_semester_id = $current_semester['semester_id'];
           session()->set(array('semester_id' => $current_semester_id));
-          $where .=' and c.semester_id='.$current_semester_id;
+          $where .=' and c.semester_id=?';
+          $binds[] = $current_semester_id;
         }
 
         //get the selected semester's classes and students info of this teacher
@@ -69,7 +73,7 @@ class Account extends BaseController
             ".$where."
             order by c.subject_id, c.class_code, p.parent_id, s.student_id";
 
-        $all_data = $this->db->query($sql)->getResultArray();
+        $all_data = $this->db->query($sql, $binds)->getResultArray();
         $students = $classes = $parent_emails = array();
         foreach($all_data as $a) {
           $classes[$a['class_id']] = $a;
@@ -236,8 +240,16 @@ class Account extends BaseController
     }
 
     if(isset($parent_id) && ctype_digit($parent_id)) {
-      $sql = "select * from parents where parent_id = $parent_id";
-      $userinfo = $this->db->query($sql)->getResultArray();
+      // another parent's invoice: only admins or the parent themself
+      $sess_user = session()->get('userresult');
+      $is_admin = session()->get('id') && session()->get('group_id') && session()->get('name');
+      $is_owner = !empty($sess_user) && $sess_user['usertype'] == 1 && (string)$sess_user[0]['parent_id'] === $parent_id;
+      if(!$is_admin && !$is_owner) {
+        ShowMsg('Session expired, please login again!', '/signin/', 0, 1500);
+        return;
+      }
+      $sql = "select * from parents where parent_id = ?";
+      $userinfo = $this->db->query($sql, [$parent_id])->getResultArray();
     } else {
       $userinfo = session()->get('userresult');
     }
@@ -285,12 +297,12 @@ class Account extends BaseController
             WHERE (semester_id) IN
             ( SELECT MAX(semester_id)
               FROM semester
-              where semester_id < " . $current_semester_id . "
+              where semester_id < ?
               and status = 1
               -- and semester_status = 'Previous'
             )";
 
-        $prev_semester = $this->db->query($sql)->getRowArray();
+        $prev_semester = $this->db->query($sql, [$current_semester_id])->getRowArray();
 
         //pod
         $pod_m = new Pod_model();
@@ -301,9 +313,9 @@ class Account extends BaseController
         //paid
         $sql = "select *
               from checks
-              where parent_id = $id
-              and semester_id = " . $current_semester_id;
-        $checks = $this->db->query($sql)->getResultArray();
+              where parent_id = ?
+              and semester_id = ?";
+        $checks = $this->db->query($sql, [$id, $current_semester_id])->getResultArray();
         $paid = 0;
         $book_charge = $prorate = $payments = array();
         foreach($checks as $check) {
@@ -336,9 +348,9 @@ class Account extends BaseController
       $data['late_fee'] = 0;
       $sql = "select *
               from late_fee
-              where parent_id = $id
-              and semester_id = " . $current_semester_id;
-      $late_fee_arr = $this->db->query($sql)->getRowArray();
+              where parent_id = ?
+              and semester_id = ?";
+      $late_fee_arr = $this->db->query($sql, [$id, $current_semester_id])->getRowArray();
       if(isset($late_fee_arr)) {
         $data['late_fee'] = $late_fee_arr['amount'];
       }
@@ -403,7 +415,7 @@ class Account extends BaseController
         $data['teacher'] = $userinfo[0];
         $teacher_id = $userinfo[0]['teacher_id'];
 
-        if(trim($this->request->getVar('en_name')) == '' || trim($this->request->getVar('passwd')) == ''
+        if(trim($this->request->getVar('en_name')) == ''
           || trim($this->request->getVar('address')) == '' || trim($this->request->getVar('phone1')) == '' || trim($this->request->getVar('phone2')) == ''){
           $data['error_msg'] = 'Missing information, please provide all required information!';
           echo view($_SESSION['tm']."common/account/teacher_info.php", $data);
@@ -412,7 +424,6 @@ class Account extends BaseController
         $insertdata['en_name'] = $this->request->getVar('en_name');
         $insertdata['cn_name'] = $this->request->getVar('cn_name');
         //$insertdata['email'] = $this->request->getVar('email');
-        $insertdata['passwd'] = $this->request->getVar('passwd');
         $insertdata['address'] = $this->request->getVar('address');
         $insertdata['phone1'] = $this->request->getVar('phone1');
         $insertdata['phone2'] = $this->request->getVar('phone2');
@@ -427,6 +438,7 @@ class Account extends BaseController
           $teacher = new Teacher();
           $result = $teacher->getTeacher($teacher_id);
           $result['usertype'] = 2;
+          unset($result['passwd'], $result['password']);
           session()->set(array('userresult'=> ['0'=>$result, 'usertype'=> 2]));
 
           $data['usertype'] = $type;
@@ -455,16 +467,18 @@ class Account extends BaseController
         $data['parent'] = $userinfo[0];
         $parent_id = $userinfo[0]['parent_id'];
 
-        if(trim($this->request->getVar('primary_en_name')) == '' || trim($this->request->getVar('email')) == '' || trim($this->request->getVar('passwd')) == ''
+        if(trim($this->request->getVar('primary_en_name')) == '' || trim($this->request->getVar('email')) == ''
           || trim($this->request->getVar('address')) == '' || trim($this->request->getVar('primary_phone')) == '' || trim($this->request->getVar('primary_relationship')) == ''){
           $data['error_msg'] = 'Missing information, please provide all required information!';
           echo view($_SESSION['tm']."common/account/index.php", $data);
         }
 
         $insertdata['email'] = $this->request->getVar('email');
-        $pass = str_replace("'","[$!)", $this->request->getVar('passwd'));
-        $insertdata['passwd'] = $pass;
-        //$insertdata['passwd'] = $this->request->getVar('passwd');
+        // blank: the password stays as it is
+        $plain = (string)$this->request->getVar('passwd');
+        if ($plain !== '') {
+          $insertdata['passwd'] = Passwords::forStorage('parents', 'passwd', $plain, Passwords::parentLegacy($plain));
+        }
         $insertdata['primary_en_name'] = $this->request->getVar('primary_en_name');
         $insertdata['primary_cn_name'] = $this->request->getVar('primary_cn_name');
         $insertdata['primary_phone'] = $this->request->getVar('primary_phone');
@@ -487,9 +501,10 @@ class Account extends BaseController
 
         if ($result) {
           $sql = "select * from parents
-          where parent_id = $parent_id";
-          $result = $this->db->query($sql)->getRowArray();
+          where parent_id = ?";
+          $result = $this->db->query($sql, [$parent_id])->getRowArray();
           $result['usertype'] = 1;
+          unset($result['passwd']);
           session()->set(array('userresult'=> ['0'=>$result, 'usertype'=> 1]));
           $data['usertype'] = $type;
           $data['parent'] = $result;
@@ -506,49 +521,57 @@ class Account extends BaseController
     }
   }
 
+  /**
+   * Forgot password: emails a parent a link to choose a new password (Password::reset). The answer is the same
+   * whether or not the address has an account, so it can't be used to find out who is registered.
+   * Teachers sign in with Google and have no password.
+   */
   function findpass()
   {
-    $email = $this->request->getVar('email');
-    if(!isset($email) || trim($email) == '') {
+    $email = trim((string)$this->request->getVar('email'));
+    if($email === '') {
       $resp = array('success' => FALSE, 'msg' => 'Empty email!');
       sendJson($resp);
       return;
     }
-    $query = "SELECT passwd from parents where email='".$email."' LIMIT 1";
-    $result = $this->db->query($query)->getRowArray();
-    if ($result) {
-      $pass = str_replace("[$!)", "'", $result['passwd']);
-      $to = $email;
-      $from = $_SESSION['site_email'];
-      $from_header = "From: $from";
-      $subject = "Your password at ".$_SERVER['HTTP_HOST'];
-      $content = "Your password to access the ".$_SERVER['HTTP_HOST']." online registration is ".$pass;
-      mail($to, $subject, $content, $from_header);
-
-      $resp = array('success' => TRUE, 'msg' => "We've sent your password to your email at ".  $email);
+    if(filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+      $resp = array('success' => FALSE, 'msg' => 'Invalid email!');
       sendJson($resp);
       return;
-    } else {
-      //check if this is at teacher's account
-      $query = "SELECT passwd from teachers where email='".$email."' LIMIT 1";
-      $result = $this->db->query($query)->getRowArray();
-      if ($result) {
-        $to = $email;
-        $from = $_SESSION['site_email'];
-        $from_header = "From: $from";
-        $subject = "Your password at ".$_SERVER['HTTP_HOST'];
-        $content = "Your password to access the ".$_SERVER['HTTP_HOST']." online registration is ".$result['passwd'];
-        mail($to, $subject, $content, $from_header);
+    }
+    if (!Passwords::attemptAllowed('findpass', $email)) {
+      $resp = array('success' => FALSE, 'msg' => 'Too many requests. Please wait 10 minutes and try again.');
+      sendJson($resp);
+      return;
+    }
 
-        $resp = array('success' => TRUE, 'msg' => "We've sent your password to your email at ".  $email);
-        sendJson($resp);
-        return;
-      } else {
-        $resp = array('success' => FALSE, 'msg' => "We could NOT find the account registered by your email: " . $email );
+    $result = $this->db->query("SELECT parent_id from parents where email=? LIMIT 1", [$email])->getRowArray();
+    if ($result) {
+      $token = Passwords::newResetToken('parent', (int)$result['parent_id']);
+      if ($token !== null) {
+        $host = parse_url(base_url(), PHP_URL_HOST);
+        $from_header = "From: " . $_SESSION['site_email'];
+        $subject = "Reset your password at ".$host;
+        $content = "To choose a new password for the " . $host . " online registration, open this link within "
+          . (Passwords::RESET_SECONDS / 60) . " minutes:\r\n\r\n" . base_url('password/reset/' . $token)
+          . "\r\n\r\nIf you didn't ask for this, you can ignore this email; your password stays the same.";
+        try {
+          mail($email, $subject, $content, $from_header);
+        } catch (\ErrorException $e) {
+          log_message('error', 'xilin: password reset email not sent: ' . $e->getMessage());
+        }
+      }
+    } else {
+      $teacher = $this->db->query("SELECT teacher_id from teachers where email=? LIMIT 1", [$email])->getRowArray();
+      if ($teacher) {
+        $resp = array('success' => TRUE, 'msg' => "Teachers sign in with their Google (xilinnschinese.org) account; no password is needed.");
         sendJson($resp);
         return;
       }
     }
+
+    $resp = array('success' => TRUE, 'msg' => "If an account is registered with " . esc($email) . ", we've sent it a link to reset the password. Please check your email.");
+    sendJson($resp);
   }
 
   function online_payment()
@@ -625,8 +648,8 @@ class Account extends BaseController
             $message .= "<p><b>Alt Phone:</b> {$userinfo[0]['alter_phone']}</p>";
           }
 
-          $message .= "<br><p><b>School Fee:</b> ${$balance}</p>";
-          $message .= "<p><b>Online Processing Fee:</b> ${$fee}</p>";
+          $message .= "<br><p><b>School Fee:</b> $" . $balance . "</p>";
+          $message .= "<p><b>Online Processing Fee:</b> $" . $fee . "</p>";
           $message .= "<p><b>Total Paid:</b> $". ($balance + $fee) . "</p>";
           $message .= "<p><b>Signature:</b> {$sig}</p>";
           $message .= "<p><b>Dated:</b> {$pdate}</p>";
@@ -685,8 +708,8 @@ class Account extends BaseController
     }
     $pid = $userinfo[0]['parent_id'];
 
-    $query = "SELECT address, city, zip, state from parents where parent_id=".$pid." LIMIT 1";
-    $result = $this->db->query($query)->getRowArray();
+    $query = "SELECT address, city, zip, state from parents where parent_id=? LIMIT 1";
+    $result = $this->db->query($query, [$pid])->getRowArray();
     if ($result) {
       $address = trim($result['address']);
       $city = trim($result['city']);
@@ -704,7 +727,7 @@ class Account extends BaseController
     }
   }
 
-  function sendInvoiceEmail($content)
+  protected function sendInvoiceEmail($content)
   {
     $userinfo = session()->get('userresult');
 
@@ -739,10 +762,11 @@ class Account extends BaseController
           $msg_parent = "<p>Dear {$userinfo[0]['primary_en_name']},</p>";
           $msg_parent .= "<p>Here is the class registration summary and payment instructions.</p><br>";
           $subject = 'Xilin Northshore Chinese School Invoice';
-          $to = $userinfo[0]['email'];
+          $to = str_replace(["\r", "\n"], '', $userinfo[0]['email']);
 
           $headers = "From: Xilin Northshore Chinese School <ec@xilinnschinese.org>\r\n";
-          if($userinfo[0]['alter_contact_email'] && $userinfo[0]['alter_contact_email'] != $userinfo[0]['email']) {
+          if($userinfo[0]['alter_contact_email'] && $userinfo[0]['alter_contact_email'] != $userinfo[0]['email']
+            && filter_var($userinfo[0]['alter_contact_email'], FILTER_VALIDATE_EMAIL)) {
               $headers .= "Cc: {$userinfo[0]['alter_contact_email']} " . "\r\n";
           }
           $headers .= 'Bcc: ' . implode(',', ['rufeng_liu@hotmail.com']) . "\r\n";

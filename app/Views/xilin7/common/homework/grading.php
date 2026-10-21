@@ -12,11 +12,11 @@
           </ul>
           <div style="clear:both;"></div>
           <? if (session()->flashdata('success_msg')) { ?>
-            <div class="row success-flash"><b><?= session()->flashdata('success_msg'); ?></b></div>
+            <div class="row success-flash"><b><?= esc(session()->flashdata('success_msg')); ?></b></div>
           <? } ?>
           <div class="Profile">
             <?php if($usertype == 2){?>
-              <h3>Homework Submissions for <?= isset($hws[0]) ? $hws[0]['title'] : ''?></h3>
+              <h3>Homework Submissions for <?= esc(isset($hws[0]) ? $hws[0]['title'] : '')?></h3>
               <table class="table table-hover table-bordered fixed-table-layout">
               <thead>
               <tr class="bg-primary">
@@ -49,12 +49,12 @@
               <? $i = 0; foreach($hws as $hw) {?>
                   <tbody>
                   <tr><td><?= ++$i?></td>
-                    <td><?=$hw['en_name']?> <?=$hw['cn_name'] ? '('.$hw['cn_name'].')' : '' ?></td>
-                    <td><?=$hw['link']?></td>
-                    <td><?=substr($hw['note'], 0, 100)?></td>
-                    <td><?=$hw['sub_date']?></td>
-                    <td><?=$hw['grade']?></td>
-                    <td><?=substr($hw['comment'], 0, 100)?></td>
+                    <td><?=esc($hw['en_name'])?> <?=esc($hw['cn_name'] ? '('.$hw['cn_name'].')' : '') ?></td>
+                    <td><?=esc($hw['link'])?></td>
+                    <td><?=esc(substr($hw['note'], 0, 100))?></td>
+                    <td><?=esc($hw['sub_date'])?></td>
+                    <td><?=esc($hw['grade'])?></td>
+                    <td><?=esc(substr($hw['comment'], 0, 100))?></td>
                     <td><a href="/homework/grade_homework/<?= $hw['sid'] ?>/<?= $hw['class_id'] ?>/<?= $hw['hid'] ?>/<?= $hw['hw_sub_id'] ?>"
                            class="btn btn-primary btn-md">Grade Homework</a></td>
                   </tr>

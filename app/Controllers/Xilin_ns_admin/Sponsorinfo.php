@@ -41,8 +41,8 @@ class Sponsorinfo extends MY_Controller
     if ($this->request->getVar('dopost') == 'save' || $this->request->getVar('dopost') == 'add') {
       if ($this->request->getVar('name')) {
         $name = trim($this->request->getVar('name'));
-        $sql = " SELECT 1 FROM  sponsor WHERE name = '$name' and status=1";
-         $rst = $this->db->query($sql)->getResultArray();
+        $sql = " SELECT 1 FROM  sponsor WHERE name = ? and status=1";
+         $rst = $this->db->query($sql, [$name])->getResultArray();
         if (is_array($rst) && count($rst) > 0) {
           ShowMsg("Sponsor already exists", $_SESSION['admin_path'].'sponsorinfo/add');
         }
@@ -79,8 +79,8 @@ class Sponsorinfo extends MY_Controller
       // 判断用户名是否存在
       if ($this->request->getVar('sponsor_id')) {
         $name = trim($this->request->getVar('name'));
-        $sql = " SELECT 1 FROM  sponsor WHERE name = '$name' and sponsor_id <> {$this->request->getVar('sponsor_id')} and status=1";
-         $rst = $this->db->query($sql)->getResultArray();
+        $sql = " SELECT 1 FROM  sponsor WHERE name = ? and sponsor_id <> ? and status=1";
+         $rst = $this->db->query($sql, [$name, (int)$this->request->getVar('sponsor_id')])->getResultArray();
         if (is_array($rst) && count($rst) > 0) {
           ShowMsg("sponsor Info'name already exists", $_SESSION['admin_path'].'sponsorinfo/add');
         }

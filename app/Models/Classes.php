@@ -16,9 +16,9 @@ class Classes extends Model
      sc.deleted = 0) as enrolled from classes c
             join teachers t on t.teacher_id = c.teacher_id
             where c.status = 1
-            and c.class_id in (select cc.class_id from classes cc where cc.semester_id = " . session()->get('current_semester')['semester_id'] . ")
+            and c.class_id in (select cc.class_id from classes cc where cc.semester_id = ?)
             order by seq, class_code";
 
-    return $this->db->query($sql)->getResultArray();
+    return $this->db->query($sql, [session()->get('current_semester')['semester_id']])->getResultArray();
   }
 }
