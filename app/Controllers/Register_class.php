@@ -292,11 +292,6 @@ class Register_class extends BaseController
     $teacher_class = $this->db->query($sql, [$class_id, $current_semester_id])->getRowArray();
     $student_name = $this->student_info[0]['en_name'];
 
-    $email = \Config\Services::email();
-    $config['wordWrap'] = TRUE;
-    $config['mailType'] = 'html';
-    $email->initialize($config);
-
     $msg = "<p>Dear {$teacher_class['en_name']},</p>";
 
     if($type == 'new') {
@@ -307,11 +302,7 @@ class Register_class extends BaseController
       $msg .= "<p>Student {$student_name} has un-registered your class {$teacher_class['class_name']} ({$teacher_class['meeting_time']}).</p><br>";
     }
 
-    $email->setFrom('ec@xilinnschinese.org', 'Xilin Northshore Chinese School');
-    $email->setTo($teacher_class['email']);
-    $email->setBCC('ec@xilinnschinese.org, rufeng_liu@hotmail.com');
-    $email->setSubject($subject);
-    $email->setMessage($msg);
-    $email->send();
+    send_html_mail($teacher_class['email'], $subject, $msg, 'ec@xilinnschinese.org', 'Xilin Northshore Chinese School',
+      '', 'ec@xilinnschinese.org, rufeng_liu@hotmail.com');
   }
 }

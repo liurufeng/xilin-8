@@ -163,16 +163,7 @@ HTML;
       //echo $message;
       // now send the email
       $subject = 'Xilin Northshore Chinese School Class Roster Update';
-      //$this->load->library('email');
-      $config['wordwrap'] = TRUE;
-      $config['mailtype'] = 'html';
-      $email = \Config\Services::email();
-      $email->initialize($config);
-      $email->setFrom('ec@xilinnschinese.org', 'Xilin Northshore Chinese School');
-      $email->setTo('rufeng_liu@hotmail.com');
-      $email->setSubject($subject);
-      $email->setMessage($message);
-      $email->send();
+      send_html_mail('rufeng_liu@hotmail.com', $subject, $message, 'ec@xilinnschinese.org', 'Xilin Northshore Chinese School');
     }
   }
 }

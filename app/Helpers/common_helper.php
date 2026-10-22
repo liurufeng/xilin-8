@@ -923,4 +923,49 @@ if ( ! function_exists('str_cut'))
     return $strcut.$dot;
   }
 }
+
+/**
+ * Send an HTML email with PHP's mail() function
+ *
+ * @param string $to comma-separated recipients
+ * @param string $subject
+ * @param string $html_message
+ * @param string $from_email
+ * @param string $from_name
+ * @param string $cc comma-separated
+ * @param string $bcc comma-separated
+ * @return bool
+ */
+if (!function_exists('send_html_mail')) {
+  function send_html_mail($to, $subject, $html_message, $from_email, $from_name = '', $cc = '', $bcc = '') {
+    // strip CR/LF so header values can't inject extra headers
+    $clean = fn($s) => trim(str_replace(["\r", "\n"], '', (string)$s));
+    $to = $clean($to);
+    $from_email = $clean($from_email);
+
+    $from = $from_name !== '' ? '=?UTF-8?B?' . base64_encode($clean($from_name)) . "?= <{$from_email}>" : $from_email;
+    $headers = [
+      'MIME-Version' => '1.0',
+      'Content-Type' => 'text/html; charset=UTF-8',
+      'From' => $from,
+      'Reply-To' => $from_email,
+    ];
+    if ($clean($cc) !== '') {
+      $headers['Cc'] = $clean($cc);
+    }
+    if ($clean($bcc) !== '') {
+      $headers['Bcc'] = $clean($bcc);
+    }
+
+    $encoded_subject = '=?UTF-8?B?' . base64_encode($clean($subject)) . '?=';
+    $body = wordwrap($html_message, 76, "\r\n");
+
+    try {
+      return mail($to, $encoded_subject, $body, $headers, '-f' . $from_email);
+    } catch (\ErrorException $e) {
+      log_message('error', 'xilin: email to ' . $to . ' not sent: ' . $e->getMessage());
+      return false;
+    }
+  }
+}
 /* End of file common_helper.php */

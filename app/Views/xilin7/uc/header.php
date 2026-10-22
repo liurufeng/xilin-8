@@ -32,10 +32,6 @@
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 
-    <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="787488937189-p0prt8vpmf7vrg3c51681u1d7q6kchv2.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js?onload=onLoadCallback" async defer></script>
-
     <link rel="shortcut icon" href="<?php echo base_url();?>/<?=$_SESSION['tm']?>img/logo.png">
 
     <script src="<?php echo base_url();?>/common/js/common.js"></script>
