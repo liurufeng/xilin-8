@@ -33,9 +33,9 @@ class Database extends Config
 	public array $default = [
 		'DSN'      => '',
 		'hostname' => 'xilinnuc.startlogicmysql.com',
-		'username' => 'newsite',
-		'password' => 'newsite', // db_password in secrets.php replaces it when set (see __construct)
-		'database' => 'scdb',
+		'username' => 'scdb_db',
+		'password' => 'data@*^&Tiu5g#$', // db_password in secrets.php replaces it when set (see __construct)
+		'database' => 'scdb_newdb',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
 		'pConnect' => false,
