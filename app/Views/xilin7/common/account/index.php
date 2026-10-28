@@ -162,6 +162,7 @@
                 <td style="text-align:right;"><span style="color:red;">*</span>Password:</td>
                 <td class="right"><input type="password" value="" placeholder="leave blank to keep" autocomplete="new-password" name="passwd"
                                          style="width:300px; padding: 3px;"/>
+                  <div style="color:#777; font-size:12px;"><?= esc(\App\Libraries\Passwords::RULES) ?></div>
                 </td>
               </tr>
               <tr>

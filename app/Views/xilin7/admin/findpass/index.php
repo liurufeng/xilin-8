@@ -47,7 +47,7 @@
       <!-- passwords are stored as hashes and can't be shown; set a new one and tell the parent -->
       <form method="post" action="<?= $_SESSION['admin_path'].'findpass/setpass'?>" autocomplete="off">
         <input type="hidden" name="parent_id" value="<?= (int)$v['parent_id']?>"/>
-        <input type="password" name="passwd" size="10" autocomplete="new-password"/>
+        <input type="password" name="passwd" size="10" autocomplete="new-password" title="<?= esc(\App\Libraries\Passwords::RULES, 'attr') ?>"/>
         <input type="submit" value="Set"/>
       </form>
     </td>

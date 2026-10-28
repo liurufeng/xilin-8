@@ -107,8 +107,8 @@ class Password extends BaseController
 
     $pass = (string)$this->request->getPost('passwd');
     $data = array();
-    if (mb_strlen($pass) < Passwords::MIN_LENGTH) {
-      $data['error_msg'] = 'Please use at least ' . Passwords::MIN_LENGTH . ' characters.';
+    if (($problem = Passwords::problem($pass)) !== null) {
+      $data['error_msg'] = $problem;
     } elseif ($pass !== (string)$this->request->getPost('passwd2')) {
       $data['error_msg'] = 'The two passwords are not the same.';
     } else {

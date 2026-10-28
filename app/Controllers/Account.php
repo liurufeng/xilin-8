@@ -476,6 +476,11 @@ class Account extends BaseController
         $insertdata['email'] = $this->request->getVar('email');
         // blank: the password stays as it is
         $plain = (string)$this->request->getVar('passwd');
+        if ($plain !== '' && ($problem = Passwords::problem($plain)) !== null) {
+          $data['error_msg'] = $problem;
+          echo view($_SESSION['tm']."common/account/index.php", $data);
+          return;
+        }
         if ($plain !== '') {
           $insertdata['passwd'] = Passwords::forStorage('parents', 'passwd', $plain, Passwords::parentLegacy($plain));
         }

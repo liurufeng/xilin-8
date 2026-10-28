@@ -34,7 +34,8 @@
                                 <tr>
                                     <td style="text-align:right;"><span style="color:red;">*</span>Password:</td>
                                     <td style="padding:3px;"><input type="password" value="" name="passwd" autocomplete="new-password"
-                                                                    style="width:300px; margin-left:20px;"/></td>
+                                                                    style="width:300px; margin-left:20px;"/>
+                                        <div style="margin-left:20px; color:#777; font-size:12px;"><?= esc(\App\Libraries\Passwords::RULES) ?></div></td>
                                 </tr>
                                 <tr>
                                     <td style="text-align:right;"><span style="color:red;">*</span>Primary Contact

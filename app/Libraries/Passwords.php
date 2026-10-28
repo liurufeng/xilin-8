@@ -12,7 +12,39 @@ namespace App\Libraries;
  */
 class Passwords
 {
-    public const MIN_LENGTH = 6;
+    // a new password (sign-ins with an older, weaker one still work): at least MIN_LENGTH characters, with an upper
+    // and a lower case letter, a number and a symbol
+    public const MIN_LENGTH = 8;
+    public const RULES      = 'At least 8 characters, with an uppercase letter, a lowercase letter, a number and a symbol.';
+
+    /**
+     * What is wrong with $plain as a new password, or null if it is strong enough.
+     */
+    public static function problem(string $plain): ?string
+    {
+        $missing = [];
+        if (! preg_match('/\p{Lu}/u', $plain)) {
+            $missing[] = 'an uppercase letter';
+        }
+        if (! preg_match('/\p{Ll}/u', $plain)) {
+            $missing[] = 'a lowercase letter';
+        }
+        if (! preg_match('/\d/', $plain)) {
+            $missing[] = 'a number';
+        }
+        if (! preg_match('/[^\p{L}\d]/u', $plain)) {
+            $missing[] = 'a symbol (such as ! @ # $ %)';
+        }
+
+        if (mb_strlen($plain) < self::MIN_LENGTH) {
+            return 'The password needs at least ' . self::MIN_LENGTH . ' characters. ' . self::RULES;
+        }
+        if ($missing !== []) {
+            return 'The password needs ' . implode(', ', $missing) . '. ' . self::RULES;
+        }
+
+        return null;
+    }
 
     // sign-in attempts allowed per account and visitor, and per visitor, in THROTTLE_SECONDS
     private const PER_ACCOUNT      = 5;

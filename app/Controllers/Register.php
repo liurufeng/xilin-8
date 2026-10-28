@@ -54,7 +54,10 @@ class Register extends BaseController
       }
 
       $plain = (string)$this->request->getVar('passwd');
-      $insertdata['passwd'] = $plain === '' ? '' : Passwords::forStorage('parents', 'passwd', $plain, Passwords::parentLegacy($plain));
+      if (($problem = Passwords::problem($plain)) !== null) {
+        ShowMsg($problem, '-1', 0, 5000);
+      }
+      $insertdata['passwd'] = Passwords::forStorage('parents', 'passwd', $plain, Passwords::parentLegacy($plain));
       $insertdata['primary_en_name'] = $this->request->getVar('primary_en_name');
       $insertdata['primary_cn_name'] = $this->request->getVar('primary_cn_name');
       $insertdata['primary_phone'] = $this->request->getVar('primary_phone');

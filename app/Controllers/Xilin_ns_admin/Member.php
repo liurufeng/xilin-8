@@ -76,7 +76,11 @@ class Member extends MY_Controller
 
         $insertdata['name'] = $this->request->getVar('username');
         $insertdata['realname'] = $this->request->getVar('realname');
-        $insertdata['pass'] = Passwords::forStorage('admin', 'pass', (string)$this->request->getVar('pwd'));
+        $pwd = (string)$this->request->getVar('pwd');
+        if (($problem = Passwords::problem($pwd)) !== null) {
+          ShowMsg($problem, '-1', 0, 5000);
+        }
+        $insertdata['pass'] = Passwords::forStorage('admin', 'pass', $pwd);
         $insertdata['group_id'] = $this->request->getVar('groupid');
         $insertdata['email'] = $this->request->getVar('email');
         $this->db->table('admin')
@@ -110,6 +114,9 @@ class Member extends MY_Controller
         $insertdata['realname'] = $this->request->getVar('realname');
         // blank: the password stays as it is
         $pwd = (string)$this->request->getVar('pwd');
+        if ($pwd !== '' && ($problem = Passwords::problem($pwd)) !== null) {
+          ShowMsg($problem, '-1', 0, 5000);
+        }
         if ($pwd !== '') {
           $insertdata['pass'] = Passwords::forStorage('admin', 'pass', $pwd);
           $insertdata['pwd'] = null;

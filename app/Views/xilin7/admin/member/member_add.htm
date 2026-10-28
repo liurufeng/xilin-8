@@ -53,7 +53,7 @@
           </tr>
           <tr> 
             <td height="30">password：</td>
-            <td style="text-align:left;"><input name="pwd" autocomplete="new-password" type="password" id="pwd" size="16" style="width:200px" /> </td>
+            <td style="text-align:left;"><input name="pwd" autocomplete="new-password" type="password" id="pwd" size="16" style="width:200px" /> <span style="color:#777;"><?= esc(\App\Libraries\Passwords::RULES) ?></span></td>
           </tr>
           <tr> 
             <td height="30">admin group：</td>

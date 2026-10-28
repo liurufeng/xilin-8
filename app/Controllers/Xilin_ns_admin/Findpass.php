@@ -62,8 +62,11 @@ class Findpass extends MY_Controller
   {
     $parent_id = (int)$this->request->getPost('parent_id');
     $pass = (string)$this->request->getPost('passwd');
-    if ($parent_id <= 0 || mb_strlen($pass) < Passwords::MIN_LENGTH) {
-      ShowMsg('Please type a new password of at least ' . Passwords::MIN_LENGTH . ' characters.', '-1');
+    if ($parent_id <= 0) {
+      ShowMsg('Please choose a parent.', '-1');
+    }
+    if (($problem = Passwords::problem($pass)) !== null) {
+      ShowMsg($problem, '-1');
     }
 
     $this->db->table('parents')

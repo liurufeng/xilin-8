@@ -7,7 +7,7 @@
             <?php if (!empty($error_msg)) { ?>
               <div class="alert alert-danger"><?= esc($error_msg) ?></div>
             <?php } ?>
-            <div class="card-help">Use at least <?= \App\Libraries\Passwords::MIN_LENGTH ?> characters.</div>
+            <div class="card-help"><?= esc(\App\Libraries\Passwords::RULES) ?></div>
             <form method="POST" action="/password/save" autocomplete="off">
               <div class="card-field">
                 <label for="new_passwd">New password</label>
