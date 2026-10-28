@@ -68,7 +68,7 @@ class Pod_model extends Model
 
   function getPODCharge($parent=array(), $current_semester=array(), $prev_semester=array()) {
     //$current_semester = session()->get('current_semester');
-    if($current_semester['semester_name'] == 'Spring') {
+    if($current_semester['semester_name'] == 'Spring' || $current_semester['semester_name'] == 'Summer') {
       return array('waiver'=>'NA', 'need'=>0,'done'=>0,'manually'=>0, 'missed'=>0, 'penalty'=>0);
     } else {
       $sql = "select semester_id from semester

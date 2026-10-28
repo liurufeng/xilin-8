@@ -61,6 +61,16 @@
             </table>
         </div>
     </div>
+
+      <br>
+      <div class="">
+          <div class="about_widget widget">
+              <div class="heading1">
+                  <h2><a href="#">Our Sponsors</a></h2>
+              </div><!-- heading -->
+          </div>
+        <?php echo view($_SESSION['tm'].'sponsor_block.php') ?>
+      </div>
   </div>
 </div>
 

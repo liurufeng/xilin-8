@@ -19,6 +19,7 @@ $controllers = [
     ['index', 'Index', ['index'], null],
     ['home', 'Home', ['index'], null],
     ['school', 'School', ['index', 'mission', 'rules', 'faq', 'scholarship', 'forms', 'notice', 'location', 'links', 'fundraising', 'jobs', 'newsletters', 'admins', 'intro', 'allannounce', 'allnews', 'finaid', 'contactus', 'contact', 'sponsor', 'pvsa'], null],
+    ['careers', 'Careers', ['index', 'applyjob'], null],
     ['calendar', 'Calendar', ['index'], null],
     ['classinfo', 'Classinfo', ['index'], null],
     ['gallery', 'Gallery', ['index'], null],

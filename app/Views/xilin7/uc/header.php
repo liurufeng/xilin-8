@@ -367,6 +367,11 @@
                                                 <span class="glyphicon glyphicon-gift"></span><a href="/school/sponsor">Our Sponsors</a>
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <td>
+                                                <span class="glyphicon glyphicon-education"></span><a href="/careers">Careers</a>
+                                            </td>
+                                        </tr>
 
                                     </table>
                                 </div>

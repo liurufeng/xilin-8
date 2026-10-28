@@ -1,106 +1,198 @@
 <style>
-    .sponsor-level {
-        margin: 30px 0 20px;
+    .sponsor-item {
+        margin-bottom: 25px;
     }
 
-    .sponsor-card {
-        border: 1px solid #ddd;
-        border-radius: 8px;
+    .sponsor-box {
+        padding: 12px;
+        border: 1px solid #eee;
+        border-radius: 6px;
         background: #fff;
-        padding: 15px;
-        margin-bottom: 25px;
-        height: 260px;               /* Same height for all */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all .3s ease;
-        box-shadow: 0 2px 8px rgba(0,0,0,.08);
+        text-align: center;
+        transition: .2s ease;
+        min-height: 315px;
     }
 
-    .sponsor-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 4px 12px rgba(0,0,0,.15);
+    .sponsor-box:hover {
+        box-shadow: 0 6px 18px rgba(0,0,0,.12);
+        transform: translateY(-2px);
     }
 
-    .sponsor-card img {
+    .sponsor-box img {
         max-width: 100%;
-        max-height: 200px;           /* Keeps images same visual size */
-        object-fit: contain;
+        max-height: 260px;
+        display: inline-block;
     }
 
-    .sponsor-note {
-        font-size: 18px;
-        text-align: center;
-        margin-bottom: 25px;
+    .sponsor-note{
+        margin-top:10px;
+        font-size:13px;
     }
 
-    .sponsor-footer {
-        font-size: 18px;
-        text-align: center;
-        margin-top: 30px;
+    /* ---------- Preview ---------- */
+
+    #sponsorPreview{
+        display:none;
+        position:fixed;
+        top:20px;
+        left:20px;
+        z-index:99999;
+
+        background:#fff;
+        border:1px solid #ccc;
+        border-radius:8px;
+        padding:10px;
+
+        box-shadow:0 10px 30px rgba(0,0,0,.35);
+
+        pointer-events:none;
     }
 
     @media (max-width: 768px) {
-        .sponsor-card {
-            height: 220px;
+        #sponsorPreview {
+            display: none !important;
         }
+    }
+
+    #sponsorPreview img{
+        max-width:500px;
+        max-height:500px;
+        display:block;
     }
 </style>
 
-<div class="row">
-  <div class="col-md-12" style="font-size: 18px;">
-      Please mention Xilin NS Chinese School when you call or visit our sponsors!<br/>
-      访问时请说明来自希林芝北中文学校
-  </div>
+<div id="sponsorPreview">
+    <img src="">
 </div>
+
+<div class="row">
+    <div class="col-md-12" style="font-size:18px;">
+        Please mention Xilin NS Chinese School when you call or visit our sponsors!<br/>
+        访问时请说明来自希林芝北中文学校
+    </div>
+</div>
+
 <br>
-    <?php
+
+<?php
+
+$sponsors = session()->get('sponsors');
+
+if (empty($sponsors)) {
     $db = db_connect();
-    $sname_arr = array();
-      $sql = "select s.*, sl.name as level_name
-          from sponsor s
-          join sponsor_level sl on s.level_id = sl.level_id
-          where s.status = 1 and active > 0
-          order by sl.show_order asc,s.show_order asc";
+
+    $sql = "
+SELECT s.*, sl.name level_name
+FROM sponsor s
+JOIN sponsor_level sl
+ON s.level_id=sl.level_id
+WHERE s.status=1
+AND active>0
+ORDER BY sl.show_order,RAND()
+";
+
     $sponsors = $db->query($sql)->getResultArray();
-    ?>
-    <?php $start = false;
-    foreach ($sponsors as $s) {
-      if(!in_array($s['level_name'], $sname_arr)) {
-        if($start) echo "</div>";
-        ?>
-        <div class="heading1 row text-center sponsor-level">
-            <h2><a href="#"><?=esc($s['level_name']) ?></a></h2>
-        </div>
-      <?php
+    session()->set('sponsors', $sponsors);
+}
 
-        $sname_arr[] = $s['level_name'];
-        echo "<div class='row'>";
-        $start = true;
+$currentLevel=null;
 
-      }
-      ?>
-          <!--<div class="col-md-5">
-          <div align="center" style="font-size:12px;"><a href="<?/*= $s['link']; */?>" target="_blank"><img class="img-responsive"
-                  src="<?/*= $s['image_path']; */?>" border="0" style="max-width: 280px;"/></a><br/><br/>
-          </div>
-            <h6><?/*= $s['note'] ? $s['note'] : '' */?></h6>
-          </div>-->
+foreach($sponsors as $s):
 
-        <div class="col-md-4 col-sm-6">
-            <div class="sponsor-card">
-                <a href="<?= esc($s['link'], 'attr'); ?>" target="_blank">
-                    <img src="<?= esc($s['image_path'], 'attr'); ?>"
-                         class="img-responsive"
-                         alt="<?= esc($s['note'] ? $s['note'] : '', 'attr') ?>l">
-                </a>
+if($currentLevel!=$s['level_name']):
+
+if($currentLevel!==null){
+  echo "</div>";
+}
+
+?>
+
+<div class="sponsor-level text-center" style="margin:25px 0;">
+    <h2><a href="#"><?= esc($s['level_name']) ?></a></h2>
+</div>
+
+<div class="row">
+
+  <?php
+
+  $currentLevel=$s['level_name'];
+
+  endif;
+
+  ?>
+
+    <div class="col-md-6 col-sm-6 sponsor-item">
+
+        <div class="sponsor-box">
+
+            <a class="sponsor-link"
+               href="<?= esc($s['link'], 'attr') ?>"
+               target="_blank">
+
+                <img
+                        src="<?= esc($s['image_path'], 'attr') ?>"
+                        class="img-responsive sponsor-logo"
+                        alt="<?= esc($s['note'], 'attr') ?>"
+                        data-large="<?= esc($s['image_path'], 'attr') ?>">
+
+            </a>
+
+            <div class="sponsor-note">
+              <?= esc($s['note']) ?>
             </div>
+
         </div>
 
-    <?php }?>
-    </div> <!--ending the last sponsor's <div class='row'>-->
-  <div class="row" style="font-size: 18px;">
-    <hr/>
+    </div>
+
+  <?php endforeach; ?>
+
+</div>
+
+<br>
+
+<div class="row" style="font-size:18px;">
+    <hr>
+
     Your Position Here!
-    <a href="mailto:chairpersonBOD@xilinnschinese.org ">Email us...</a><br/>
-  </div>
+
+    <a href="mailto:chairpersonBOD@xilinnschinese.org">
+        Email us...
+    </a>
+
+</div>
+
+<script>
+    $(function () {
+
+        // Disable preview on mobile/tablets
+        if ($(window).width() <= 768) {
+            return;
+        }
+
+        $(".sponsor-link")
+
+            .mouseenter(function () {
+
+                $("#sponsorPreview img").attr(
+                    "src",
+                    $(this).find("img").data("large")
+                );
+
+                $("#sponsorPreview")
+                    .stop(true, true)
+                    .fadeIn(150);
+
+            })
+
+            .mouseleave(function () {
+
+                $("#sponsorPreview")
+                    .stop(true, true)
+                    .fadeOut(150);
+
+            });
+
+    });
+
+</script>

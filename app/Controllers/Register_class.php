@@ -278,11 +278,12 @@ class Register_class extends BaseController
 
   /**
    * @param $current_semester_id
-   * @param $config
+   * @param $class_id
+   * @param string $type
    */
   protected function send_email($current_semester_id, $class_id, $type = 'new')
   {
-// get the teacher's email and name
+    // get the teacher's email and name
     $sql = "SELECT c.class_name, c.meeting_time, t.en_name, t.email
                   FROM classes c 
                   JOIN teachers t on t.teacher_id = c.teacher_id 

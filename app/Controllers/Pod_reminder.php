@@ -68,7 +68,7 @@ class Pod_reminder extends BaseController {
 
           $subject = "POD at Chinese School this Sunday";
           //$to = 'rufeng_liu@hotmail.com';
-          mail($to, $subject, $msg, $from_header);
+          mail($to, $subject, $msg, $from_header, '-f ec@xilinnschinese.org');
         }
 
       }
