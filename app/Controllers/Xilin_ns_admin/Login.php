@@ -1,6 +1,6 @@
 <?php namespace App\Controllers\Xilin_ns_admin;
 
-use App\Libraries\Passwords;
+use App\Libraries\{LoginCode, Passwords};
 use App\Models\Admin\{Member_model};
 /**
  *
@@ -48,13 +48,59 @@ class Login extends MY_Controller
       $userinfo = $member_model->getuserinfo($uid);
       $userinfo['authorized_nodes'] = explode(',', $userinfo['nodeids']);
 
-      // a new session id on sign-in
-      session()->regenerate(true);
-      session()->set($userinfo);
-      return redirect()->to($_SESSION['admin_path'].'index');
+      // the password is right; the sign-in finishes once the code emailed to LoginCode::ADMIN_EMAIL is typed in
+      if (!LoginCode::start('admin', $userinfo, LoginCode::ADMIN_EMAIL)) {
+        log_message('error', 'xilin: admin sign-in code not sent for ' . $name);
+      }
+      return redirect()->to($_SESSION['admin_path'].'login/verify');
     } else {
       ShowMsg('Login failed!', $_SESSION['admin_path'].'login/', 0, 1500);
     }
+  }
+
+  /**
+   * The second sign-in step: the code emailed by check_login.
+   */
+  function verify()
+  {
+    if (LoginCode::pending('admin') === null) {
+      return redirect()->to($_SESSION['admin_path'].'login');
+    }
+    if (strtolower($this->request->getMethod()) !== 'post') {
+      echo view($_SESSION['tm'].'admin/login/verify.htm', array('masked_email' => LoginCode::maskedTo('admin')));
+      return;
+    }
+
+    $userinfo = LoginCode::finish('admin', (string)$this->request->getPost('code'));
+    if ($userinfo === null) {
+      if (LoginCode::pending('admin') === null) {
+        ShowMsg('The code expired or was entered wrong too many times. Please sign in again.', $_SESSION['admin_path'].'login', 0, 3000);
+      }
+      echo view($_SESSION['tm'].'admin/login/verify.htm', array(
+        'masked_email' => LoginCode::maskedTo('admin'),
+        'error_msg' => 'That code is not right.',
+      ));
+      return;
+    }
+
+    // a new session id on sign-in
+    session()->regenerate(true);
+    session()->set($userinfo);
+    return redirect()->to($_SESSION['admin_path'].'index');
+  }
+
+  // emails a new code (the button on the code page)
+  function resend()
+  {
+    if (LoginCode::pending('admin') === null) {
+      return redirect()->to($_SESSION['admin_path'].'login');
+    }
+    $sent = LoginCode::send('admin');
+    echo view($_SESSION['tm'].'admin/login/verify.htm', array(
+      'masked_email' => LoginCode::maskedTo('admin'),
+      'success_msg' => $sent ? 'A new code has been sent.' : '',
+      'error_msg' => $sent ? '' : 'Please wait a minute before asking for another code.',
+    ));
   }
 
   function logout()

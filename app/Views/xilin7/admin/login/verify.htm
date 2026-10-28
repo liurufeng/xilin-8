@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Xilin Northshore Admin login</title>
+<link href="/admin/css/base.css" rel="stylesheet" type="text/css" />
+<link href="/admin/css/login.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="login-box">
+   <div class="login-top"></div>
+
+   <div class="login-main">
+     <p style="margin:0 0 10px 0;">A 6-digit code was sent to <b><?= esc($masked_email ?? '') ?></b>. It works for 10 minutes.</p>
+     <?php if (!empty($error_msg)) { ?><p style="color:#c00;margin:0 0 10px 0;"><?= esc($error_msg) ?></p><?php } ?>
+     <?php if (!empty($success_msg)) { ?><p style="color:#080;margin:0 0 10px 0;"><?= esc($success_msg) ?></p><?php } ?>
+	   <form name="form1" method="post" action="<?=$_SESSION['admin_path']?>login/verify" autocomplete="off">
+      <dl>
+	   <dt>Code：</dt>
+	   <dd><input type="text" name="code" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" autocomplete="one-time-code" autofocus required /></dd>
+	   <dt>&nbsp;</dt>
+		<dd><button type="submit" class="login-btn">Login</button></dd>
+	 </dl>
+	   </form>
+	   <form method="post" action="<?=$_SESSION['admin_path']?>login/resend" style="margin-top:10px;">
+	     <button type="submit">Send a new code</button> or <a href="<?=$_SESSION['admin_path']?>login">start over</a>
+	   </form>
+   </div>
+   <div class="login-power"> </div>
+</div>
+
+</body>
+</html>

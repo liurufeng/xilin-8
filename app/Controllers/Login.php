@@ -1,5 +1,5 @@
 <?php namespace App\Controllers;
-use App\Libraries\Passwords;
+use App\Libraries\{LoginCode, Passwords};
 use App\Models\{Semester, Subject, Classes, Teacher, Article};
 
 /**
@@ -53,16 +53,62 @@ class Login extends BaseController
       return redirect()->to(base_url('/signin') );
     }
 
-    // a new session id on sign-in; the password (hash) stays out of the session
-    $pod = session()->get('pod');
-    session()->regenerate(true);
+    // the password is right; the sign-in finishes once the code emailed to the parent is typed in (verify)
     unset($parent['passwd']);
-    session()->set(array('userresult'=> array(0 => $parent, 'usertype' => 1)));
-    if ($pod) {
+    $pending = array('parent' => $parent, 'pod' => (bool)session()->get('pod'));
+    if (!LoginCode::start('parent', $pending, (string)$parent['email'])) {
+      log_message('error', 'xilin: sign-in code not sent to parent ' . $parent['parent_id']);
+    }
+    return redirect()->to(base_url('/login/verify'));
+  }
+
+  /**
+   * The second sign-in step: the code emailed by check_login.
+   */
+  function verify()
+  {
+    if (LoginCode::pending('parent') === null) {
+      return redirect()->to(base_url('/signin'));
+    }
+    if (strtolower($this->request->getMethod()) !== 'post') {
+      echo view($_SESSION['tm'].'signin/verify.php', array('masked_email' => LoginCode::maskedTo('parent')));
+      return;
+    }
+
+    $pending = LoginCode::finish('parent', (string)$this->request->getPost('code'));
+    if ($pending === null) {
+      if (LoginCode::pending('parent') === null) {
+        ShowMsg('The code expired or was entered wrong too many times. Please sign in again.', '/signin/', 0, 3000);
+      }
+      echo view($_SESSION['tm'].'signin/verify.php', array(
+        'masked_email' => LoginCode::maskedTo('parent'),
+        'error_msg' => 'That code is not right. Please check the email and try again.',
+      ));
+      return;
+    }
+
+    // a new session id on sign-in; the password (hash) stays out of the session
+    session()->regenerate(true);
+    session()->set(array('userresult'=> array(0 => $pending['parent'], 'usertype' => 1)));
+    if ($pending['pod']) {
       session()->remove('pod');
       return redirect()->to(base_url('/pod/index') );
     }
     return redirect()->to(base_url('/account') );
+  }
+
+  // emails a new code (the button on the code page)
+  function resend()
+  {
+    if (LoginCode::pending('parent') === null) {
+      return redirect()->to(base_url('/signin'));
+    }
+    $sent = LoginCode::send('parent');
+    echo view($_SESSION['tm'].'signin/verify.php', array(
+      'masked_email' => LoginCode::maskedTo('parent'),
+      'success_msg' => $sent ? 'A new code has been sent.' : '',
+      'error_msg' => $sent ? '' : 'Please wait a minute before asking for another code.',
+    ));
   }
 
   function logout()

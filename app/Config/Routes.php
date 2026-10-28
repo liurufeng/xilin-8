@@ -25,7 +25,7 @@ $controllers = [
     ['gallery', 'Gallery', ['index'], null],
     ['pod', 'Pod', ['index', 'getEvents', 'processRegEvent', 'processUnregEvent'], null],
     ['signin', 'Signin', ['index'], null],
-    ['login', 'Login', ['index', 'check_login', 'logout'], null],
+    ['login', 'Login', ['index', 'check_login', 'verify', 'resend', 'logout'], null],
     ['tlogin', 'Tlogin', ['index', 'g_login'], null],
     ['register', 'Register', ['index', 'registerinfo'], null],
     ['register_class', 'Register_class', ['index', 'do_register', 'send_email'], null],
@@ -38,7 +38,7 @@ $controllers = [
     ['imap', 'Imap', ['index'], null],
     ['payment', 'Payment', ['auth', 'callback', 'read'], null],
 
-    ['Xilin_ns_admin/login', 'Xilin_ns_admin\Login', ['index', 'check_login', 'logout'], null],
+    ['Xilin_ns_admin/login', 'Xilin_ns_admin\Login', ['index', 'check_login', 'verify', 'resend', 'logout'], null],
 
     ['Xilin_ns_admin/index', 'Xilin_ns_admin\Index', ['index', 'index_menu', 'index_body', 'catalogmenu'], 'admin'],
     ['Xilin_ns_admin/calendar', 'Xilin_ns_admin\Calendar', ['index', 'add', 'edit', 'del', 'desc', 'copy'], 'admin'],
