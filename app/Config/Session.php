@@ -126,12 +126,6 @@ class Session extends BaseConfig
      */
     public int $lockMaxRetries = 300;
 
-    public function __construct()
-    {
-        require_once __DIR__ . '/xilin_environment.php';
-
-        parent::__construct();
-
-        $this->savePath = xilin_session_dir();
-    }
+    // Sessions stay in writable/session: on the shared host the system temp directory isn't the same for every request
+    // (xilin_session_dir() put them there, and signed-in users were signed out on the next page).
 }

@@ -102,27 +102,4 @@ if (!function_exists('xilin_environment')) {
     $p = isset($_GET['p']) && is_string($_GET['p']) ? $_GET['p'] : '';
     return $p !== '' && hash_equals((string)xilin_secret('cron_token', 'qDqAxn24w!0@o9!*@o15'), $p);
   }
-
-  // Sessions in a folder of the system temp directory only the site's PHP user can read (instead of loose in a shared
-  // folder). Created on first use; if that fails, writable/session is used and a warning logged.
-  function xilin_session_dir()
-  {
-    $fallback = rtrim(WRITEPATH, '/\\') . DIRECTORY_SEPARATOR . 'session';
-    if (PHP_SAPI === 'cli') {
-      return $fallback;
-    }
-    $dir = rtrim(sys_get_temp_dir(), '/\\') . DIRECTORY_SEPARATOR . 'xilin_sessions';
-    if (!is_dir($dir)) {
-      @mkdir($dir, 0700);
-    }
-    $ok = is_dir($dir) && !is_link($dir) && is_writable($dir);
-    if ($ok && function_exists('posix_geteuid')) {
-      $ok = fileowner($dir) === posix_geteuid() && (fileperms($dir) & 0077) === 0;
-    }
-    if (!$ok) {
-      error_log('xilin: can\'t use ' . $dir . ' (missing, not writable, or not private to this user); sessions stay in ' . $fallback);
-      return $fallback;
-    }
-    return $dir;
-  }
 }
