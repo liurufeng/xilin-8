@@ -5,25 +5,41 @@
 <title>Xilin Northshore Admin login</title>
 <link href="/admin/css/base.css" rel="stylesheet" type="text/css" />
 <link href="/admin/css/login.css" rel="stylesheet" type="text/css" />
+<style>
+  .login-main.code-main { height: auto; padding: 5px 0 15px; text-align: center; font-family: Arial, sans-serif; }
+  .code-main .code-help { color: #555; font-size: 13px; line-height: 1.6; margin-bottom: 14px; }
+  .code-main .code-help b { color: #333; }
+  .code-main .code-msg { margin: 0 auto 12px; width: 300px; padding: 6px 10px; font-size: 13px; border-radius: 4px; text-align: left; }
+  .code-main .code-error { color: #a94442; background: #f2dede; border: 1px solid #ebccd1; }
+  .code-main .code-ok { color: #3c763d; background: #dff0d8; border: 1px solid #d6e9c6; }
+  .code-main .code-input { display: block; width: 220px; margin: 0 auto 12px; padding: 8px 0 8px 0.5em;
+    font: bold 26px/1.2 "Courier New", Courier, monospace; letter-spacing: 0.5em; text-align: center; color: #333;
+    border: 2px solid #ccc; border-radius: 5px; outline: none; }
+  .code-main .code-input:focus { border-color: #6f88f3; box-shadow: 0 0 0 3px rgba(111,136,243,.2); }
+  .code-main .login-btn { margin-top: 0; }
+  .code-main .code-more { margin-top: 14px; color: #777; font-size: 12px; }
+  .code-main .code-more button { background: none; border: none; padding: 0; color: #256EB1; font-size: 12px; cursor: pointer; }
+  .code-main .code-more button:hover, .code-main .code-more a:hover { text-decoration: underline; }
+  .code-main .code-more a { color: #256EB1; }
+</style>
 </head>
 <body>
 <div id="login-box">
    <div class="login-top"></div>
 
-   <div class="login-main">
-     <p style="margin:0 0 10px 0;">A 6-digit code was sent to <b><?= esc($masked_email ?? '') ?></b>. It works for 10 minutes.</p>
-     <?php if (!empty($error_msg)) { ?><p style="color:#c00;margin:0 0 10px 0;"><?= esc($error_msg) ?></p><?php } ?>
-     <?php if (!empty($success_msg)) { ?><p style="color:#080;margin:0 0 10px 0;"><?= esc($success_msg) ?></p><?php } ?>
+   <div class="login-main code-main">
+     <div class="code-help">
+       A 6-digit code was sent to <b><?= esc($masked_email ?? '') ?></b>.<br />It works for 10 minutes.
+     </div>
+     <?php if (!empty($error_msg)) { ?><div class="code-msg code-error"><?= esc($error_msg) ?></div><?php } ?>
+     <?php if (!empty($success_msg)) { ?><div class="code-msg code-ok"><?= esc($success_msg) ?></div><?php } ?>
 	   <form name="form1" method="post" action="<?=$_SESSION['admin_path']?>login/verify" autocomplete="off">
-      <dl>
-	   <dt>Code：</dt>
-	   <dd><input type="text" name="code" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" autocomplete="one-time-code" autofocus required /></dd>
-	   <dt>&nbsp;</dt>
-		<dd><button type="submit" class="login-btn">Login</button></dd>
-	 </dl>
+	     <input class="code-input" type="text" name="code" maxlength="6" inputmode="numeric" pattern="[0-9]{6}"
+	       placeholder="000000" aria-label="6-digit code" autocomplete="one-time-code" autofocus required />
+	     <button type="submit" class="login-btn">Login</button>
 	   </form>
-	   <form method="post" action="<?=$_SESSION['admin_path']?>login/resend" style="margin-top:10px;">
-	     <button type="submit">Send a new code</button> or <a href="<?=$_SESSION['admin_path']?>login">start over</a>
+	   <form method="post" action="<?=$_SESSION['admin_path']?>login/resend" class="code-more">
+	     Didn't get the code? <button type="submit">Send a new code</button> &middot; <a href="<?=$_SESSION['admin_path']?>login">Start over</a>
 	   </form>
    </div>
    <div class="login-power"> </div>
