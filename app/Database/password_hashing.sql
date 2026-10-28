@@ -12,7 +12,8 @@ UPDATE `admin` SET `pwd` = NULL WHERE `pwd` IS NOT NULL AND `pwd` NOT LIKE '$2_$
 UPDATE `teachers` SET `passwd` = '', `password` = NULL;
 UPDATE `login_log` SET `password` = '';
 
--- 3. Links "Find password" emails to parents (Controllers/Password.php); only the token's sha256 is stored.
+-- 3. No longer used: "Forgot password" now emails a 6-digit code (Controllers/Password.php, Libraries/LoginCode.php)
+--    instead of a link. Skip this, or DROP TABLE `password_resets` where it was created.
 CREATE TABLE IF NOT EXISTS `password_resets` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_type` VARCHAR(10) NOT NULL,

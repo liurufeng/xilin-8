@@ -53,4 +53,14 @@ final class LoginCodeTest extends CIUnitTestCase
         $this->assertFalse(LoginCode::send('parent'));
         $this->assertSame('j***@example.com', LoginCode::maskedTo('parent'));
     }
+
+    // a reset asked for an unregistered email: no email, and no code matches
+    public function testResetWithoutAccountMatchesNoCode(): void
+    {
+        $this->assertTrue(LoginCode::start('reset', [], 'nobody@example.com'));
+        $this->assertSame('', LoginCode::pending('reset')['hash']);
+        $this->assertNull(LoginCode::finish('reset', '000000'));
+        $this->assertNull(LoginCode::finish('reset', ''));
+        $this->assertNotNull(LoginCode::pending('reset'));
+    }
 }

@@ -29,8 +29,8 @@ $controllers = [
     ['tlogin', 'Tlogin', ['index', 'g_login'], null],
     ['register', 'Register', ['index', 'registerinfo'], null],
     ['register_class', 'Register_class', ['index', 'do_register', 'send_email'], null],
-    ['account', 'Account', ['index', 'students', 'add_student', 'remove_student', 'update_student', 'invoice', 'teacher_info', 'update_teacher', 'update_parent', 'findpass', 'online_payment', 'pay_instruction', 'check_address'], null],
-    ['password', 'Password', ['reset', 'save'], null],
+    ['account', 'Account', ['index', 'students', 'add_student', 'remove_student', 'update_student', 'invoice', 'teacher_info', 'update_teacher', 'update_parent', 'online_payment', 'pay_instruction', 'check_address'], null],
+    ['password', 'Password', ['forgot', 'code', 'resend', 'reset', 'save'], null],
     ['teachers', 'Teachers', ['index', 'update_sl', 'rosterEmail'], null],
     // jobs and Google sign-in for the mailbox; each checks its own token or admin sign-in
     ['scheduler', 'Scheduler', ['index'], null], // also scheduler/<token>, below

@@ -521,59 +521,6 @@ class Account extends BaseController
     }
   }
 
-  /**
-   * Forgot password: emails a parent a link to choose a new password (Password::reset). The answer is the same
-   * whether or not the address has an account, so it can't be used to find out who is registered.
-   * Teachers sign in with Google and have no password.
-   */
-  function findpass()
-  {
-    $email = trim((string)$this->request->getVar('email'));
-    if($email === '') {
-      $resp = array('success' => FALSE, 'msg' => 'Empty email!');
-      sendJson($resp);
-      return;
-    }
-    if(filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-      $resp = array('success' => FALSE, 'msg' => 'Invalid email!');
-      sendJson($resp);
-      return;
-    }
-    if (!Passwords::attemptAllowed('findpass', $email)) {
-      $resp = array('success' => FALSE, 'msg' => 'Too many requests. Please wait 10 minutes and try again.');
-      sendJson($resp);
-      return;
-    }
-
-    $result = $this->db->query("SELECT parent_id from parents where email=? LIMIT 1", [$email])->getRowArray();
-    if ($result) {
-      $token = Passwords::newResetToken('parent', (int)$result['parent_id']);
-      if ($token !== null) {
-        $host = parse_url(base_url(), PHP_URL_HOST);
-        $from_header = "From: " . $_SESSION['site_email'];
-        $subject = "Reset your password at ".$host;
-        $content = "To choose a new password for the " . $host . " online registration, open this link within "
-          . (Passwords::RESET_SECONDS / 60) . " minutes:\r\n\r\n" . base_url('password/reset/' . $token)
-          . "\r\n\r\nIf you didn't ask for this, you can ignore this email; your password stays the same.";
-        try {
-          mail($email, $subject, $content, $from_header);
-        } catch (\ErrorException $e) {
-          log_message('error', 'xilin: password reset email not sent: ' . $e->getMessage());
-        }
-      }
-    } else {
-      $teacher = $this->db->query("SELECT teacher_id from teachers where email=? LIMIT 1", [$email])->getRowArray();
-      if ($teacher) {
-        $resp = array('success' => TRUE, 'msg' => "Teachers sign in with their Google (xilinnschinese.org) account; no password is needed.");
-        sendJson($resp);
-        return;
-      }
-    }
-
-    $resp = array('success' => TRUE, 'msg' => "If an account is registered with " . esc($email) . ", we've sent it a link to reset the password. Please check your email.");
-    sendJson($resp);
-  }
-
   function online_payment()
   {
     $userinfo = session()->get('userresult');

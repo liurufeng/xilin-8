@@ -320,70 +320,6 @@ function register_class(stdid, stname, cid, ctime, cname, bookfee, act, withbook
 }
 
 
-function findpass() {
-  var header_text = 'Find Password';
-  var post_url = '/account/findpass';
-  yes_str = 'Email me a reset link';
-  no_str = 'Cancel';
-
-  var elem1 = '<div class="container-fluid"> 	' +
-    '<div class="row"> 		' +
-    '<div class="col-md-12"> 			 ' +
-    '<a id="modal-301706" href="#modal-container-301706" role="button" class="btn" data-toggle="modal" style="visibility: hidden; display: none;"></a> 			' +
-    '<div class="modal fade" id="modal-container-301706" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> 				' +
-    '<div class="modal-dialog">' +
-    '<div class="modal-content">' +
-    '<div class="modal-header">' +
-    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true"> × </button>' +
-    '<h3 class="modal-title" id="myModalLabel"> ' + header_text + '	</h3>' +
-    '</div> 						' +
-    '<div class="modal-body">' +
-    '<table id="findpass">' +
-    '<tr><td style="text-align:right;"><span style="color:red;">*</span>Email:</td>' +
-    '<td style="padding:3px;"><input type="text" value="" name="email" id="email" style="width:300px; margin-left:20px;"/></td></tr>' +
-    '</table>' +
-    '</div>' +
-    '<div class="modal-footer"> <button type="button" class="btn btn-danger no-button" data-dismiss="modal">' + no_str + '</button>' +
-    '<button type="button" class="btn btn-success confirm-alert"> ' + yes_str + ' </button>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-    '</div>';
-
-  $(".container-wrapper").first().after(elem1);
-  $("#modal-301706").click();
-
-  //click close-alert
-  $(".close-alert").on("click", function () {
-    $(".modal.fade.in").fadeOut();
-  });
-
-  $(".confirm-alert").on("click", function () {
-    $(".fade.in").fadeOut();
-    $.post(post_url,
-      {
-        email: $("#email").val(),
-        'csrf_test_name': $.cookie('csrf_cookie_name')
-      },
-      function (result) {
-        $(".modal.fade.in").fadeOut();
-        result = JSON.parse(result);
-        if (result.success) {
-          msg = result.msg;
-          ajax_error(msg, 'We found your password', 'return');
-          return;
-        } else {
-          msg = result.msg;
-          ajax_error(msg, 'Failed to find you password', 'return');
-          return;
-        }
-      });
-  });
-}
-
 // your own JS code to be here
 $(document).ajaxError(function (event, request, settings) {
   //alert('Your login session has expired and you will be directed to the login page!');
@@ -393,15 +329,6 @@ $(document).ajaxError(function (event, request, settings) {
 });
 
 $(document).ready(function () {
-  //find password
-  $("#findpass").on("click", function () {
-    findpass();
-    return false;
-  });
-  $("#findpass1").on("click", function () {
-    findpass();
-    return false;
-  });
   //for date picker
   $('#sandbox-container input').datepicker({
     format: "yyyy-mm-dd",

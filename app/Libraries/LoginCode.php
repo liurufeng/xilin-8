@@ -3,11 +3,13 @@
 namespace App\Libraries;
 
 /**
- * The second sign-in step: after the password, a 6-digit code is emailed and must be typed in before the sign-in
- * finishes. Parents get the code at their own email; admins' codes go to ADMIN_EMAIL.
+ * 6-digit codes sent by email. Kinds:
+ * - 'parent', 'admin': the second sign-in step; after the password, the code must be typed in before the sign-in
+ *   finishes. Parents get the code at their own email; admins' codes go to ADMIN_EMAIL.
+ * - 'reset': a parent's forgotten password (Controllers/Password.php); the code proves the email is theirs.
  *
- * Until then the signed-in user's data waits in the session (login_code_<kind>) with the code's hash, so the
- * password step is not repeated when the code is checked or sent again.
+ * Until then the user's data waits in the session (login_code_<kind>) with the code's hash, so the earlier step is
+ * not repeated when the code is checked or sent again.
  */
 class LoginCode
 {
@@ -19,8 +21,9 @@ class LoginCode
     private const RESEND_SECONDS = 60;
 
     /**
-     * Starts the second step for $kind ('parent' or 'admin'): keeps $user for finish() and emails a code to $to.
-     * False if the email could not be sent.
+     * Starts $kind: keeps $user for finish() and emails a code to $to. False if the email could not be sent.
+     * With no $user (a reset asked for an unregistered email) nothing is sent and no code matches, but the pages
+     * answer the same, so they can't be used to find out who is registered.
      */
     public static function start(string $kind, array $user, string $to): bool
     {
@@ -52,24 +55,53 @@ class LoginCode
         $pending['until'] = time() + self::CODE_SECONDS;
         $pending['tries'] = 0;
         $pending['sent']  = time();
+        if ($pending['user'] === []) {
+            $pending['hash'] = '';
+        }
         session()->set('login_code_' . $kind, $pending);
+        if ($pending['user'] === []) {
+            return true;
+        }
 
         $host    = parse_url(base_url(), PHP_URL_HOST);
-        $to      = str_replace(["\r", "\n"], '', $pending['to']);
-        $subject = 'Your ' . $host . ' sign-in code';
-        $content = ($kind === 'admin' ? 'Admin sign-in for ' . ($pending['user']['name'] ?? '') . ".\r\n\r\n" : '')
-            . 'Your sign-in code is: ' . $code . "\r\n\r\nIt works for " . (self::CODE_SECONDS / 60) . ' minutes.'
-            . " If you didn't try to sign in, you can ignore this email; someone may know the password, so"
-            . ' please change it.';
+        $minutes = 'It works for ' . (self::CODE_SECONDS / 60) . ' minutes.';
+        if ($kind === 'reset') {
+            $subject = 'Your ' . $host . ' password reset code';
+            $content = 'Your password reset code is: ' . $code . "\r\n\r\n" . $minutes
+                . " If you didn't ask to reset your password, you can ignore this email; your password stays the same.";
+        } else {
+            $subject = 'Your ' . $host . ' sign-in code';
+            $content = ($kind === 'admin' ? 'Admin sign-in for ' . ($pending['user']['name'] ?? '') . ".\r\n\r\n" : '')
+                . 'Your sign-in code is: ' . $code . "\r\n\r\n" . $minutes
+                . " If you didn't try to sign in, you can ignore this email; someone may know the password, so"
+                . ' please change it.';
+        }
+
+        return self::mail($pending['to'], $subject, $content);
+    }
+
+    /**
+     * Sends a plain-text email from ADMIN_EMAIL, also as the envelope sender (-f) like the invoice emails, so the
+     * host's mail server and spam filters accept it. False (and a log line) if mail() refused it.
+     */
+    public static function mail(string $to, string $subject, string $content): bool
+    {
+        $to      = str_replace(["\r", "\n"], '', $to);
         $headers = "From: Xilin Northshore Chinese School <" . self::ADMIN_EMAIL . ">\r\n"
+            . "Reply-To: " . self::ADMIN_EMAIL . "\r\n"
+            . "MIME-Version: 1.0\r\n"
             . "Content-Type: text/plain; charset=UTF-8\r\n";
         try {
-            return mail($to, $subject, $content, $headers, '-f ' . self::ADMIN_EMAIL);
+            $sent = mail($to, $subject, $content, $headers, '-f ' . self::ADMIN_EMAIL);
         } catch (\ErrorException $e) {
-            log_message('error', 'xilin: sign-in code email not sent: ' . $e->getMessage());
-
-            return false;
+            $sent = false;
+            log_message('error', 'xilin: email "' . $subject . '" not sent: ' . $e->getMessage());
         }
+        if (! $sent) {
+            log_message('error', 'xilin: mail() did not accept the email "' . $subject . '"');
+        }
+
+        return $sent;
     }
 
     /**
@@ -89,7 +121,7 @@ class LoginCode
         }
 
         $code = preg_replace('/\s+/', '', $code);
-        if (preg_match('/\A\d{6}\z/', $code) && password_verify($code, $pending['hash'])) {
+        if ($pending['hash'] !== '' && preg_match('/\A\d{6}\z/', $code) && password_verify($code, $pending['hash'])) {
             self::cancel($kind);
 
             return $pending['user'];

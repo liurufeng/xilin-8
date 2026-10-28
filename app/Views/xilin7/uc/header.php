@@ -69,7 +69,7 @@
                                 </div>
                                 <div class="field">
                                     <input type="submit" value="Login" class="flat-btn" />
-                                    <button id="findpass" class="btn btn-md btn-warning" style="height: 51px;">Find password</button>
+                                    <a href="/password/forgot" class="btn btn-md btn-warning" style="height: 51px; line-height: 37px;">Find password</a>
                                 </div>
                             </form>
                             <i>OR</i>

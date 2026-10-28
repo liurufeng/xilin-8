@@ -68,7 +68,7 @@
                   <br>
                   <input name="submit" value="Login" type="submit">
                   <br>
-                  <div style="margin-top:20px;">Forgot password? <button id="findpass1" class="btn btn-xs btn-info">Find password</button>
+                  <div style="margin-top:20px;">Forgot password? <a href="/password/forgot" class="btn btn-xs btn-info">Find password</a>
                   </div>
                 </td>
               </tr>

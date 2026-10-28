@@ -19,9 +19,6 @@ class Passwords
     private const PER_VISITOR      = 20;
     private const THROTTLE_SECONDS = 600;
 
-    // how long a password reset link works
-    public const RESET_SECONDS = 3600;
-
     /**
      * Whether $plain is the password stored as $stored. $legacy is the form the plain-text password was stored in
      * (parents: ' written as [$!)). Passwords hashed in place on the server are hashes of that stored form, so a
@@ -117,60 +114,6 @@ class Passwords
         }
 
         return true;
-    }
-
-    /**
-     * A new password reset link token for a parent or teacher (table password_resets). Only its sha256 is stored.
-     */
-    public static function newResetToken(string $userType, int $userId): ?string
-    {
-        $db = db_connect();
-        if (! $db->tableExists('password_resets')) {
-            log_message('error', 'xilin: table password_resets is missing; run app/Database/password_hashing.sql');
-
-            return null;
-        }
-
-        $token = bin2hex(random_bytes(32));
-        $db->table('password_resets')->where('expires_at <', date('Y-m-d H:i:s'))->delete();
-        $db->table('password_resets')->insert([
-            'user_type'  => $userType,
-            'user_id'    => $userId,
-            'token_hash' => hash('sha256', $token),
-            'expires_at' => date('Y-m-d H:i:s', time() + self::RESET_SECONDS),
-            'created_at' => date('Y-m-d H:i:s'),
-        ]);
-
-        return $token;
-    }
-
-    /**
-     * The unused, unexpired password_resets row of $token, or null.
-     */
-    public static function findResetToken(string $token): ?array
-    {
-        if (! preg_match('/\A[0-9a-f]{64}\z/', $token)) {
-            return null;
-        }
-
-        $row = db_connect()->table('password_resets')
-            ->where('token_hash', hash('sha256', $token))
-            ->where('used_at', null)
-            ->where('expires_at >=', date('Y-m-d H:i:s'))
-            ->get(1)
-            ->getRowArray();
-
-        return $row ?: null;
-    }
-
-    // a reset link works once: this one is used up, and any other open link of the same account stops working too
-    public static function useResetToken(array $row): void
-    {
-        db_connect()->table('password_resets')
-            ->where('user_type', $row['user_type'])
-            ->where('user_id', $row['user_id'])
-            ->where('used_at', null)
-            ->update(['used_at' => date('Y-m-d H:i:s')]);
     }
 
     // parents' plain-text passwords were stored with ' written as [$!)
