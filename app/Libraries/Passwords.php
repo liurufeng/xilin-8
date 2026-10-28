@@ -37,7 +37,7 @@ class Passwords
         }
 
         if (mb_strlen($plain) < self::MIN_LENGTH) {
-            return 'The password needs at least ' . self::MIN_LENGTH . ' characters. ' . self::RULES;
+            return 'The password is too short. ' . self::RULES;
         }
         if ($missing !== []) {
             return 'The password needs ' . implode(', ', $missing) . '. ' . self::RULES;

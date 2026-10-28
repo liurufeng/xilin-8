@@ -90,7 +90,10 @@
                                     <input type="email" value="" name="re_email" placeholder="*Re-type Email" />
                                 </div>
                                 <div class="field">
-                                    <input type="password" name="passwd" autocomplete="new-password" placeholder="*Type Password" maxlength="20"/>
+                                    <input type="password" name="passwd" autocomplete="new-password" placeholder="*Password: 8+ characters, A-Z, a-z, 0-9 and a symbol" title="<?= esc(\App\Libraries\Passwords::RULES, 'attr') ?>"/>
+                                </div>
+                                <div class="field">
+                                    <input type="password" name="passwd2" autocomplete="new-password" placeholder="*Re-type Password" />
                                 </div>
                                 <div class="field-half">
                                     <input type="text" value="" name="primary_en_name" placeholder="*English Name" />
@@ -119,10 +122,7 @@
                                 <div class="field-half">
                                     <input type="text" value="" name="alter_relationship" placeholder="Relationship" />
                                 </div>
-                                <div class="field-half">
-                                    <input type="text" value="" name="address" placeholder="*Street Address" />
-                                </div>
-                                <div class="field-half">
+                                <div class="field">
                                     <input type="text" value="" name="city" placeholder="*City" />
                                 </div>
                                 <div class="field-half">

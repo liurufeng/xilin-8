@@ -22,65 +22,77 @@ class Register extends BaseController
     echo view($_SESSION['tm'].'register/index.php');
   }
 
+  /**
+   * The sign-up form posts here. Every field is checked first; if any is wrong, the form comes back with the typed
+   * values (not the password) and the problem shown under each field.
+   */
   function registerinfo()
   {
-    $type = $_GET['REGISTERTYPE'];
-    $insertdata['email'] = trim($this->request->getVar('email'));
+    $type = (string)$this->request->getGet('REGISTERTYPE');
 
     if ($type == "Parents") {
+      $fields = array('email', 're_email', 'primary_en_name', 'primary_cn_name', 'primary_phone', 'primary_relationship',
+        'alter_contact_email', 'alter_en_name', 'alter_cn_name', 'alter_phone', 'alter_relationship', 'city', 'state',
+        'zip', 'heard_from', 'referrer_id');
+      $old = array();
+      foreach ($fields as $field) {
+        $old[$field] = trim((string)$this->request->getPost($field));
+      }
+      $plain = (string)$this->request->getPost('passwd');
 
-      if($_SESSION['tm'] == 'xilin7/') {
-        $re_email = trim($this->request->getVar('re_email'));
-
-        if($insertdata['email'] != $re_email) {
-          ShowMsg('Your re-typed email does not match.', '/', 0, 3000);
+      $errors = array();
+      $required = array(
+        'email' => 'Please enter your email address.',
+        're_email' => 'Please type your email address again.',
+        'primary_en_name' => "Please enter the primary contact's English name.",
+        'primary_phone' => 'Please enter a phone number.',
+        'primary_relationship' => 'Please enter the relationship (for example: Mother, Father).',
+        'city' => 'Please enter your city.',
+        'zip' => 'Please enter your zip code.',
+      );
+      foreach ($required as $field => $msg) {
+        if ($old[$field] === '') {
+          $errors[$field] = $msg;
         }
       }
 
-      if (! filter_var($insertdata['email'], FILTER_VALIDATE_EMAIL)) {
-        ShowMsg("Your Email address ".$insertdata['email']." is invalid", '/');
+      if (!isset($errors['email'])) {
+        if (!filter_var($old['email'], FILTER_VALIDATE_EMAIL)) {
+          $errors['email'] = 'This is not a valid email address.';
+        } elseif ($this->db->query("SELECT parent_id FROM parents WHERE email = ?", [$old['email']])->getNumRows() > 0) {
+          $errors['email'] = 'This email already has an account. Please sign in, or use "Find password" if you forgot the password.';
+        } elseif ($this->db->query("SELECT parent_id FROM parents WHERE alter_contact_email = ?", [$old['email']])->getNumRows() > 0) {
+          $errors['email'] = 'This email is already the alternative contact of a family account. Please contact the school admin if you need another account.';
+        }
       }
-
-      $sql = " SELECT parent_id FROM parents WHERE email = ?";
-      $rst = $this->db->query($sql, [$insertdata['email']]);
-      if ($rst->getNumRows() > 0) {
-        ShowMsg('The email already existed in our system. You can retrieve your password if you forgot it by clicking Find Password button.', '/', 0, 3000);
+      if (!isset($errors['email']) && !isset($errors['re_email']) && strcasecmp($old['email'], $old['re_email']) !== 0) {
+        $errors['re_email'] = 'The two email addresses are not the same.';
       }
-
-      $sql = " SELECT parent_id FROM parents WHERE alter_contact_email = ?";
-      $rst = $this->db->query($sql, [$insertdata['email']]);
-      if ($rst->getNumRows() > 0) {
-        ShowMsg('Your family account already existed, please contact school admin if you need to create another account', '/', 0, 3000);
-      }
-
-      $plain = (string)$this->request->getVar('passwd');
       if (($problem = Passwords::problem($plain)) !== null) {
-        ShowMsg($problem, '-1', 0, 5000);
+        $errors['passwd'] = $plain === '' ? 'Please choose a password. ' . Passwords::RULES : $problem;
+      } elseif ((string)$this->request->getPost('passwd2') === '') {
+        $errors['passwd2'] = 'Please type the password again.';
+      } elseif ((string)$this->request->getPost('passwd2') !== $plain) {
+        $errors['passwd2'] = 'The two passwords are not the same.';
       }
+      if ($old['alter_contact_email'] !== '' && !filter_var($old['alter_contact_email'], FILTER_VALIDATE_EMAIL)) {
+        $errors['alter_contact_email'] = 'This is not a valid email address.';
+      }
+
+      if ($errors) {
+        echo view($_SESSION['tm'].'register/index.php', array('errors' => $errors, 'old' => $old));
+        return;
+      }
+
+      $insertdata = array();
+      foreach (array('email', 'primary_en_name', 'primary_cn_name', 'primary_phone', 'primary_relationship', 'alter_en_name',
+        'alter_cn_name', 'alter_phone', 'alter_relationship', 'alter_contact_email', 'heard_from', 'city', 'state',
+        'zip') as $field) {
+        $insertdata[$field] = $old[$field];
+      }
+      // the street address is not asked at sign-up; the parent adds it on the account page
+      $insertdata['address'] = '';
       $insertdata['passwd'] = Passwords::forStorage('parents', 'passwd', $plain, Passwords::parentLegacy($plain));
-      $insertdata['primary_en_name'] = $this->request->getVar('primary_en_name');
-      $insertdata['primary_cn_name'] = $this->request->getVar('primary_cn_name');
-      $insertdata['primary_phone'] = $this->request->getVar('primary_phone');
-
-      $insertdata['primary_relationship'] = $this->request->getVar('primary_relationship');
-      $insertdata['alter_en_name'] = $this->request->getVar('alter_en_name');
-      $insertdata['alter_cn_name'] = $this->request->getVar('alter_cn_name');
-      $insertdata['alter_phone'] = $this->request->getVar('alter_phone');
-
-      $insertdata['alter_relationship'] = $this->request->getVar('alter_relationship');
-      $insertdata['alter_contact_email'] = $this->request->getVar('alter_contact_email');
-      $insertdata['heard_from'] = $this->request->getVar('heard_from');
-
-      $insertdata['address'] = $this->request->getVar('address');
-      $insertdata['city'] = $this->request->getVar('city');
-      $insertdata['state'] = $this->request->getVar('state');
-      $insertdata['zip'] = $this->request->getVar('zip');
-
-
-      if(empty($insertdata['email']) || empty($insertdata['passwd']) || empty($insertdata['primary_en_name']) || empty($insertdata['primary_phone'])
-        || empty($insertdata['primary_relationship']) || empty($insertdata['address'])) {
-        ShowMsg('Please fill in all the *required information', '/', 0, 3000);
-      }
 
       $this->db->table('parents')
         ->insert($insertdata);
@@ -94,7 +106,7 @@ class Register extends BaseController
       session()->set(array('userresult'=> array(0 => $parent, 'usertype' => 1)));
 
       // insert referral info if there is referer ID
-      $referrer_id = trim($this->request->getVar('referrer_id'));
+      $referrer_id = $old['referrer_id'];
 
       if(strlen($referrer_id) > 0 ) {
         $current_semester = session()->get('current_semester');

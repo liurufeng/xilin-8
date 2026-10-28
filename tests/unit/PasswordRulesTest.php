@@ -17,7 +17,7 @@ final class PasswordRulesTest extends CIUnitTestCase
 
     public function testTooShort(): void
     {
-        $this->assertStringContainsString('at least 8 characters', Passwords::problem('Ab1!xyz'));
+        $this->assertStringContainsString('too short', Passwords::problem('Ab1!xyz'));
     }
 
     public function testEachMissingKind(): void
