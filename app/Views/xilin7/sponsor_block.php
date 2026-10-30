@@ -1,3 +1,4 @@
+<?php $GLOBALS['sponsor_block_rendered'] = true; ?>
 <style>
     .sponsor-item {
         margin-bottom: 25px;

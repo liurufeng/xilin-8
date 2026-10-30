@@ -1,5 +1,18 @@
 
 
+<?php if (empty($GLOBALS['sponsor_block_rendered'])): ?>
+<section class="box-slider-search">
+    <div class="container">
+        <div class="about_widget widget">
+            <div class="heading1">
+                <h2><a href="/school/sponsor">Our Sponsors</a></h2>
+            </div><!-- heading -->
+        </div>
+      <?php echo view($_SESSION['tm'].'sponsor_block.php') ?>
+    </div>
+</section>
+<?php endif; ?>
+
 <footer>
 
     <div class="bottom-line">
