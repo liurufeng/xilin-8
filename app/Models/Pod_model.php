@@ -72,7 +72,8 @@ class Pod_model extends Model
       return array('waiver'=>'NA', 'need'=>0,'done'=>0,'manually'=>0, 'missed'=>0, 'penalty'=>0);
     } else {
       $sql = "select semester_id from semester
-              where status = 1 and semester_id < ?"
+              where status = 1 and semester_id < ?
+              and semester_name in ('Fall', 'Spring')" // no POD in summer
               ." group by semester_id
                order by semester_id desc
                limit 2";
@@ -105,7 +106,8 @@ class Pod_model extends Model
       }
     }
     //if($parent['pod_waiver'] > 0) return array('waiver'=>'yes', 'need'=>0,'done'=>0,'manually'=>0, 'missed'=>0, 'penalty'=>0);
-    $sql = "select s.student_id from
+    // need 1 POD per student for each semester the student was enrolled in
+    $sql = "select s.student_id, sc.semester_id from
             students s
             join parents p on p.parent_id = s.parent_id
             join studentclasses sc on sc.student_id = s.student_id
@@ -114,11 +116,10 @@ class Pod_model extends Model
             " and sc.deleted != 1
             and p.parent_id = ?".
             " and c.class_code NOT LIKE '%GRP%'
-            group by s.student_id";
+            group by s.student_id, sc.semester_id";
 
     $student_num = $this->db->query($sql, array_merge($sid_binds, [$pid]))->getNumRows();
     if($student_num == 0) return array('waiver'=>'no', 'need'=>0,'done'=>0,'manually'=>0, 'missed'=>0, 'penalty'=>0);
-    $student_num = $student_num * 2; //need 1 POD each semester and that is 2 each school year
 
     //get how many POD the parent has done if any in the previous semester
     $sql = "SELECT count(*) as done
@@ -134,7 +135,7 @@ class Pod_model extends Model
     $done_num = (int) $result['done'];
 
     //get how many POD the parent has done but recorded manually if any in the previous semester
-    $sql = "SELECT manual_records
+    $sql = "SELECT sum(manual_records) as manual_records
             FROM manual_pod_record
             WHERE semester_id  in ".$sid_in . "
             AND parent_id = ?";
