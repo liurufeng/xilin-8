@@ -35,6 +35,7 @@ $controllers = [
     // jobs and Google sign-in for the mailbox; each checks its own token or admin sign-in
     ['scheduler', 'Scheduler', ['index'], null], // also scheduler/<token>, below
     ['pod_reminder', 'Pod_reminder', ['index'], null],
+    ['late_fee', 'Late_fee', ['index'], null],
     ['imap', 'Imap', ['index'], null],
     ['payment', 'Payment', ['auth', 'callback', 'read'], null],
 

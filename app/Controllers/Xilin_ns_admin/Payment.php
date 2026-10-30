@@ -31,36 +31,14 @@ class Payment extends MY_Controller
   }
 
   /**
-   * Function for the adding late fee
+   * Function for the adding late fee, by hand (the yearly run is the late_fee job)
    *
    */
   function late_fee()
   {
     $payment = new Payment_model();
-    $data = $payment->getPaymentData('');
-    $semester_id = session()->get('semester_id');
-    $total = $data['total'];
-    $pod = $data['pod'];
-    $discount = $data['discount'];
-    $checks = $data['checks'];
-
-    foreach($data['parents'] as $pk => $p) {
-      $paid = 0;
-      foreach($checks[$pk] as $check) {
-        $paid += $check['check_amount'];
-      }
-      $balance = $total[$pk] + $pod[$pk]['penalty'] - $discount[$pk] - $paid;
-      if($balance > 10) { // apply late fee
-        $insertdata = [
-          'semester_id' => $semester_id,
-          'parent_id' => $pk,
-          'amount' => 20
-        ];
-        $this->db->table('late_fee')
-          ->replace($insertdata);
-      }
-    }
-
+    $result = $payment->applyLateFees();
+    echo 'Semester ' . $result['semester_id'] . ': late fee applied to ' . count($result['charged']) . ' parents.';
   }
 
   /**

@@ -108,9 +108,10 @@ class Payment_model extends Model
     $pod_m = new Pod_model();
     $disc = new Discount_model();
     foreach ($tuition_total as $k => $t) {
-      if ($_SESSION['tm'] == 'xilin7/') {
+      $tm = $_SESSION['tm'] ?? 'xilin7/'; // no session when run from the command line
+      if ($tm == 'xilin7/') {
         $discount[$k] = $disc->getXilinDiscount($parents[$k], $t, $data['this_semester']);
-      } else if ($_SESSION['tm'] == 'ccc/') {
+      } else if ($tm == 'ccc/') {
         $discount[$k] = $disc->getCCCDiscount($parents[$k], $t, $data['this_semester']);
       } else {
         $discount[$k] = $disc->getDiscount($parents[$k], $t, $data['this_semester']);
@@ -175,5 +176,37 @@ class Payment_model extends Model
     $data['pay_types'] = array('Regular', 'Refund', 'Discnt', 'FinAid', 'POD wvr', 'Prorate', 'Other');
     $data['pay_forms'] = array('Check', 'Cash', 'Online');
     return $data;
+  }
+
+  /**
+   * Charge the late fee to every parent who still owes more than $10 for the current semester.
+   * Safe to run again: late_fee holds one row per parent and semester.
+   * @return array semester_id and the ids of the parents charged
+   */
+  public function applyLateFees()
+  {
+    $data = $this->getPaymentData('');
+    $semester_id = (int)$data['semester_id'];
+    $charged = array();
+    if ($semester_id < 1) {
+      return array('semester_id' => 0, 'charged' => $charged);
+    }
+
+    foreach ($data['parents'] as $pk => $p) {
+      $paid = 0;
+      foreach ($data['checks'][$pk] as $check) {
+        $paid += $check['check_amount'];
+      }
+      $balance = $data['total'][$pk] + $data['pod'][$pk]['penalty'] - $data['discount'][$pk] - $paid;
+      if ($balance > 10) { // apply late fee
+        $this->db->table('late_fee')->replace([
+          'semester_id' => $semester_id,
+          'parent_id' => $pk,
+          'amount' => 20
+        ]);
+        $charged[] = $pk;
+      }
+    }
+    return array('semester_id' => $semester_id, 'charged' => $charged);
   }
 }
