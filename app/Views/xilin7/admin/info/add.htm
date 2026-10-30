@@ -83,7 +83,7 @@ function checkSubmit()
   <table width="98%" border="0" align="center" cellpadding="0" cellspacing="0">
     <tr>
       <td width="60%" height="30"><IMG height=14 src="<?php echo base_url();?>/admin/images/book1.gif" width=20>&nbsp;<a href="<?=$_SESSION['admin_path']?>info/index?cid=<?php echo esc($cid, 'attr')?>"><u>文章列表</u></a> &gt;&gt; 发布文章</td>
-      <td width="30%" align='right'>&nbsp; <? if(session()->get('id')== 88){ ?><a href="<?=$_SESSION['admin_path']?>column/index">[<u>栏目管理</u>]</a> <?}?> </td>
+      <td width="30%" align='right'>&nbsp; <?php if(session()->get('id')== 88){ ?><a href="<?=$_SESSION['admin_path']?>column/index">[<u>栏目管理</u>]</a> <?php } ?> </td>
     </tr>
   </table>
   
@@ -162,8 +162,8 @@ function checkSubmit()
             <td  width="90">&nbsp;<?php echo esc($modelvarr['flag']['t_name'])?></td>
             <td align="left">
             	<?php
-            	$sql = "Select * From ".$this->db->dbprefix('arcatt')." order by sortid asc";
-            	$flaglist = $this->db->query($sql)->getResultArray();
+            	$sql = "Select * From ".db_connect()->prefixTable('arcatt')." order by sortid asc";
+            	$flaglist = db_connect()->query($sql)->getResultArray();
             	foreach($flaglist as $k=>$v)
             	{	
 					$ischecked = '';
@@ -219,9 +219,9 @@ function checkSubmit()
 			<?php
 				if($modelvarr['typeid']['egroupid']){
 					$id = $modelvarr['typeid']['egroupid'];
-					$arr = $this->db->query("SELECT * FROM ".$this->db->dbprefix('stepselect')." WHERE id='$id' LIMIT 1")->row_array();
-					$dsql ="Select * From ".$this->db->dbprefix('sys_enum')." where egroup like '{$arr['egroup']}' order by disorder asc, evalue asc";
-					$dlist = $this->db->query($dsql)->getResultArray();
+					$arr = db_connect()->query("SELECT * FROM ".db_connect()->prefixTable('stepselect')." WHERE id='$id' LIMIT 1")->getRowArray();
+					$dsql ="Select * From ".db_connect()->prefixTable('sys_enum')." where egroup like '{$arr['egroup']}' order by disorder asc, evalue asc";
+					$dlist = db_connect()->query($dsql)->getResultArray();
 					$options = '';
 					  foreach ($dlist as $k=>$row1) 
 					  {
@@ -266,9 +266,9 @@ function checkSubmit()
 				$options = '';
 				if($modelvarr['typeid2']['egroupid']){
 					$id = $modelvarr['typeid2']['egroupid'];
-					$arr = $this->db->query("SELECT * FROM ".$this->db->dbprefix('stepselect')." WHERE id='$id' LIMIT 1")->row_array();
-					$dsql ="Select * From ".$this->db->dbprefix('sys_enum')." where egroup like '{$arr['egroup']}' order by disorder asc, evalue asc";
-					$dlist = $this->db->query($dsql)->getResultArray();
+					$arr = db_connect()->query("SELECT * FROM ".db_connect()->prefixTable('stepselect')." WHERE id='$id' LIMIT 1")->getRowArray();
+					$dsql ="Select * From ".db_connect()->prefixTable('sys_enum')." where egroup like '{$arr['egroup']}' order by disorder asc, evalue asc";
+					$dlist = db_connect()->query($dsql)->getResultArray();
 					$options = '';
 					  foreach ($dlist as $k=>$row1) 
 					  {

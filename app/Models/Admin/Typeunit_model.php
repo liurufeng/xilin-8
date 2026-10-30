@@ -217,7 +217,7 @@ class Typeunit_model extends Model
   public function writetreec()
   {
 
-    $sql = "SELECT * FROM " . $this->db->dbprefix($this->able_name) . " WHERE 1 ORDER BY sortrank ASC,id ASC";
+    $sql = "SELECT * FROM " . $this->db->prefixTable($this->able_name) . " WHERE 1 ORDER BY sortrank ASC,id ASC";
     $info = $this->db->query($sql)->getResultArray();
     $this->load->driver('cache');
     $this->cache->file->save($this->cachename . '_tree', $info, 100000);
@@ -226,7 +226,7 @@ class Typeunit_model extends Model
 
   public function gettreec()
   {
-    $sql = "SELECT * FROM " . $this->db->dbprefix($this->able_name) . " WHERE 1 ORDER BY sortrank ASC,id ASC";
+    $sql = "SELECT * FROM " . $this->db->prefixTable($this->able_name) . " WHERE 1 ORDER BY sortrank ASC,id ASC";
     $info = $this->db->query($sql)->getResultArray();
     return $info;
     /*$this->load->driver('cache');
@@ -255,7 +255,7 @@ class Typeunit_model extends Model
   public function writec()
   {
 
-    $sql = "SELECT * FROM " . $this->db->dbprefix($this->able_name) . " ORDER BY sortrank ASC,id ASC";
+    $sql = "SELECT * FROM " . $this->db->prefixTable($this->able_name) . " ORDER BY sortrank ASC,id ASC";
     $info = $this->db->query($sql)->getResultArray();
 
     $this->load->driver('cache');

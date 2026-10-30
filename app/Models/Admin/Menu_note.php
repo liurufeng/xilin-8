@@ -307,7 +307,7 @@ class Menu_note extends Model
   public function writec()
   {
 
-    $sql = "SELECT * FROM " . $this->db->dbprefix('menu') . " where is_check = '1' ORDER BY sort ASC,id ASC";
+    $sql = "SELECT * FROM " . $this->db->prefixTable('menu') . " where is_check = '1' ORDER BY sort ASC,id ASC";
     $info = $this->db->query($sql)->result_array('array');
     return $info;
     /*$this->load->driver('cache');

@@ -21,7 +21,7 @@ class Ueditor {
 		/*$this->CI =& get_instance();
         $this->HTTP = $this->CI->config->config['base_url'];
         $this->index_page = $this->CI->config->config['index_page'];*/
-    $config = \CodeIgniter\Config\Services::request()->config;
+    $config = config(\Config\App::class);
     $this->HTTP = $config->baseURL;
     $this->index_page = $config->indexPage;
     $this->uurl = $this->HTTP.$this->url;

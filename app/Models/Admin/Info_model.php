@@ -61,7 +61,7 @@ class Info_model extends Model
 
     if (empty($aid)) return;
 
-    $sql = "SELECT * FROM " . $this->db->dbprefix('attachment') . "
+    $sql = "SELECT * FROM " . $this->db->prefixTable('attachment') . "
 			  WHERE aid = ? 
 			  LIMIT 1";
     $info = $this->db->query($sql, [$aid])->getRowArray();
@@ -103,7 +103,7 @@ class Info_model extends Model
     $this->cachename = md5('IndexsData');
     // 轮播图数据
     $unitid = '11';
-    $sql = " SELECT * FROM " . $this->db->dbprefix('archives') . "
+    $sql = " SELECT * FROM " . $this->db->prefixTable('archives') . "
 				WHERE status = '1' AND unitid = '" . $unitid . "'
 				ORDER BY sortrank asc,senddate asc
 				LIMIT 4";
@@ -115,7 +115,7 @@ class Info_model extends Model
     }
     // 首页置顶6个活动
     $unitid = '(4,6,7,9,19,20)';
-    $sql = " SELECT * FROM " . $this->db->dbprefix('archives') . "
+    $sql = " SELECT * FROM " . $this->db->prefixTable('archives') . "
 				WHERE status = '1' AND unitid in " . $unitid . " AND  FIND_IN_SET('c',flag)
 				ORDER BY sortrank asc,senddate asc
 				LIMIT 6";
@@ -128,7 +128,7 @@ class Info_model extends Model
     }
     // 首页置顶4条新闻
     $unitid = '2';
-    $sql = " SELECT * FROM " . $this->db->dbprefix('archives') . "
+    $sql = " SELECT * FROM " . $this->db->prefixTable('archives') . "
 				WHERE status = '1'  AND unitid = '" . $unitid . "'  AND  FIND_IN_SET('c',flag)
 				ORDER BY sortrank asc,senddate asc
 				LIMIT 4";

@@ -70,7 +70,7 @@ var HTTPURL = "<?php echo $_SESSION['admin_path']?>";
 		<input type='button' class="coolbg np" name='bb1' onClick="location='<?=$_SESSION['admin_path']?>info/recycling?cid=<?php echo esc($cid, 'attr')?>';" value='信息回收站' />
 		<?php } ?>
     </div>
-	◆ <?php echo esc($cname)?>文档列表 &nbsp;
+	◆ <?php echo $cname ?? ""?>文档列表 &nbsp;
 	</td>
 </tr>
 <tr align="center" bgcolor="#FBFCE2" height="25">

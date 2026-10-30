@@ -46,7 +46,7 @@ class Info extends MY_Controller
     if ($cid) {
       $addsql .= " and unitid = $cid";
       $addurl .= "&cid=" . $cid;
-      $data['cname'] = "<a href='" . $_SESSION['admin_path'].'info/index' . "?cid=" . $cid . "'>" . $typeunit_model->id2name($cid) . "</a>->";
+      $data['cname'] = "<a href='" . $_SESSION['admin_path'].'info/index' . "?cid=" . $cid . "'>" . esc($typeunit_model->id2name($cid)) . "</a>->";
       session()->set(array('cid' => $cid));
     }
     $keyword = $this->request->getVar('keyword') ? $this->request->getVar('keyword') : '';

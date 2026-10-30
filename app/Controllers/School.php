@@ -37,8 +37,8 @@ class School extends BaseController
       $nav[$item['id']] = $item['url'];
     }
     //新闻
-    $sql = "select la.unitid,lac.body,la.title,la.description,la.id, FROM_UNIXTIME(adddate,'%M %D, %Y %H:%i:%s') as adddate from " . $this->db->dbprefix('archives') . " la
-				join  " . $this->db->dbprefix('addonarticle') . " lac on la.id = lac.aid
+    $sql = "select la.unitid,lac.body,la.title,la.description,la.id, FROM_UNIXTIME(adddate,'%M %D, %Y %H:%i:%s') as adddate from " . $this->db->prefixTable('archives') . " la
+				join  " . $this->db->prefixTable('addonarticle') . " lac on la.id = lac.aid
 				where la.unitid = 70 and la.status = 1
 				ORDER BY sortrank ASC,topdate DESC,adddate DESC   
 				limit 3 ";
@@ -251,8 +251,8 @@ class School extends BaseController
   public function allnews()
   {
     //新闻
-    $sql = "select la.unitid,lac.body,la.title,la.description,la.id, FROM_UNIXTIME(adddate,'%M %D, %Y %H:%i:%s') as adddate,FROM_UNIXTIME(lastupdate,'%M %D, %Y %H:%i:%s') as lastupdate from " . $this->db->dbprefix('archives') . " la
-				join  " . $this->db->dbprefix('addonarticle') . " lac on la.id = lac.aid
+    $sql = "select la.unitid,lac.body,la.title,la.description,la.id, FROM_UNIXTIME(adddate,'%M %D, %Y %H:%i:%s') as adddate,FROM_UNIXTIME(lastupdate,'%M %D, %Y %H:%i:%s') as lastupdate from " . $this->db->prefixTable('archives') . " la
+				join  " . $this->db->prefixTable('addonarticle') . " lac on la.id = lac.aid
 				where la.unitid = 70 and la.status = 1
 				ORDER BY sortrank ASC,lac.aid DESC
 				";

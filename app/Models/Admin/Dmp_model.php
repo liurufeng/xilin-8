@@ -114,7 +114,7 @@ class Dmp_model extends Model
     }
     // dump($nodes);exit;
     // 获取车型数据
-    $sql = "SELECT * FROM " . $this->db->dbprefix('cartype') . " WHERE 1";
+    $sql = "SELECT * FROM " . $this->db->prefixTable('cartype') . " WHERE 1";
 
     $carinfo = $this->db->query($sql)->result_array();
     $this->load->model('info_model');
@@ -225,7 +225,7 @@ class Dmp_model extends Model
     }
     // dump($nodes);exit;
     // 获取车型数据
-    $sql = "SELECT * FROM " . $this->db->dbprefix('cartype') . " WHERE 1";
+    $sql = "SELECT * FROM " . $this->db->prefixTable('cartype') . " WHERE 1";
 
     $carinfo = $this->db->query($sql)->result_array();
     $this->load->model('info_model');

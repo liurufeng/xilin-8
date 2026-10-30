@@ -21,7 +21,7 @@ class Modelv_model extends Model
   public function writec()
   {
 
-    $sql = "SELECT * FROM " . $this->db->dbprefix('ttable') . " ORDER BY ismust ASC,tid ASC";
+    $sql = "SELECT * FROM " . $this->db->prefixTable('ttable') . " ORDER BY ismust ASC,tid ASC";
     $info = $this->db->query($sql)->result_array('array');
     foreach ($info as $k => $v) {
 
@@ -96,7 +96,7 @@ class Modelv_model extends Model
   function getModelv()
   {
 
-    $sql = "SELECT * FROM " . $this->db->dbprefix('channeltype') . " WHERE 1 ";
+    $sql = "SELECT * FROM " . $this->db->prefixTable('channeltype') . " WHERE 1 ";
     $info = $this->db->query($sql)->result_array();
     return $info;
   }
